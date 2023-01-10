@@ -16,8 +16,8 @@ import Results from './Results';
   
 type KBarProps = WithChildren
   
-  const KBar = (props: KBarProps) => {
-    const { children } = props
+const KBar = (props: KBarProps) => {
+  const { children } = props
   
   const actions: Action[] = [
     
