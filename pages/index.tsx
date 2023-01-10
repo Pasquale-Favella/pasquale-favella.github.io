@@ -1,3 +1,4 @@
+import PostList from '@/components/PostList';
 import GithubService from '@/services/github.service';
 import { GithubIssue } from '@/types';
 import { GetStaticProps } from 'next';
@@ -16,12 +17,12 @@ const Home : React.FC<Props>  = ({posts})=>{
       </Head>
       <main >
         
-      <h1 className="text-3xl font-bold underline h-screen">
+      <h1 className="text-3xl font-bold underline ">
         Hello world!
       </h1>
       
 
-      <pre>{JSON.stringify(posts,null,2)}</pre>
+      <PostList posts={posts}/>
 
       </main>
     </>
