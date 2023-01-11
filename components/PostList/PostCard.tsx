@@ -28,7 +28,7 @@ const PostCard : React.FC<Props>  = ({post})=>{
                           </h2>
                         </div>
                         <div className="prose">
-                          {/* */}Azz wee gefeege
+                          {/* */}Azz wee gefeeg
                         </div>
                       </div>
                       <div className="text-base font-medium leading-6">
