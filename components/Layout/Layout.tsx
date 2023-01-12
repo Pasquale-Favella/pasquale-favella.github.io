@@ -9,7 +9,7 @@ const Layout = (props: WithChildren)=> {
     return (
         <KBar>
             <Navbar/>
-            <main className='relative mx-auto mb-16 max-w-5xl px-8 py-24'>
+            <main className='relative mx-auto mb-16 max-w-6xl px-8 py-24'>
                 {children}
             </main>
         </KBar>
