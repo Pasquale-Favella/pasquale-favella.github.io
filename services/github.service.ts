@@ -7,7 +7,9 @@ const getAllIssues = async ()=>{
     return await api.get<GithubIssue[]>(`repos/${GitOwner.owner}/${GitOwner.repo}/issues`,{
         params : {
             labels : 'documentation',
-            per_page : 100
+            per_page : 100,
+            sort : 'created',
+            direction : 'desc'
         }
     })
 }

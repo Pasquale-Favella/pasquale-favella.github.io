@@ -11,4 +11,4 @@ const formatDateEN = (date : any) => {
 
 export default {
     formatDateEN
-}
+} as const
