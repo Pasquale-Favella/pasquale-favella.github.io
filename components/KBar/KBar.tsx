@@ -1,6 +1,8 @@
 
 import { BiCodeAlt } from 'react-icons/bi';
 import { FiGithub } from 'react-icons/fi';
+import { RiArticleFill } from 'react-icons/ri';
+
 import {
   Action,
   KBarAnimator,
@@ -13,14 +15,23 @@ import {
 import React from 'react'
 import { WithChildren } from '@/types'
 import Results from './Results';
+import { useRouter } from 'next/router';
   
 type KBarProps = WithChildren
   
 const KBar = (props: KBarProps) => {
-  const { children } = props
+  const { children } = props;
+  const router = useRouter()
   
   const actions: Action[] = [
-    
+    {
+      id: 'blog',
+      name: 'Blog',
+      keywords: 'Visit Blog',
+      section: 'General',
+      perform: () => router.push('/blog'),
+      icon: <RiArticleFill />,
+    },
     {
       id: 'source-code',
       name: 'Source code',
