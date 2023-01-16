@@ -9,7 +9,7 @@ type Props = {post:GithubIssue}
 const PostCard : React.FC<Props>  = ({post})=>{
 
   return (
-            <div 
+            <div key={post.id}
               className="group flex bg-transparent bg-opacity-20 px-2 transition duration-100 hover:scale-105 hover:rounded-md hover:bg-base-300" 
             >
               <li className="py-6 w-full">
