@@ -1,3 +1,5 @@
+
+import HeroSection from '@/components/HeroSection';
 import PostList from '@/components/PostList';
 import GithubService from '@/services/github.service';
 import { GithubIssue } from '@/types';
@@ -14,10 +16,9 @@ const Home : React.FC<Props>  = ({posts})=>{
       <NextSeo description='Pasquale Favella Blogfolio home'/>
       <main >
         
-        <h1 className="text-3xl font-bold underline ">
-          Hello world!
-        </h1>
+        <HeroSection/>
         
+        <h2 className='flex pb-6 text-3xl font-extrabold tracking-tight sm:text-3xl md:text-5xl'>Recent Posts</h2>
 
         <PostList posts={posts}/>
 

@@ -1,3 +1,5 @@
+import GitOwner from "@/config/owner"
+
 const formatDateEN = (date : any) => {
     const options : Intl.DateTimeFormatOptions= {
       year: 'numeric',
@@ -9,6 +11,12 @@ const formatDateEN = (date : any) => {
     return now
 }
 
+const calculateAge = () =>{ 
+  const ageDate = new Date(); 
+  return Math.abs(ageDate.getUTCFullYear() - GitOwner.dob);
+}
+
 export default {
-    formatDateEN
+    formatDateEN ,
+    calculateAge
 } as const
