@@ -1,7 +1,8 @@
 export default {
 
     LABELS : {
-        DOC : 'documentation'
+        DOC : 'documentation',
+        ALL : 'All Tags'
     }
 
 } as const
