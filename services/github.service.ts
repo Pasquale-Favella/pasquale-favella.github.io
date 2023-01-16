@@ -26,9 +26,14 @@ const getLatestIssues = async (qty = 4)=>{
     })
 }
 
+const getIssueById = async (id : string)=>{
+    return await api.get<GithubIssue>(`repos/${GitOwner.owner}/${GitOwner.repo}/issues/${id}`)
+}
+
 const GithubService = {
     getAllIssues ,
-    getLatestIssues
+    getLatestIssues ,
+    getIssueById
 } as const
 
 export default GithubService;

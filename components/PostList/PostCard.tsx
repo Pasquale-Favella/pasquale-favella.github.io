@@ -26,7 +26,7 @@ const PostCard : React.FC<Props>  = ({post})=>{
                         <div>
                           <h2 className="text-2xl font-bold leading-8 tracking-tight"> 
                             <Link
-                              href={`/blog/${post.title}`}
+                              href={`/blog/${post.number}`}
                               className=" transition duration-500 ease-in-out hover:text-primary"
                             >
                               {post.title}
@@ -54,7 +54,7 @@ const PostCard : React.FC<Props>  = ({post})=>{
                 </article>
                 <div className="text-base font-medium leading-6 flex justify-end">
                   <Link
-                    href={`/blog/${post.title}`}
+                    href={`/blog/${post.number}`}
                     className="text-primary hover:text-primary/60 transition duration-200"
                     aria-label={`Read "${post.title}"`}
                   >
