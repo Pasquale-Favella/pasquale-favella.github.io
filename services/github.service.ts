@@ -1,3 +1,4 @@
+import { CONSTANTS } from "@/config"
 import GitOwner from "@/config/owner"
 import api from "@/lib/githubApi"
 import { GithubIssue } from "@/types"
@@ -6,7 +7,7 @@ import { GithubIssue } from "@/types"
 const getAllIssues = async ()=>{
     return await api.get<GithubIssue[]>(`repos/${GitOwner.owner}/${GitOwner.repo}/issues`,{
         params : {
-            labels : 'documentation',
+            labels : CONSTANTS.LABELS.DOC,
             per_page : 100,
             sort : 'created',
             direction : 'desc'
@@ -17,7 +18,7 @@ const getAllIssues = async ()=>{
 const getLatestIssues = async (qty = 4)=>{
     return await api.get<GithubIssue[]>(`repos/${GitOwner.owner}/${GitOwner.repo}/issues`,{
         params : {
-            labels : 'documentation',
+            labels : CONSTANTS.LABELS.DOC,
             per_page : qty ,
             sort : 'created',
             direction : 'desc'

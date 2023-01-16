@@ -25,7 +25,7 @@ const Blog : React.FC<Props>  = ({posts})=>{
 
   return (
     <>
-      <NextSeo description='Pasquale Favella Blog'/>
+      <NextSeo title='Blog' description='Pasquale Favella Blog'/>
       <main >   
 
         <div className='relative'>

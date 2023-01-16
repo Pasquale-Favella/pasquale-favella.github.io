@@ -11,10 +11,10 @@ export default function App({ Component, pageProps }: AppProps) {
           type: 'website',
           locale: 'en_US',
           url: 'https://pasquale-favella.github.io/',
-          siteName: 'Pasquale blogfolio',
+          siteName: 'Pasquale Favella blogfolio',
         }}
-        titleTemplate = 'Pasquale blogfolio | %s'
-        defaultTitle="Pasquale blogfolio"
+        titleTemplate = 'Pasquale Favella blogfolio | %s'
+        defaultTitle="Pasquale Favella blogfolio"
         additionalLinkTags={[
           {
             rel: 'icon',
