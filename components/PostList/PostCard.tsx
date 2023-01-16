@@ -9,7 +9,7 @@ type Props = {post:GithubIssue}
 const PostCard : React.FC<Props>  = ({post})=>{
 
   return (
-            <div key={post.id}
+            <div 
               className="group flex bg-transparent bg-opacity-20 px-2 transition duration-100 hover:scale-105 hover:rounded-md hover:bg-base-300" 
             >
               <li className="py-6 w-full">
@@ -35,7 +35,7 @@ const PostCard : React.FC<Props>  = ({post})=>{
                         </div>
                         <div className="flex flex-wrap">
                           {post.labels?.length && post.labels.filter(label => label.name.toLowerCase() !== CONSTANTS.LABELS.DOC).map(label =>
-                          <Link className="mt-2 mr-3 btn btn-ghost btn-sm text-primary" 
+                          <Link className="mt-2 mr-3 btn btn-ghost btn-sm text-primary"  key={label.id}
                             href={{
                               pathname: '/blog',
                               query: { tag :  label.name},
