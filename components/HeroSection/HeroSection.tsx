@@ -26,7 +26,7 @@ const HeroSection = () => {
                     }}
                   />
                 </span>
-                </h1>
+              </h1>
               <h2 className='text-lg font-medium text-primary'>
                 {age} yrs • Musician • Full-stack Developer
               </h2>

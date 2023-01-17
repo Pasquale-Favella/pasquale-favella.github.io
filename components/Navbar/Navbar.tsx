@@ -16,7 +16,7 @@ const Navbar = () => {
         <div>
           <Link href="/" aria-label="Pasquale's website">
             <div className="flex items-center justify-between text-xl font-semibold">
-              {`~ P: ${pathname}`}
+              {`~ P: /${pathname?.split('/')[1]}`}
               <Typewriter
                 options={{
                   strings: [],

@@ -13,7 +13,7 @@ type Props = {posts:GithubIssue[]}
 const Home : React.FC<Props>  = ({posts})=>{
   return (
     <>
-      <NextSeo description='Pasquale Favella Blogfolio home'/>
+      <NextSeo description='Pasquale Favella Blogfolio home' title='Home'/>
       <main >
         
         <HeroSection/>

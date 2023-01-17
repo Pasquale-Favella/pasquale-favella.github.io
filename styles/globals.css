@@ -1,3 +1,8 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+
+#nprogress  .bar {
+    background: hsl(var(--p) / 1) !important;
+}
