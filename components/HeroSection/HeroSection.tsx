@@ -9,8 +9,10 @@ import { BsArrowRight } from 'react-icons/bs';
 
 const HeroSection = () => {
 
+    const age = DateUtils.calculateAge();
+
     return (
-        <section className='space-y-6 mb-10 md:my-16'>
+        <section className='space-y-6 mb-10 md:mb-16'>
           <div className='flex flex-col-reverse gap-8 md:flex-row md:justify-between'>
             <div className='space-y-4 md:max-w-lg'>
 
@@ -26,7 +28,7 @@ const HeroSection = () => {
                 </span>
                 </h1>
               <h2 className='text-lg font-medium text-primary'>
-                {DateUtils.calculateAge()} yrs • Musician • Full-stack Developer
+                {age} yrs • Musician • Full-stack Developer
               </h2>
               <p className='text-lg'>
               Welcome to my full stack developer portfolio! <br/>
@@ -37,7 +39,7 @@ const HeroSection = () => {
                 <span className='flex items-center gap-x-1'>Get in touch <BsArrowRight className='h-4 w-4 transition duration-200 group-hover:translate-x-1' /></span>
               </a>
             </div>
-            <div >
+            <div className='flex flex-col justify-center'>
                 <div className="mockup-code">
                     <pre data-prefix="$"><code>npm i fullstack</code></pre> 
                     <pre data-prefix=">" className="text-warning"><code>installing...</code></pre> 
