@@ -39,11 +39,54 @@ const HeroSection = () => {
                 <span className='flex items-center gap-x-1'>Get in touch <BsArrowRight className='h-4 w-4 transition duration-200 group-hover:translate-x-1' /></span>
               </a>
             </div>
-            <div className='flex flex-col justify-center'>
-                <div className="mockup-code">
-                    <pre data-prefix="$"><code>npm i fullstack</code></pre> 
-                    <pre data-prefix=">" className="text-warning"><code>installing...</code></pre> 
-                    <pre data-prefix=">" className="text-success"><code>Done!</code></pre>
+            <div className='flex flex-col justify-center relative'>
+
+                <div className="mockup-code bg-base-300 text-primary absolute -left-28 md:-left-8 bottom-[40px] md:bottom-[20px] hidden md:block">
+                  <pre data-prefix="$"><code>sudo apt-get update</code></pre>
+                </div>
+
+                <div className="mockup-code bg-base-200 text-warning absolute -left-44 top-[20px] hidden lg:block">
+                  <pre data-prefix="$"><code>docker run -it --name pakydev -p 80:80 -d nginx</code></pre>
+                </div>
+
+                <div className="mockup-code z-20">
+                    <pre data-prefix="$" className='flex'>
+                      <code >
+                        <Typewriter
+                          options={{
+                            strings: 'npm i fullstack',
+                            autoStart: true,
+                            loop: false,
+                          }}
+                        />
+                      </code>
+                    </pre> 
+
+                    <pre data-prefix=">" className='flex text-warning'>
+                      <code >
+                        <Typewriter
+                          onInit={(typewriter) => {
+                            typewriter.typeString('')
+                              .pauseFor(2100)
+                              .typeString('installing...')
+                              .start();
+                          }}
+                        />
+                      </code>
+                    </pre> 
+
+                    <pre data-prefix=">" className='flex text-success'>
+                      <code >
+                        <Typewriter
+                          onInit={(typewriter) => {
+                            typewriter.typeString('')
+                              .pauseFor(5500)
+                              .typeString('Done!')
+                              .start();
+                          }}
+                        />
+                      </code>
+                    </pre> 
                 </div>
             </div>
           </div>
