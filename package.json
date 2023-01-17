@@ -17,6 +17,7 @@
     "axios": "^1.2.2",
     "clsx": "^1.2.1",
     "daisyui": "^2.46.1",
+    "date-fns": "^2.29.3",
     "eslint": "8.31.0",
     "eslint-config-next": "13.1.1",
     "gray-matter": "^4.0.3",

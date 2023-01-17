@@ -4,7 +4,7 @@ const GitOwner = {
     repo : 'pasquale-favella.github.io',
     git_url : 'https://github.com/Pasquale-Favella',
     linkedin_url : 'https://it.linkedin.com/in/pasquale-favella-1a3682187' ,
-    dob : 1991
+    dob : '28/06/1991'
 
 } as const
 

@@ -1,4 +1,5 @@
 import GitOwner from "@/config/owner"
+import { differenceInYears, parse } from "date-fns"
 
 const formatDateEN = (date : any) => {
     const options : Intl.DateTimeFormatOptions= {
@@ -11,9 +12,10 @@ const formatDateEN = (date : any) => {
     return now
 }
 
-const calculateAge = () =>{ 
-  const ageDate = new Date(); 
-  return Math.abs(ageDate.getUTCFullYear() - GitOwner.dob);
+const calculateAge = ( dateToCalculate = new Date()) => {
+  const date = parse(GitOwner.dob, "dd/MM/yyyy", new Date());
+  const age = differenceInYears(new Date(), date);
+  return age;
 }
 
 export default {
