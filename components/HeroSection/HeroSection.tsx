@@ -35,7 +35,7 @@ const HeroSection = () => {
               I am a highly passionated for creating web and mobile applications.           
               Let&apos;s work together to bring your ideas to life and create an exceptional product.
               </p>
-              <a className="link link-primary text-xl group" aria-label="Email to pasquale.favella@gmail.com" title="Email to pasquale.favella@gmail.com" href="mailto:pasquale.favella@gmail.com">
+              <a className="link link-primary text-xl group" aria-label="Email to paskfdev@gmail.com" title="Email to paskfdev@gmail.com" href="mailto:paskfdev@gmail.com">
                 <span className='flex items-center gap-x-1'>Get in touch <BsArrowRight className='h-4 w-4 transition duration-200 group-hover:translate-x-1' /></span>
               </a>
             </div>
