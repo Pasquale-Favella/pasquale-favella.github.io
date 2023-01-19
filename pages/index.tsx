@@ -18,7 +18,7 @@ const Home : React.FC<Props>  = ({posts})=>{
         
         <HeroSection/>
         
-        <h2 className='flex pb-6 text-3xl font-extrabold tracking-tight sm:text-3xl md:text-5xl'>Recent Posts</h2>
+        <h2 className='flex pb-6 text-3xl font-extrabold tracking-tight sm:text-3xl md:text-5xl'>Latest Posts</h2>
 
         <PostList posts={posts}/>
 
