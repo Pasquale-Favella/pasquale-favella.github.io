@@ -34,7 +34,11 @@ const ProjectCard : React.FC<Props>  = ({project})=>{
                 >
                     <GitHubTooltip project={project}/>
                     <div className='px-4'>
-                        <h2 className="text-2xl text-primary font-bold">{project.name}</h2>
+                        <a  href={`${project.html_url}`} target="_blank" rel="noopener noreferrer"
+                            className="text-2xl text-primary font-bold transition-all duration-300 hover:text-primary/80"
+                        >
+                            {project.name}
+                        </a>
                         <p>{project.description}</p>
 
                         {Boolean(projectTopics.length) &&
