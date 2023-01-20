@@ -2,6 +2,7 @@
 import HeroSection from '@/components/HeroSection';
 import PostList from '@/components/PostList';
 import ProjectList from '@/components/ProjectList';
+import Skills from '@/components/Skills';
 import GithubService from '@/services/github.service';
 import { GithubIssue, GithubRepo } from '@/types';
 import { GetStaticProps } from 'next';
@@ -21,6 +22,10 @@ const Home : React.FC<Props>  = ({posts , projects})=>{
       <main >
         
         <HeroSection/>
+
+        <h2 className='flex pb-6 text-3xl font-extrabold tracking-tight sm:text-3xl md:text-5xl'>My Skills</h2>
+
+        <Skills />
         
         <h2 className='flex pb-6 text-3xl font-extrabold tracking-tight sm:text-3xl md:text-5xl'>Projects</h2>
 
