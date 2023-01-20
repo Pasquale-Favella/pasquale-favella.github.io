@@ -1,6 +1,8 @@
 import KBar from "@/components/KBar"
 import Navbar from "@/components/Navbar"
+import Footer from "@/components/Footer"
 import { WithChildren } from "@/types"
+
 
 const Layout = (props: WithChildren)=> {
 
@@ -9,9 +11,10 @@ const Layout = (props: WithChildren)=> {
     return (
         <KBar>
             <Navbar/>
-            <main className='relative mx-auto mb-16 max-w-6xl px-8 py-24'>
+            <main className='relative mx-auto max-w-6xl px-8 pt-24 pb-2'>
                 {children}
             </main>
+            <Footer/>
         </KBar>
     )
 }
