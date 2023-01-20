@@ -2,6 +2,7 @@ import { CONSTANTS } from '@/config';
 import { GithubIssue } from '@/types';
 import { useRouter } from 'next/router';
 import { useMemo } from 'react';
+import useDebounce from './use-debounce';
 
 type Props = {
     posts:GithubIssue[] ,
@@ -11,6 +12,8 @@ type Props = {
 export const usePostSearch = ({posts , searchTerm} : Props)=>{
 
     const router = useRouter();
+
+    const debouncedSearchTerm = useDebounce<string>(searchTerm, 300);
 
     const tags = useMemo(
         ()=>Array.from(new Set([CONSTANTS.LABELS.ALL ,...posts.map(post=> post.labels.map(label => label.name)).flat().filter(tag=> tag!==CONSTANTS.LABELS.DOC)]))
@@ -41,7 +44,7 @@ export const usePostSearch = ({posts , searchTerm} : Props)=>{
     
         return match;
     
-    }),[searchTerm , selectedTag]);
+    }),[debouncedSearchTerm , selectedTag]);
     
 
     return {

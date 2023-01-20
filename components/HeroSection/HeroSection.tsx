@@ -81,7 +81,7 @@ const HeroSection = () => {
                           onInit={(typewriter) => {
                             typewriter.typeString('')
                               .pauseFor(5500)
-                              .pasteString(`✔️Done!`,null)
+                              .pasteString(`Done!`,null)
                               .start();
                           }}
                         />

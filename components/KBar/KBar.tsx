@@ -1,7 +1,8 @@
 
 import { BiCodeAlt } from 'react-icons/bi';
-import { FiGithub } from 'react-icons/fi';
+import { FiGithub, FiLinkedin } from 'react-icons/fi';
 import { RiArticleFill } from 'react-icons/ri';
+import { DiGitPullRequest } from 'react-icons/di';
 
 import {
   Action,
@@ -16,6 +17,7 @@ import React from 'react'
 import { WithChildren } from '@/types'
 import Results from './Results';
 import { useRouter } from 'next/router';
+import GitOwner from '@/config/owner';
   
 type KBarProps = WithChildren
   
@@ -24,6 +26,14 @@ const KBar = (props: KBarProps) => {
   const router = useRouter()
   
   const actions: Action[] = [
+    {
+      id: 'projects',
+      name: 'Projects',
+      keywords: 'Visit Projects',
+      section: 'General',
+      perform: () => router.push('/projects'),
+      icon: <DiGitPullRequest />,
+    },
     {
       id: 'blog',
       name: 'Blog',
@@ -37,18 +47,24 @@ const KBar = (props: KBarProps) => {
       name: 'Source code',
       keywords: 'source code github',
       section: 'General',
-      perform: () =>
-        window.open('https://github.com/Pasquale-Favella/pasquale-favella.github.io', '_blank'),
+      perform: () => window.open(GitOwner.this_repo_url, '_blank'),
       icon: <BiCodeAlt />,
     },
-    
     {
       id: 'github',
       name: 'GitHub',
       keywords: 'github',
       section: 'Social',
-      perform: () => window.open('https://github.com/Pasquale-Favella', '_blank'),
+      perform: () => window.open(GitOwner.git_url, '_blank'),
       icon: <FiGithub />,
+    },
+    {
+      id: 'linkedin',
+      name: 'LinkedIn',
+      keywords: 'linkedin',
+      section: 'Social',
+      perform: () => window.open(GitOwner.linkedin_url, '_blank'),
+      icon: <FiLinkedin />,
     }
   ]
 

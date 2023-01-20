@@ -26,10 +26,10 @@ const Home : React.FC<Props>  = ({posts , projects})=>{
 
         <ProjectList projects={projects}/>
 
-        <div className='flex'>
+        <div className='flex mb-5 md:mb-10'>
           <Link
             href='/projects'
-            className='group my-8 flex items-center gap-4 text-lg font-medium'
+            className='group my-8 flex items-center gap-4 text-lg font-medium text-primary'
           >
             <span>View All Projects</span>
             <BsArrowRight className='h-4 w-4 transition duration-200 group-hover:translate-x-1' />
@@ -43,7 +43,7 @@ const Home : React.FC<Props>  = ({posts , projects})=>{
         <div className='flex'>
           <Link
             href='/blog'
-            className='group my-8 flex items-center gap-4 text-lg font-medium'
+            className='group my-8 flex items-center gap-4 text-lg font-medium text-primary'
           >
             <span>View All Posts</span>
             <BsArrowRight className='h-4 w-4 transition duration-200 group-hover:translate-x-1' />
