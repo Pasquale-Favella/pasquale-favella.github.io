@@ -6,6 +6,7 @@ import { NextSeo } from 'next-seo';
 import ProjectList from '@/components/ProjectList';
 import { CiSearch } from "react-icons/ci"
 import { useProjectSearch } from '@/hooks/use-projectSearch';
+import { MdOutlineDoNotDisturb } from 'react-icons/md';
 
 type Props = {projects:GithubRepo[]};
 
@@ -41,7 +42,18 @@ const Projects : React.FC<Props>  = ({projects})=>{
           </label>
         </div>
 
-        <ProjectList projects={filteredProjects}/>
+        {Boolean(filteredProjects.length) 
+          ? <ProjectList projects={filteredProjects}/>
+          : <div className='flex justify-items-center items-center'>
+              <span
+                
+                className='group my-8 flex items-center gap-4 text-lg font-medium'
+              >
+                <MdOutlineDoNotDisturb size={20} className='transition duration-200 group-hover:scale-125' />
+                <span>No projects found</span>
+              </span>
+            </div>
+        }
 
       </main>
     </>

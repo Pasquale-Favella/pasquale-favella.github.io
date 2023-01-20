@@ -5,7 +5,11 @@ module.exports = {
     "./components/**/*.{js,ts,jsx,tsx}",
   ],
   theme: {
-    extend: {},
+    extend: {
+      minHeight: {
+        'layout': '92vh',
+      }
+    },
   },
   plugins: [require("daisyui"),require('@tailwindcss/typography'),require('@tailwindcss/aspect-ratio')],
   daisyui: {
