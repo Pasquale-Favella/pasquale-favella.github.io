@@ -5,6 +5,7 @@ import { NextSeo } from 'next-seo';
 import { ParsedUrlQuery } from 'querystring';
 import md from 'markdown-it';
 import matter from 'gray-matter';
+import { Comments } from '@/components/PostList';
 
 interface Params extends ParsedUrlQuery {
     slug : string;
@@ -27,6 +28,7 @@ const BlogPage : React.FC<Props>  = ({content , title})=>{
 
         <article className="prose md:prose-lg lg:prose-xl mx-auto" dangerouslySetInnerHTML={{ __html: md().render(content) }} />
 
+        <Comments />
       </main>
     </>
   )
