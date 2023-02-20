@@ -1,9 +1,9 @@
-
 import GithubService from '@/services/github.service';
 import { GetStaticProps } from 'next';
 import { NextSeo } from 'next-seo';
 import { ParsedUrlQuery } from 'querystring';
 import md from 'markdown-it';
+import highlightjs from 'markdown-it-highlightjs';
 import matter from 'gray-matter';
 import { Comments } from '@/components/PostList';
 
@@ -26,7 +26,7 @@ const BlogPage : React.FC<Props>  = ({content , title})=>{
 
         <h1 className='text-center text-primary text-2xl md:text-5xl lg:text-6xl mb-5'>{title}</h1>
 
-        <article className="prose md:prose-lg lg:prose-xl mx-auto" dangerouslySetInnerHTML={{ __html: md().render(content) }} />
+        <article className="prose md:prose-lg lg:prose-xl mx-auto" dangerouslySetInnerHTML={{ __html: md().use(highlightjs).render(content) }} />
 
         <Comments />
       </main>

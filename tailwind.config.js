@@ -8,6 +8,15 @@ module.exports = {
     extend: {
       minHeight: {
         'layout': '92vh',
+      },
+      typography : {
+        DEFAULT : {
+          css : {
+            pre : {
+              'background-color' : '#282c34'
+            }
+          }
+        }
       }
     },
   },
