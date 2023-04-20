@@ -6,6 +6,9 @@ import md from 'markdown-it';
 import highlightjs from 'markdown-it-highlightjs';
 import matter from 'gray-matter';
 import { Comments } from '@/components/PostList';
+import Link from 'next/link';
+import { MdKeyboardArrowLeft } from 'react-icons/md';
+
 
 interface Params extends ParsedUrlQuery {
     slug : string;
@@ -22,11 +25,21 @@ const BlogPage : React.FC<Props>  = ({content , title})=>{
   return (
     <>
       <NextSeo title={title} description={`Pasquale Favella Blog - ${title}`} />
-      <main>   
+      <main className='relative'>   
+      
+        <Link
+          href='/blog'
+          className='group absolute top-2 hidden items-center justify-center text-sm font-medium xl:inline-flex'
+        >
+          <MdKeyboardArrowLeft className='h-4 w-4 transition duration-200 group-hover:translate-x-1' />
+          <span>See all Posts</span>
+        </Link>
 
-        <h1 className='text-center text-primary text-2xl md:text-5xl lg:text-6xl mb-5'>{title}</h1>
+        <div className='prose md:prose-lg lg:prose-xl mx-auto  mb-3 lg:mb-5'>
+          <h1 className='text-4xl font-extrabold leading-tight md:text-5xl'>{title}</h1>
+        </div>
 
-        <article className="prose md:prose-lg lg:prose-xl mx-auto" dangerouslySetInnerHTML={{ __html: md().use(highlightjs).render(content) }} />
+        <article className='prose md:prose-lg lg:prose-xl mx-auto' dangerouslySetInnerHTML={{ __html: md().use(highlightjs).render(content) }} />
 
         <Comments />
       </main>
