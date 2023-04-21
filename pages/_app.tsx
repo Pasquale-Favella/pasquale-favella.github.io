@@ -8,7 +8,6 @@ import Router from 'next/router';
 import NProgress from 'nprogress';
 import { ThemeProvider } from 'next-themes';
 import Layout from '@/components/Layout';
-import { Theme } from '@/types';
 
 NProgress.configure({showSpinner : false})
 
