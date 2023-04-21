@@ -25,24 +25,22 @@ const BlogPage : React.FC<Props>  = ({content , title})=>{
   return (
     <>
       <NextSeo title={title} description={`Pasquale Favella Blog - ${title}`} />
-      <main className='relative'>   
-      
-        <Link
-          href='/blog'
-          className='group absolute top-2 hidden items-center justify-center text-sm font-medium xl:inline-flex'
-        >
-          <MdKeyboardArrowLeft className='h-4 w-4 transition duration-200 group-hover:translate-x-1' />
-          <span>See all Posts</span>
-        </Link>
+       
+      <Link
+        href='/blog'
+        className='group fixed top-[6.5rem] hidden items-center justify-center text-sm font-medium xl:inline-flex'
+      >
+        <MdKeyboardArrowLeft className='h-4 w-4 transition duration-200 group-hover:translate-x-1' />
+        <span>See all Posts</span>
+      </Link>
 
-        <div className='prose md:prose-lg lg:prose-xl mx-auto  mb-3 lg:mb-5'>
-          <h1 className='text-4xl font-extrabold leading-tight md:text-5xl'>{title}</h1>
-        </div>
+      <div className='prose md:prose-lg lg:prose-xl mx-auto  mb-3 lg:mb-5'>
+        <h1 className='text-4xl font-extrabold leading-tight md:text-5xl'>{title}</h1>
+      </div>
 
-        <article className='prose md:prose-lg lg:prose-xl mx-auto' dangerouslySetInnerHTML={{ __html: md().use(highlightjs).render(content) }} />
+      <article className='prose md:prose-lg lg:prose-xl mx-auto' dangerouslySetInnerHTML={{ __html: md().use(highlightjs).render(content) }} />
 
-        <Comments />
-      </main>
+      <Comments />
     </>
   )
 }
@@ -54,7 +52,7 @@ export async function getStaticPaths() {
     const { data } = await GithubService.getAllIssues();
 
     
-    const paths = data.map(post=>({ params: { slug : ""+post.number } }))
+    const paths = data.map(post=>({ params: { slug : post.number.toString() } }))
 
     
     return {
