@@ -10,3 +10,8 @@ export type WithProps<
   T extends keyof JSX.IntrinsicElements | React.JSXElementConstructor<U>,
   U = any
 > = React.ComponentProps<T>
+
+export enum Theme {
+  dark = 'dark' ,
+  light = 'light'
+}

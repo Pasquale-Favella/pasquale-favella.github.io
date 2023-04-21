@@ -1,19 +1,18 @@
-import { useEffect } from 'react';
-import { useStorage } from './use-storage';
+import { useMemo } from 'react';
+import { useTheme as useNextThemes} from 'next-themes';
+import { Theme } from '@/types';
 
 export const useTheme = ()=>{
 
-    const [theme , setTheme] = useStorage("theme","dark");
+    const { theme, setTheme } = useNextThemes();
 
-    useEffect(() => {
-        document.documentElement.setAttribute('data-theme', theme);
-    }, [theme])
+    const toggleTheme = ()=> setTheme(theme === Theme.dark ? Theme.light : Theme.dark);
 
-    const toggleTheme = ()=> {
-        setTheme((prevTheme: string) => prevTheme==='dark'?'light':'dark');
-    };
+    const isDarkMode = useMemo(()=>theme === Theme.dark , [theme]);
+
+    const nextThemeTip = useMemo(()=>isDarkMode ? 'Light': 'Dark' , [theme]);
 
     return {
-        theme , toggleTheme
+        theme , toggleTheme , isDarkMode , nextThemeTip
     }
 }
