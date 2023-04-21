@@ -4,15 +4,13 @@ import { Theme } from '@/types';
 
 export const useTheme = ()=>{
 
-    const { theme, setTheme } = useNextThemes();
+    const { resolvedTheme : theme , setTheme } = useNextThemes();
 
-    const toggleTheme = ()=> setTheme(theme === Theme.dark ? Theme.light : Theme.dark);
+    const isDarkMode = useMemo(()=> theme === Theme.dark , [theme]);
 
-    const isDarkMode = useMemo(()=>theme === Theme.dark , [theme]);
-
-    const nextThemeTip = useMemo(()=>isDarkMode ? 'Light': 'Dark' , [theme]);
+    const toggleTheme = ()=> setTheme( isDarkMode ? Theme.light : Theme.dark);
 
     return {
-        theme , toggleTheme , isDarkMode , nextThemeTip
+        theme , toggleTheme , isDarkMode
     }
 }

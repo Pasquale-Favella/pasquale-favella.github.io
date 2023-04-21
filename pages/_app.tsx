@@ -18,7 +18,7 @@ Router.events.on('routeChangeError',()=>NProgress.done())
 
 export default function App({ Component, pageProps }: AppProps) {
   return (
-    <ThemeProvider defaultTheme={Theme.dark}>
+    <ThemeProvider>
       <Layout>
         <DefaultSeo 
           openGraph={{
