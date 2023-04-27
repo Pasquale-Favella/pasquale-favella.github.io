@@ -1,36 +1,28 @@
-import { useEffect , useRef, useState } from "react";
+import React, { useDebugValue, useEffect, useState } from "react";
+
+export const useStorage = <S>(
+  key: string,
+  initialState?: S | (() => S)
+): [S, React.Dispatch<React.SetStateAction<S>>] => {
+  const [state, setState] = useState<S>(initialState as S);
+  useDebugValue(state);
+
+  useEffect(() => {
+    const item = localStorage.getItem(key);
+    if (item) setState(parse(item));
+  }, []);
+
+  useEffect(() => {
+    localStorage.setItem(key, JSON.stringify(state));
+  }, [state]);
+
+  return [state, setState];
+};
 
 const parse = (value: string) => {
-    try {
-      return JSON.parse(value);
-    } catch {
-      return value;
-    }
+  try {
+    return JSON.parse(value);
+  } catch {
+    return value;
+  }
 };
-
-export const useStorage = ( key: string , defaultValue: any ) => {
-
-    const [value, setValue] = useState(() => defaultValue);
-
-    const mount = useRef(false);
-
-    useEffect(() => {
-
-        if(mount.current) return;
-
-        const item = localStorage.getItem(key);
-        if (item) setValue(parse(item));
-
-        mount.current = true;
-    }, []);
-  
-    useEffect(() => {
-       window.localStorage.setItem(key, JSON.stringify(value));
-    }, [key, value]);
-  
-    return [value, setValue];
-};
-
-
-
-

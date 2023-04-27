@@ -6,3 +6,23 @@
 #nprogress  .bar {
     background: hsl(var(--p) / 1) !important;
 }
+
+.react-flow__attribution{
+    background-color:  transparent !important;
+}
+
+.react-flow__controls-button{
+    background-color: hsl(var(--b3)) !important;
+    border-color: hsl(var(--b1)) !important;
+    color: hsl(var(--bc)) !important;
+    fill: hsl(var(--bc)) !important;
+}
+
+.react-flow__minimap{
+    background-color: hsl(var(--b1)) !important;
+}
+
+.react-flow__minimap-mask,
+.react-flow__minimap-node{
+    fill: hsl(var(--b3)) !important;
+}

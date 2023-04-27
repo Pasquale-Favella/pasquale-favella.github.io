@@ -3,6 +3,7 @@ import { BiCodeAlt } from 'react-icons/bi';
 import { FiGithub, FiLinkedin } from 'react-icons/fi';
 import { RiArticleFill } from 'react-icons/ri';
 import { DiGitPullRequest } from 'react-icons/di';
+import { TfiThought } from 'react-icons/tfi';
 
 import {
   Action,
@@ -26,6 +27,14 @@ const KBar = (props: KBarProps) => {
   const router = useRouter()
   
   const actions: Action[] = [
+    {
+      id: 'flow',
+      name: 'Idea Flow',
+      keywords: 'Flow your ideas',
+      section: 'Apps',
+      perform: () => router.push('/flow'),
+      icon: <TfiThought />,
+    },
     {
       id: 'projects',
       name: 'Projects',
