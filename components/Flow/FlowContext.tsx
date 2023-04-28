@@ -45,7 +45,7 @@ function useFlow() {
     const flowContext = useContext(FlowContext);
     const [nodes, setNodes] = useNodesState(flowContext.nodes);
     const [edges, setEdges] = useEdgesState(flowContext.edges);
-    const { addNodes , deleteElements , getViewport , project} = useReactFlow();
+    const { addNodes , deleteElements , getViewport , fitView } = useReactFlow();
 
     const store = useStoreApi();
 
@@ -76,6 +76,12 @@ function useFlow() {
             type: 'custom',
             className: '',
             dragHandle: '.custom-drag-handle'
+        })
+
+        fitView({
+            nodes : store.getState().getNodes(),
+            duration : 200 ,
+            maxZoom : 0.5
         })
     }
 

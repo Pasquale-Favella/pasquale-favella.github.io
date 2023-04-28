@@ -21,7 +21,7 @@ const edgeTypes = {
 };
 
 const defaultEdgeOptions = {
-  animated: true,
+  animated: false,
   type: 'buttonedge',
 };
 
@@ -45,6 +45,11 @@ const Flow = ()=> {
             defaultEdgeOptions={defaultEdgeOptions}
             connectionLineType={ConnectionLineType.SmoothStep}
             fitView
+            fitViewOptions={{
+              includeHiddenNodes : true,
+              nodes,
+              maxZoom : 0.7
+            }}
           >
             {!isMobile && <MiniMap nodeStrokeWidth={3} zoomable pannable position='top-right'/>}
             <CustomControl/>
