@@ -79,7 +79,7 @@ const CustomNode: FC<NodeProps<CustomNodeData>> = ({ data, xPos, yPos , id }) =>
 
         <div className="card-body">
           <h2 className="card-title">
-            <input name='title' type="text" placeholder="Thought" className="input input-ghost w-full max-w-xs" 
+            <input name='title' type="text" placeholder="Flow title" className="input input-ghost w-full max-w-xs" 
               value={title}
               onChange={e => handleChange({ title : e.target.value})}
             />
