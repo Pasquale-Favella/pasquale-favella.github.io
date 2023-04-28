@@ -32,7 +32,7 @@ const Flow = ()=> {
     const isMobile = useIsMobile();
 
     return (
-        <div className="h-[calc(85vh-70px)]">
+        <div className="h-[calc(85vh-70px)] bg-base-100">
           
           <ReactFlow
             nodes={nodes}

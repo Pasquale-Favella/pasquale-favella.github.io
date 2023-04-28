@@ -22,6 +22,7 @@
     "eslint": "8.31.0",
     "eslint-config-next": "13.1.1",
     "gray-matter": "^4.0.3",
+    "html-to-image": "^1.11.11",
     "kbar": "^0.1.0-beta.39",
     "markdown-it": "^13.0.1",
     "markdown-it-highlightjs": "^4.0.1",

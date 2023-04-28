@@ -51,7 +51,7 @@ const CustomNode: FC<NodeProps<CustomNodeData>> = ({ data, xPos, yPos , id }) =>
       
       <Handle type="target" position={Position.Top} />
  
-      <div className={`card w-96 shadow-xl relative ${isDarkMode ? "bg-base-300" : "bg-transparent"}`}>
+      <div className={`card w-96 shadow-xl relative ${isDarkMode ? "bg-base-300" : "bg-base-100"}`}>
 
         <div className="tooltip tooltip-bottom before:text-xs before:content-[attr(data-tip)] custom-drag-handle absolute top-2 left-1" data-tip="move">
             <label className="btn btn-ghost btn-circle normal-case btn-sm cursor-grab">
