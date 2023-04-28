@@ -1,4 +1,4 @@
-import { memo, FC, CSSProperties , useState, useMemo} from 'react';
+import { memo, FC, CSSProperties , useState, useMemo } from 'react';
 import dynamic from 'next/dynamic';
 import { RiDeleteBinLine } from 'react-icons/ri';
 import { Handle, Position, NodeProps } from 'reactflow';
@@ -25,6 +25,8 @@ const CustomNode: FC<NodeProps<CustomNodeData>> = ({ data, xPos, yPos , id }) =>
   const [{title , body} , setNodeData] = useState(data);
   const { deleteNodeById } = useFlow();
   const { isDarkMode } = useTheme();
+
+  const handleChange = (value : Partial<CustomNodeData>)=> setNodeData(prev => ({...prev , ...value}));
 
   const handleRemove = ()=> deleteNodeById(id);
 
@@ -79,14 +81,14 @@ const CustomNode: FC<NodeProps<CustomNodeData>> = ({ data, xPos, yPos , id }) =>
           <h2 className="card-title">
             <input name='title' type="text" placeholder="Thought" className="input input-ghost w-full max-w-xs" 
               value={title}
-              onChange={e => setNodeData(prev => ({...prev , title : e.target.value}))}
+              onChange={e => handleChange({ title : e.target.value})}
             />
           </h2>
 
           <ReactQuill 
             theme="snow" 
             value={body} 
-            onChange={body => setNodeData(prev => ({...prev , body}))} 
+            onChange={body => handleChange({body})} 
             modules={modules}
           />
           
