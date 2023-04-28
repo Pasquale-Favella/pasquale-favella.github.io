@@ -75,6 +75,7 @@ function useFlow() {
             position: { x: viewPort.x, y:viewPort.y },
             type: 'custom',
             className: '',
+            dragHandle: '.custom-drag-handle'
         })
     }
 
