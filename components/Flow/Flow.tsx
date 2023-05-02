@@ -1,15 +1,14 @@
 import ReactFlow, {
   ConnectionLineType,
-  MiniMap
+  MiniMap,
 } from 'reactflow';
-
 import CustomNode from './CustomNode';
 
 import useIsMobile from '@/hooks/use-isMobile';
 import CustomControl from './CustomControls';
-import { useFlow } from './FlowContext';
 import WelcomeFlow from './WelcomeFlow';
 import CustomEdge from './CustomEdge';
+import useFlow from '@/hooks/use-flow';
 
   
 const nodeTypes = {
@@ -28,7 +27,6 @@ const defaultEdgeOptions = {
 const Flow = ()=> {
 
     const { nodes , edges , onConnect , onEdgesChange , onNodesChange } = useFlow();
-
     const isMobile = useIsMobile();
 
     return (

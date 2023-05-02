@@ -2,32 +2,34 @@ import { memo, FC, CSSProperties , useState, useMemo } from 'react';
 import dynamic from 'next/dynamic';
 import { RiDeleteBinLine } from 'react-icons/ri';
 import { Handle, Position, NodeProps } from 'reactflow';
-import { useFlow } from './FlowContext';
 import { BiDotsVerticalRounded, BiMove } from 'react-icons/bi';
 
 const ReactQuill = dynamic(() => import("react-quill"), { ssr: false });
 import 'react-quill/dist/quill.snow.css';
 import { useTheme } from '@/hooks/use-theme';
+import useFlow from '@/hooks/use-flow';
+import { useAtom } from 'jotai';
+import { CustomNodeData, getNodeAtomById } from '@/store/flow.atom';
 
-const sourceHandleStyleA: CSSProperties = { left: 15 };
+const sourceHandleStyleA: CSSProperties = { 
+  left: 15 ,
+  backgroundColor : 'hsl(var(--p))'
+};
 const sourceHandleStyleB: CSSProperties = {
   right: 15,
   left: 'auto',
+  backgroundColor : 'hsl(var(--p))'
 };
 
-type CustomNodeData = {
-  title : string,
-  body : string
-}
 
-const CustomNode: FC<NodeProps<CustomNodeData>> = ({ data, xPos, yPos , id }) => {
+const CustomNode: FC<NodeProps<CustomNodeData>> = ({ id }) => {
 
-  const [{title , body} , setNodeData] = useState(data);
+  const nodeId = useMemo(()=> getNodeAtomById(id) , [id])
+  const [node, updateNode] = useAtom(nodeId);
   const { deleteNodeById } = useFlow();
   const { isDarkMode } = useTheme();
 
-  const handleChange = (value : Partial<CustomNodeData>)=> setNodeData(prev => ({...prev , ...value}));
-
+  const handleChange = (value : Partial<CustomNodeData>)=> updateNode(value);
   const handleRemove = ()=> deleteNodeById(id);
 
   const modules = useMemo(() => ({
@@ -48,8 +50,7 @@ const CustomNode: FC<NodeProps<CustomNodeData>> = ({ data, xPos, yPos , id }) =>
 
   return (
     <>
-      
-      <Handle type="target" position={Position.Top} />
+    <Handle type="target" id={`${id}-top`} position={Position.Top} />
  
       <div className={`card w-96 shadow-xl relative ${isDarkMode ? "bg-base-300" : "bg-base-100"}`}>
 
@@ -80,14 +81,14 @@ const CustomNode: FC<NodeProps<CustomNodeData>> = ({ data, xPos, yPos , id }) =>
         <div className="card-body">
           <h2 className="card-title">
             <input name='title' type="text" placeholder="Flow title" className="input input-ghost w-full max-w-xs" 
-              value={title}
+              value={node?.data.title ?? ''}
               onChange={e => handleChange({ title : e.target.value})}
             />
           </h2>
 
           <ReactQuill 
             theme="snow" 
-            value={body} 
+            value={node?.data.body ?? ''} 
             onChange={body => handleChange({body})} 
             modules={modules}
           />
@@ -98,13 +99,13 @@ const CustomNode: FC<NodeProps<CustomNodeData>> = ({ data, xPos, yPos , id }) =>
       <Handle
         type="source"
         position={Position.Bottom}
-        id="a"
+        id={`${id}-d`}
         style={sourceHandleStyleA}
       />
       <Handle
         type="source"
         position={Position.Bottom}
-        id="b"
+        id={`${id}-e`}
         style={sourceHandleStyleB}
       />
     </>

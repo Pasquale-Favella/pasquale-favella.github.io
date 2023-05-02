@@ -8,6 +8,7 @@ import { DefaultSeo } from 'next-seo';
 import Router from 'next/router';
 import NProgress from 'nprogress';
 import { ThemeProvider } from 'next-themes';
+import { Provider as JotaiProvider} from 'jotai'
 import Layout from '@/components/Layout';
 
 NProgress.configure({showSpinner : false})
@@ -18,26 +19,28 @@ Router.events.on('routeChangeError',()=>NProgress.done())
 
 export default function App({ Component, pageProps }: AppProps) {
   return (
-    <ThemeProvider>
-      <Layout>
-        <DefaultSeo 
-          openGraph={{
-            type: 'website',
-            locale: 'en_US',
-            url: 'https://pasquale-favella.github.io/',
-            siteName: 'Pasquale Favella blogfolio',
-          }}
-          titleTemplate = 'Pasquale Favella | %s'
-          defaultTitle="Pasquale Favella"
-          additionalLinkTags={[
-            {
-              rel: 'icon',
-              href:'/favicon.ico',
-            },
-          ]}
-        />
-        <Component {...pageProps} />
-      </Layout>
-    </ThemeProvider>
+    <JotaiProvider>
+      <ThemeProvider>
+        <Layout>
+          <DefaultSeo 
+            openGraph={{
+              type: 'website',
+              locale: 'en_US',
+              url: 'https://pasquale-favella.github.io/',
+              siteName: 'Pasquale Favella blogfolio',
+            }}
+            titleTemplate = 'Pasquale Favella | %s'
+            defaultTitle="Pasquale Favella"
+            additionalLinkTags={[
+              {
+                rel: 'icon',
+                href:'/favicon.ico',
+              },
+            ]}
+          />
+          <Component {...pageProps} />
+        </Layout>
+      </ThemeProvider>
+    </JotaiProvider>
   )
 }

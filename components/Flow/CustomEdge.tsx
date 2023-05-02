@@ -1,7 +1,7 @@
 import { memo, FC ,MouseEvent} from 'react';
 import { EdgeProps, getBezierPath } from 'reactflow';
 import { MdRemoveRoad } from 'react-icons/md';
-import { useFlow } from './FlowContext';
+import useFlow from '@/hooks/use-flow';
 
 const foreignObjectSizeX = 80;
 const foreignObjectSizeY = 50;
