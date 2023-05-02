@@ -37,14 +37,14 @@ export default function useFlow() {
 
 
     const addNewNode = () => {
-        
+
         const newNode : Node = {
             id: Utils.uid(),
             data: { 
                 title : '',
                 body : ''
             },
-            position: { x: 0, y: 0 },
+            position: { x: 0, y: nodes.length * 200},
             type: 'custom',
             className: '',
             dragHandle: '.custom-drag-handle'

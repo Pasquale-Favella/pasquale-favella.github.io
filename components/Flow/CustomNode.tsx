@@ -1,15 +1,16 @@
-import { memo, FC, CSSProperties , useState, useMemo } from 'react';
+import { memo, FC, CSSProperties, useMemo } from 'react';
 import dynamic from 'next/dynamic';
 import { RiDeleteBinLine } from 'react-icons/ri';
 import { Handle, Position, NodeProps } from 'reactflow';
 import { BiDotsVerticalRounded, BiMove } from 'react-icons/bi';
-
-const ReactQuill = dynamic(() => import("react-quill"), { ssr: false });
-import 'react-quill/dist/quill.snow.css';
 import { useTheme } from '@/hooks/use-theme';
 import useFlow from '@/hooks/use-flow';
 import { useAtom } from 'jotai';
 import { CustomNodeData, getNodeAtomById } from '@/store/flow.atom';
+
+const ReactQuill = dynamic(() => import("react-quill"), { ssr: false });
+import 'react-quill/dist/quill.snow.css';
+
 
 const sourceHandleStyleA: CSSProperties = { 
   left: 15 ,
