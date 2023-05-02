@@ -29,8 +29,8 @@ export const edgesAtom = focusAtom(flowStateAtom, (optic) => optic.prop('edges')
 
 export const getNodeAtomById = (id : string)=> atom(
     get =>{
-        const splitted = get(nodesAtom);
-        const nodeAtom = splitted.find(node=>node.id === id);
+        const nodes = get(nodesAtom);
+        const nodeAtom = nodes.find(node=>node.id === id)!;
         return nodeAtom;
     },
     (get , set, newNodeData : Partial<CustomNodeData>)=>{
