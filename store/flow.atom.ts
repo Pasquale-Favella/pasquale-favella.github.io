@@ -28,19 +28,12 @@ export const nodesAtom = focusAtom(flowStateAtom, (optic) => optic.prop('nodes')
 export const edgesAtom = focusAtom(flowStateAtom, (optic) => optic.prop('edges'));
 
 export const getNodeAtomById = (id : string)=> atom(
-    get =>{
-        const nodes = get(nodesAtom);
-        return nodes.find(node=>node.id === id);
-    },
-    (get , set, newNodeData : Partial<CustomNodeData>)=>{
-        const nodes = get(nodesAtom);
+    get => get(nodesAtom).find(node => node.id === id),
+    (get , set , newNodeData : Partial<CustomNodeData>)=> {
         
-        const nodesUpdated = nodes.map(node=>{
-            if(node.id === id){
-                node.data = {...node.data , ...newNodeData};
-            }
-            return node;
-        });
+        const nodesUpdated = get(nodesAtom).map(
+            node=> Object.assign(node, node.id === id && {data : {...node.data , ...newNodeData}}) satisfies Node<CustomNodeData>
+        );
 
         set(nodesAtom , nodesUpdated);
     }
