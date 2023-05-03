@@ -18,7 +18,7 @@ import {
 
 export default function useFlow() {
 
-    const [{ nodes  , edges  } , syncFlowContext] = useAtom(flowStateAtom);
+    const [{ nodes  , edges } , syncFlowContext] = useAtom(flowStateAtom);
   
     const { getViewport , setCenter } = useReactFlow();
 
@@ -69,15 +69,12 @@ export default function useFlow() {
 
     const focusOnNode = ({position} : Node)=> {
         const node = store.getState().getNodes().at(0);
+        const width = node?.width ?? 380;
+        const height = node?.height ?? 230;
 
-        const nodeDimensions = {
-            width : new Number(node?.width).valueOf() ,
-            height : new Number(node?.height).valueOf() ,
-        }
-        
         setCenter(
-            position.x + nodeDimensions.width / 2 , 
-            position.y + nodeDimensions.height / 2 , 
+            position.x + width / 2 , 
+            position.y + height / 2 , 
             { zoom : 0.7 , duration: 300 }
         );
     }

@@ -51,7 +51,7 @@ const CustomNode: FC<NodeProps<CustomNodeData>> = ({ id }) => {
 
   return (
     <>
-    <Handle type="target" id={`${id}-top`} position={Position.Top} />
+      <Handle type="target" id={`${id}-top`} position={Position.Top} />
  
       <div className={`card w-96 shadow-xl relative ${isDarkMode ? "bg-base-300" : "bg-base-100"}`}>
 
