@@ -11,7 +11,8 @@ import {
   applyNodeChanges,
   NodeChange,
   EdgeChange,
-  useReactFlow
+  useReactFlow,
+  useStoreApi
 } from 'reactflow';
 
 
@@ -19,7 +20,9 @@ export default function useFlow() {
 
     const [{ nodes  , edges  } , syncFlowContext] = useAtom(flowStateAtom);
   
-    const { fitView } = useReactFlow();
+    const { getViewport , setCenter } = useReactFlow();
+
+    const store = useStoreApi();
 
     const onConnect = useCallback(
       (params: Connection | Edge) => syncFlowContext(prev =>({...prev , edges : addEdge(params, prev.edges)})),
@@ -28,14 +31,16 @@ export default function useFlow() {
   
     const onNodesChange = useCallback( (changes: NodeChange[]) => {
         syncFlowContext(prev =>({...prev , nodes : applyNodeChanges(changes, prev.nodes)}))
-    },[] );
+    }, []);
 
     const onEdgesChange = useCallback( (changes: EdgeChange[]) => {
         syncFlowContext(prev =>({...prev , edges : applyEdgeChanges(changes, prev.edges)}))
-    },[] );
+    }, []);
 
 
     const addNewNode = () => {
+
+        const { x , y } = getViewport();
 
         const newNode : Node = {
             id: Utils.uid(),
@@ -43,7 +48,7 @@ export default function useFlow() {
                 title : '',
                 body : ''
             },
-            position: { x: 0, y: nodes.length * 200},
+            position: { x , y },
             type: 'custom',
             className: '',
             dragHandle: '.custom-drag-handle'
@@ -51,23 +56,32 @@ export default function useFlow() {
 
         syncFlowContext(prev => ({...prev , nodes : [...prev.nodes , newNode]}));
 
-        fitView({
-            nodes,
-            duration : 200 ,
-            maxZoom : 0.5
-        })
+        focusOnNode(newNode);
     }
 
+    const deleteNodeById = (id : string)=> syncFlowContext(prev => ({...prev , nodes : prev.nodes.filter(node=>node.id !== id)}));
 
-    const deleteNodeById = ( id : string )=> syncFlowContext(prev => ({...prev , nodes : prev.nodes.filter(node=>node.id !== id)}));
-
-    const deleteEdgeById = ( id : string )=> syncFlowContext(prev => ({...prev , edges : prev.edges.filter(edge=>edge.id !== id)}));
+    const deleteEdgeById = (id : string)=> syncFlowContext(prev => ({...prev , edges : prev.edges.filter(edge=>edge.id !== id)}));
 
     const resetFlow = ()=> syncFlowContext({nodes : [] , edges : []});
 
-    const getNodeIdAtom = (id : string) => useMemo(()=> getNodeAtomById(id) , [id])
-      
+    const getNodeIdAtom = (id : string) => useMemo(()=> getNodeAtomById(id) , [id]);
 
+    const focusOnNode = ({position} : Node)=> {
+        const node = store.getState().getNodes().at(0);
+
+        const nodeDimensions = {
+            width : new Number(node?.width).valueOf() ,
+            height : new Number(node?.height).valueOf() ,
+        }
+        
+        setCenter(
+            position.x + nodeDimensions.width / 2 , 
+            position.y + nodeDimensions.height / 2 , 
+            { zoom : 0.7 , duration: 300 }
+        );
+    }
+      
     return {
         nodes ,
         edges ,

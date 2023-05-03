@@ -9,13 +9,10 @@ type Props = {};
 const FlowPage : React.FC<Props>  = ()=>{
 
   return (
-    <>
+    <ReactFlowProvider>
       <NextSeo title='Idea Flow' description='Pasquale Favella , flow your idea'/>
-      
-      <ReactFlowProvider>
-        <Flow />
-      </ReactFlowProvider>
-    </>
+      <Flow />
+    </ReactFlowProvider>
   )
 }
 
