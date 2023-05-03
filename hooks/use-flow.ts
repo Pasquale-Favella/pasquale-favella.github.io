@@ -1,8 +1,7 @@
-import {  flowStateAtom } from "@/store/flow.atom";
+import { useCallback, useMemo } from "react";
+import { flowStateAtom, getNodeAtomById } from "@/store/flow.atom";
 import { Utils } from "@/utils";
 import { useAtom } from "jotai";
-import { useCallback } from "react";
-
 import {
   Node,
   addEdge,
@@ -63,6 +62,10 @@ export default function useFlow() {
     const deleteNodeById = ( id : string )=> syncFlowContext(prev => ({...prev , nodes : prev.nodes.filter(node=>node.id !== id)}));
 
     const deleteEdgeById = ( id : string )=> syncFlowContext(prev => ({...prev , edges : prev.edges.filter(edge=>edge.id !== id)}));
+
+    const resetFlow = ()=> syncFlowContext({nodes : [] , edges : []});
+
+    const getNodeIdAtom = (id : string) => useMemo(()=> getNodeAtomById(id) , [id])
       
 
     return {
@@ -73,6 +76,8 @@ export default function useFlow() {
         onEdgesChange ,
         addNewNode ,
         deleteNodeById ,
-        deleteEdgeById
+        deleteEdgeById ,
+        resetFlow ,
+        getNodeIdAtom
     }
 }

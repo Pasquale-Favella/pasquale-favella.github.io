@@ -1,14 +1,14 @@
 import { FC } from 'react';
 import useIsMobile from '@/hooks/use-isMobile';
+import useFlow from '@/hooks/use-flow';
 import { toPng } from 'html-to-image';
-
 import  {
     Controls,
     ControlButton,
 } from 'reactflow';
 import { HiOutlineViewGridAdd } from 'react-icons/hi';
 import { BsCardImage } from 'react-icons/bs';
-import useFlow from '@/hooks/use-flow';
+import { GrPowerReset } from 'react-icons/gr';
 
 
 type CustomControlProps = {}
@@ -23,7 +23,7 @@ const CustomControl : FC<CustomControlProps> = () => {
             position={isMobile ? 'bottom-left' : 'top-left'} 
         >
             {!isMobile && <DownloadButton />}
-
+            {!isMobile && <ResetButton />}
             <AddButton/>
 
         </Controls>
@@ -71,4 +71,16 @@ function downloadImage(dataUrl : string) {
     downloadAnchor.setAttribute('download', 'IdeaFlow.png');
     downloadAnchor.setAttribute('href', dataUrl);
     downloadAnchor.click();
+}
+
+const ResetButton : FC = ()=> {
+
+    const { resetFlow } = useFlow();
+    const handleReset = ()=> resetFlow();
+  
+    return (
+        <ControlButton onClick={handleReset} title="reset flow">
+            <GrPowerReset />
+        </ControlButton>
+    );
 }

@@ -1,12 +1,12 @@
 import { memo, FC, CSSProperties, useMemo } from 'react';
 import dynamic from 'next/dynamic';
-import { RiDeleteBinLine } from 'react-icons/ri';
-import { Handle, Position, NodeProps } from 'reactflow';
-import { BiDotsVerticalRounded, BiMove } from 'react-icons/bi';
 import { useTheme } from '@/hooks/use-theme';
 import useFlow from '@/hooks/use-flow';
 import { useAtom } from 'jotai';
-import { CustomNodeData, getNodeAtomById } from '@/store/flow.atom';
+import { Handle, Position, NodeProps } from 'reactflow';
+import { RiDeleteBinLine } from 'react-icons/ri';
+import { BiDotsVerticalRounded, BiMove } from 'react-icons/bi';
+import { CustomNodeData } from '@/store/flow.atom';
 
 const ReactQuill = dynamic(() => import("react-quill"), { ssr: false });
 import 'react-quill/dist/quill.snow.css';
@@ -25,9 +25,9 @@ const sourceHandleStyleB: CSSProperties = {
 
 const CustomNode: FC<NodeProps<CustomNodeData>> = ({ id }) => {
 
-  const nodeId = useMemo(()=> getNodeAtomById(id) , [id])
-  const [node, updateNode] = useAtom(nodeId);
-  const { deleteNodeById } = useFlow();
+  const { deleteNodeById , getNodeIdAtom } = useFlow();
+  const nodeIdAtom = getNodeIdAtom(id);
+  const [node, updateNode] = useAtom(nodeIdAtom);
   const { isDarkMode } = useTheme();
 
   const handleChange = (value : Partial<CustomNodeData>)=> updateNode(value);
