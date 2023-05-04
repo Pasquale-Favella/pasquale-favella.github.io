@@ -30,7 +30,7 @@ export default function App({ Component, pageProps }: AppProps) {
               url: 'https://pasquale-favella.github.io/',
               siteName: 'Pasquale Favella blogfolio',
               images : [
-                { url: 'https://www.example.ie/og-image.png' },
+                { url: 'https://pasquale-favella.github.io/og-image.png' },
               ]
             }}
             titleTemplate = 'Pasquale Favella | %s'
