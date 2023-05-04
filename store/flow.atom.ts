@@ -32,7 +32,7 @@ export const getNodeAtomById = (id : string)=> atom(
     (get , set , newNodeData : Partial<CustomNodeData>)=> {
         
         const nodesUpdated = get(nodesAtom).map(
-            node=> Object.assign(node, node.id === id && {data : {...node.data , ...newNodeData}}) as Node<CustomNodeData>
+            node=> Object.assign(node, node.id === id && {data : {...node.data , ...newNodeData}}) satisfies Node<CustomNodeData>
         );
 
         set(nodesAtom , nodesUpdated);
