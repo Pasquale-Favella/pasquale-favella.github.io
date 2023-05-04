@@ -2,11 +2,12 @@
 @tailwind components;
 @tailwind utilities;
 
-
+/* nprogress style overrides */
 #nprogress  .bar {
     background: hsl(var(--p) / 1) !important;
 }
 
+/* reactflow style overrides */
 .react-flow__attribution{
     background-color:  transparent !important;
 }
@@ -25,4 +26,10 @@
 .react-flow__minimap-mask,
 .react-flow__minimap-node{
     fill: hsl(var(--b3)) !important;
+}
+
+/* react-quill style overrides */
+.ql-container p code{
+    background-color: hsl(var(--b2)) !important;
+    display: block;
 }
