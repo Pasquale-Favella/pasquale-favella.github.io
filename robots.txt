@@ -1,0 +1,9 @@
+# *
+User-agent: *
+Allow: /
+
+# Host
+Host: https://pasquale-favella.github.io/
+
+# Sitemaps
+Sitemap: https://pasquale-favella.github.io/sitemap.xml
