@@ -8,7 +8,7 @@
     "start": "next start",
     "export": "next export",
     "lint": "next lint",
-    "dev:serve-export" : "npm run build && npm run export && npx serve ./out"
+    "dev:serve-export": "npm run build && npm run export && npx serve ./out"
   },
   "dependencies": {
     "@giscus/react": "^2.2.8",
@@ -21,11 +21,13 @@
     "date-fns": "^2.30.0",
     "eslint": "8.39.0",
     "eslint-config-next": "13.3.4",
+    "font-awesome": "^4.7.0",
     "gray-matter": "^4.0.3",
     "html-to-image": "^1.11.11",
     "jotai": "^2.0.4",
     "kbar": "^0.1.0-beta.39",
     "markdown-it": "^13.0.1",
+    "markdown-it-code-copy": "^0.1.1",
     "markdown-it-highlightjs": "^4.0.1",
     "next": "13.3.4",
     "next-seo": "^5.15.0",

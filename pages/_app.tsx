@@ -2,6 +2,7 @@ import '@/styles/globals.css'
 import 'nprogress/nprogress.css'
 import 'highlight.js/styles/atom-one-dark.css'
 import 'reactflow/dist/style.css'
+import 'font-awesome/css/font-awesome.min.css'
 
 import type { AppProps } from 'next/app';
 import { DefaultSeo } from 'next-seo';

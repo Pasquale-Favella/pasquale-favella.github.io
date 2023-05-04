@@ -1,9 +1,11 @@
+import { useMemo } from 'react'
 import GithubService from '@/services/github.service';
 import { GetStaticProps } from 'next';
 import { NextSeo } from 'next-seo';
 import { ParsedUrlQuery } from 'querystring';
 import md from 'markdown-it';
 import highlightjs from 'markdown-it-highlightjs';
+import codecopy from 'markdown-it-code-copy'
 import matter from 'gray-matter';
 import { Comments } from '@/components/PostList';
 import Link from 'next/link';
@@ -22,6 +24,11 @@ interface Props {
 
 const BlogPage : React.FC<Props>  = ({content , title})=>{
 
+  const articleContent = useMemo(()=> md().use(highlightjs).use(codecopy,{
+    buttonClass : 'btn btn-ghost btn-circle btn-sm',
+    iconClass : 'fa fa-solid fa-clone text-neutral-content'
+  }).render(content) , []);
+
   return (
     <>
       <NextSeo title={title} description={`Pasquale Favella Blog - ${title}`} />
@@ -38,7 +45,7 @@ const BlogPage : React.FC<Props>  = ({content , title})=>{
         <h1 className='text-4xl font-extrabold leading-tight md:text-5xl'>{title}</h1>
       </div>
 
-      <article className='prose md:prose-lg lg:prose-xl mx-auto' dangerouslySetInnerHTML={{ __html: md().use(highlightjs).render(content) }} />
+      <article className='prose md:prose-lg lg:prose-xl mx-auto' dangerouslySetInnerHTML={{ __html: articleContent }} />
 
       <Comments />
     </>
