@@ -11,7 +11,6 @@ import { Comments } from '@/components/PostList';
 import Link from 'next/link';
 import { MdKeyboardArrowLeft } from 'react-icons/md';
 
-
 interface Params extends ParsedUrlQuery {
     slug : string;
 }
@@ -27,7 +26,7 @@ const BlogPage : React.FC<Props>  = ({content , title})=>{
   const articleContent = useMemo(()=> md().use(highlightjs).use(codecopy,{
     buttonClass : 'btn btn-ghost btn-circle btn-sm',
     iconClass : 'fa fa-solid fa-clone text-neutral-content'
-  }).render(content) , []);
+  }).render(content) , [content]);
 
   return (
     <>
