@@ -1,5 +1,5 @@
 
-import { BiCodeAlt } from 'react-icons/bi';
+import { BiCodeAlt, BiCodeBlock } from 'react-icons/bi';
 import { FiGithub, FiLinkedin } from 'react-icons/fi';
 import { RiArticleFill } from 'react-icons/ri';
 import { DiGitPullRequest } from 'react-icons/di';
@@ -34,6 +34,14 @@ const KBar = (props: KBarProps) => {
       section: 'Apps',
       perform: () => router.push('/flow'),
       icon: <TfiThought />,
+    },
+    {
+      id: 'diff',
+      name: 'Editor',
+      keywords: 'code editor helper',
+      section: 'Apps',
+      perform: () => router.push('/editor'),
+      icon: <BiCodeBlock />,
     },
     {
       id: 'projects',
