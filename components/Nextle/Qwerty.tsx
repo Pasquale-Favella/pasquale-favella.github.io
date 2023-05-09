@@ -20,7 +20,7 @@ const Qwerty : FC<QwertyProps> = ()=> {
     return () => {
         window.removeEventListener('keyup', handleAction)
     }
-  }, []);
+  }, [handleAction]);
 
   return (
     <div>
