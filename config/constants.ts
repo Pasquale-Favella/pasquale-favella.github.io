@@ -117,3 +117,4 @@ export const EDITOR_INITIALS = {
     `
 }
 
+export const QWERTY = ['QWERTYUIOP', 'ASDFGHJKL', 'ZXCVBNM'];

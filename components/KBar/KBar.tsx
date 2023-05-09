@@ -19,6 +19,7 @@ import { WithChildren } from '@/types'
 import Results from './Results';
 import { useRouter } from 'next/router';
 import GitOwner from '@/config/owner';
+import { BsGrid3X3Gap } from 'react-icons/bs';
   
 type KBarProps = WithChildren
   
@@ -34,6 +35,14 @@ const KBar = (props: KBarProps) => {
       section: 'Apps',
       perform: () => router.push('/flow'),
       icon: <TfiThought />,
+    },
+    {
+      id: 'nextle',
+      name: 'Nextle',
+      keywords: 'Guess the hidden word in 6 tries',
+      section: 'Apps',
+      perform: () => router.push('/nextle'),
+      icon: <BsGrid3X3Gap />,
     },
     {
       id: 'diff',

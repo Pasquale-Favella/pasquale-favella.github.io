@@ -155,3 +155,36 @@ export type GithubRepo = {
   default_branch: string;
 }
 
+export type NextleGist = {
+  url: string;
+  forks_url: string;
+  commits_url: string;
+  id: string;
+  node_id: string;
+  git_pull_url: string;
+  git_push_url: string;
+  html_url: string;
+  files: WirdsFiles;
+  public: boolean;
+  created_at: string;
+  updated_at: string;
+  description: string;
+  comments: number;
+  comments_url: string;
+  owner: GithubUser;
+  truncated: boolean;
+}
+
+export type WirdsFiles = {
+  'words.json': Wordsjson;
+}
+
+export type Wordsjson = {
+  filename: string;
+  type: string;
+  language: string;
+  raw_url: string;
+  size: number;
+  truncated: boolean;
+  content: string;
+}

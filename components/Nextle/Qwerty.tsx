@@ -1,0 +1,58 @@
+import { FC, memo , useEffect} from "react"
+import clsx from "clsx";
+import { QWERTY } from "@/config/constants";
+import useIsMobile from "@/hooks/use-isMobile";
+import useNextle from "@/hooks/use-nextle";
+import { Utils } from "@/utils";
+
+type QwertyProps = {}
+ 
+const Qwerty : FC<QwertyProps> = ()=> {
+
+  const { handleAction , exactGuesses , inexactGuesses , allGuesses } = useNextle();
+
+  const isMobile = useIsMobile();
+
+  useEffect(() => {
+
+    window.addEventListener('keyup', handleAction)
+
+    return () => {
+        window.removeEventListener('keyup', handleAction)
+    }
+  }, []);
+
+  return (
+    <div>
+      {QWERTY.map((row,i) => (
+        <div key={Utils.uid()} 
+          className={clsx('flex justify-center w-full', isMobile ? 'gap-px my-px' : 'gap-1 my-1')}
+        >
+          {(i===2 ? ['Enter',...row.split(''),'⟵'] : row.split('')).map((char) => {
+
+            return (
+              <button
+                key={Utils.uid()}
+                onClick={()=>handleAction({key : char})}
+                className={clsx(
+                  'kbd scale-90',
+                  exactGuesses.includes(char) 
+                    ? 'bg-primary bg-opacity-25' 
+                    : inexactGuesses.includes(char) 
+                    ? 'bg-warning bg-opacity-25' 
+                    : allGuesses.includes(char)
+                    ? 'bg-base-300'
+                    : 'bg-base-100'
+                )}
+              >
+                {char}
+              </button>
+            )
+          })}
+        </div>
+      ))}
+    </div>
+  )
+}
+
+export default memo(Qwerty);

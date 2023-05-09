@@ -38,6 +38,7 @@
     "nprogress": "^0.2.0",
     "react": "18.2.0",
     "react-dom": "18.2.0",
+    "react-hot-toast": "^2.4.1",
     "react-icons": "^4.8.0",
     "react-quill": "^2.0.0",
     "reactflow": "^11.7.0",
