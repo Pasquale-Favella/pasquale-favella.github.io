@@ -14,14 +14,14 @@ const WinModal = ()=>{
         
         switch (currentGuessNumber) {
             case 1:
-                return <p className="flex gap-2 justify-start items-center"><GiPuzzle size={30} /> You're a true puzzle master</p>
+                return <p className="flex gap-2 justify-start items-center"><GiPuzzle size={30} /> You&apos;re a true puzzle master</p>
             case 2:
-                return <p className="flex gap-2 justify-start items-center"><GiDoubleDragon size={30} /> You're a true puzzle Dragon</p>
+                return <p className="flex gap-2 justify-start items-center"><GiDoubleDragon size={30} /> You&apos;re a true puzzle Dragon</p>
             case 3:
-                return <p className="flex gap-2 justify-start items-center"><SiGunicorn size={30} /> You're a true puzzle Unicorn</p>
+                return <p className="flex gap-2 justify-start items-center"><SiGunicorn size={30} /> You&apos;re a true puzzle Unicorn</p>
         
             default:
-                return <p className="flex gap-2 justify-start items-center"><TbConfetti size={30} /> Bravo! You've cracked that puzzle with ease</p>
+                return <p className="flex gap-2 justify-start items-center"><TbConfetti size={30} /> Bravo! You&apos;ve cracked that puzzle with ease</p>
         }
     },[currentGuessNumber])
     
@@ -31,7 +31,7 @@ const WinModal = ()=>{
             <div className="modal modal-bottom sm:modal-middle">
                 <div className="modal-box">
                     <h3 className="font-bold text-lg">Great!</h3>
-                    <p className="py-4">Congratulations, you've successfully solved the Nextle!</p>
+                    <p className="py-4">Congratulations, you&apos;ve successfully solved the Nextle!</p>
                     {winningPhrase}
                     <div className="modal-action">
                         <button className="btn btn-ghost gap-2" 
