@@ -18,7 +18,7 @@ const Guess : FC< GuessProps> = ({index})=> {
   const isGuessed = index < currentGuessNumber;
 
   return (
-    <div className="mb-2 grid grid-cols-5 gap-2">
+    <div className="grid grid-cols-5 gap-1 md:gap-2">
       {new Array(5).fill(0).map((_, i) => {
 
         return (
@@ -26,7 +26,7 @@ const Guess : FC< GuessProps> = ({index})=> {
             className={clsx(
               'flex h-16 w-16 items-center justify-center rounded border border-base-300 font-bold uppercase',
               !isGuessed ? 'bg-base-100' : guess[i] === word[i] ? 'bg-primary bg-opacity-50' : word.includes(guess[i]) ? 'bg-warning bg-opacity-50' : 'bg-base-100' ,
-              isMobile ? 'scale-90' : ''
+              isMobile ? 'h-14 w-14' : ''
             )}
           >
             {guess[i]}

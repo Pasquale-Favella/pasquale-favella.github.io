@@ -18,15 +18,15 @@ const Qwerty : FC<QwertyProps> = ()=> {
     window.addEventListener('keyup', handleAction)
 
     return () => {
-        window.removeEventListener('keyup', handleAction)
+      window.removeEventListener('keyup', handleAction)
     }
   }, [handleAction]);
 
   return (
-    <div>
+    <div className="w-full flex flex-col justify-center items-center mx-1">
       {QWERTY.map((row,i) => (
         <div key={Utils.uid()} 
-          className={clsx('flex justify-center w-full', isMobile ? 'gap-px my-px' : 'gap-1 my-1')}
+          className='flex justify-center w-full gap-px md:gap-1 my-px md:my-1'
         >
           {(i===2 ? ['Enter',...row.split(''),'⟵'] : row.split('')).map((char) => {
 
@@ -35,7 +35,7 @@ const Qwerty : FC<QwertyProps> = ()=> {
                 key={Utils.uid()}
                 onClick={()=>handleAction({key : char})}
                 className={clsx(
-                  'kbd font-semibold tracking-wider md:tracking-wide h-12',
+                  'kbd font-semibold tracking-wider md:tracking-wide h-12 w-12',
                   exactGuesses.includes(char) 
                     ? 'bg-primary bg-opacity-25' 
                     : inexactGuesses.includes(char) 
@@ -43,7 +43,7 @@ const Qwerty : FC<QwertyProps> = ()=> {
                     : allGuesses.includes(char)
                     ? 'bg-base-300'
                     : 'bg-base-100',
-                  isMobile ? 'scale-90' : 'w-12'
+                  char === 'Enter' && 'min-w-min'
                 )}
               >
                 {char}

@@ -11,7 +11,7 @@ const Layout = (props: WithChildren)=> {
     return (
         <KBar>
             <Navbar/>
-            <main className='relative mx-auto min-h-layout max-w-6xl px-8 pt-20 pb-2 mb-2'>
+            <main className='relative mx-auto min-h-layout max-w-6xl px-8 pt-20 mb-2'>
                 {children}
             </main>
             <Footer/>
