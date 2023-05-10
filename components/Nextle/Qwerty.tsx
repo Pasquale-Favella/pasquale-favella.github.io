@@ -1,7 +1,6 @@
 import { FC, memo , useEffect} from "react"
 import clsx from "clsx";
 import { QWERTY } from "@/config/constants";
-import useIsMobile from "@/hooks/use-isMobile";
 import useNextle from "@/hooks/use-nextle";
 import { Utils } from "@/utils";
 
@@ -10,8 +9,6 @@ type QwertyProps = {}
 const Qwerty : FC<QwertyProps> = ()=> {
 
   const { handleAction , exactGuesses , inexactGuesses , allGuesses } = useNextle();
-
-  const isMobile = useIsMobile();
 
   useEffect(() => {
 
