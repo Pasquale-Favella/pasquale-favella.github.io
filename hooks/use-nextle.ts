@@ -1,6 +1,7 @@
 import { useMemo } from "react";
 import { useAtom, useAtomValue, useSetAtom } from "jotai";
-import { currentGuessAtom, currentGuessWordAtom, guessesAtom, hasLostNextleAtom, hasWonNextleAtom, wordAtom, wordsAtom } from "@/store/nextle.atom";
+import { toast } from "react-hot-toast";
+import { currentGuessAtom, currentGuessWordAtom, guessesAtom, hasLostNextleAtom, hasWonNextleAtom, isCurrentWordNotInPerimeterAtom, wordAtom, wordsAtom } from "@/store/nextle.atom";
 import { NextleUtils } from "@/utils";
 
 export default function useNextle() {
@@ -9,6 +10,7 @@ export default function useNextle() {
     const [word , setWord] = useAtom(wordAtom);
     const [guesses , setGuesses] = useAtom(guessesAtom);
     const [currentGuessNumber , setCurrentTry ] = useAtom(currentGuessAtom);
+    const isCurrentWordNotInPerimeter = useAtomValue(isCurrentWordNotInPerimeterAtom);
     const hasWon = useAtomValue(hasWonNextleAtom);
     const hasLost = useAtomValue(hasLostNextleAtom);
     const dispatch = useSetAtom(currentGuessWordAtom);
@@ -31,20 +33,22 @@ export default function useNextle() {
     const inexactGuesses = useMemo(() => word.split('').filter((letter) => allGuesses.includes(letter)) , [allGuesses]);
 
     const handleAction = ({ key }: KeyboardEvent | { key: string }) => {
+
+        if(key === 'Enter' && isCurrentWordNotInPerimeter) return toast.error('Not in word list');
         
         if(key === 'Enter') return dispatch({ type: key });
 
         if(key === 'Backspace' || key === '⟵') return dispatch({ type: key });
 
-        if(key.match(/^[A-z]$/)) return dispatch({ type: 'Add', value: key });
+        if(key.match(/^[A-z]$/)) return dispatch({ type: 'Add', value: key });        
         
     }
 
     const restart = ()=> {
-        const {currentGuess , guesses , word} = NextleUtils.initializeGameState(words)
-        setWord(word)
-        setGuesses(guesses)
-        setCurrentTry(currentGuess)
+        const {currentGuess , guesses , word} = NextleUtils.initializeGameState(words);
+        setWord(word);
+        setGuesses(guesses);
+        setCurrentTry(currentGuess);
     };
 
     return {

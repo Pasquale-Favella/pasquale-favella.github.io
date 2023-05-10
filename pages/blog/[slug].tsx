@@ -34,7 +34,7 @@ const BlogPage : React.FC<Props>  = ({content , title})=>{
        
       <Link
         href='/blog'
-        className='group fixed top-[6.5rem] hidden items-center justify-center text-sm font-medium xl:inline-flex'
+        className='group fixed top-24 hidden items-center justify-center text-sm font-medium xl:inline-flex'
       >
         <MdKeyboardArrowLeft className='h-4 w-4 transition duration-200 group-hover:translate-x-1' />
         <span>See all Posts</span>

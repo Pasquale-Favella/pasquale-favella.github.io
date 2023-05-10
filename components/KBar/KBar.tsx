@@ -99,7 +99,7 @@ const KBar = (props: KBarProps) => {
       <KBarProvider actions={actions}>
         <KBarPortal>
           <KBarPositioner className='z-50 bg-black/10 backdrop-blur'>
-            <KBarAnimator className='w-full max-w-lg rounded-lg border border-primary '>
+            <KBarAnimator className='w-full max-w-lg rounded-lg border border-primary bg-base-100'>
               <KBarSearch className='w-full bg-transparent py-3 px-6 outline-none placeholder-primary' />
               <Results />
               <div className='h-4'></div>

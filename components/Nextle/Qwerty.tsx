@@ -35,14 +35,15 @@ const Qwerty : FC<QwertyProps> = ()=> {
                 key={Utils.uid()}
                 onClick={()=>handleAction({key : char})}
                 className={clsx(
-                  'kbd scale-90',
+                  'kbd font-semibold tracking-wider md:tracking-wide h-12',
                   exactGuesses.includes(char) 
                     ? 'bg-primary bg-opacity-25' 
                     : inexactGuesses.includes(char) 
                     ? 'bg-warning bg-opacity-25' 
                     : allGuesses.includes(char)
                     ? 'bg-base-300'
-                    : 'bg-base-100'
+                    : 'bg-base-100',
+                  isMobile ? 'scale-90' : 'w-12'
                 )}
               >
                 {char}

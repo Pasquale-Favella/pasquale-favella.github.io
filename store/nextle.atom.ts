@@ -1,6 +1,5 @@
 import { atom } from "jotai";
 import { focusAtom } from "jotai-optics";
-import { toast } from "react-hot-toast";
 
 export type NextleGameState = {
   word: string;
@@ -63,10 +62,6 @@ export const currentGuessWordAtom = atom(
         if(action.type === 'Enter' && words.includes(guesses[currentGuessIndex])){
             set(currentGuessAtom , currentGuessIndex + 1);
         }
-
-        if(action.type === 'Enter' && get(isCurrentWordNotInPerimeterAtom)){
-            toast.error('Not in word list')
-        } 
 
         if(action.type === 'Backspace' || action.type === '⟵'){
             guesses[currentGuessIndex] = guesses[currentGuessIndex].slice(0 , guesses[currentGuessIndex].length - 1);
