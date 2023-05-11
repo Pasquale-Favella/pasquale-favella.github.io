@@ -16,6 +16,8 @@ type GuessAction = {
 
 export const wordsAtom = atom<string[]>([]);
 
+const wordsSetAtom = atom(get => new Set(get(wordsAtom)));
+
 export const nextleGameStateAtom= atom<NextleGameState>({
     word: '',
     guesses: [] ,
@@ -33,7 +35,7 @@ export const hasWonNextleAtom = atom(
         const word = get(wordAtom);
         return guesses[currentGuessIndex - 1] === word;
     }
-)
+);
 
 export const hasLostNextleAtom = atom(
     get => {
@@ -41,7 +43,7 @@ export const hasLostNextleAtom = atom(
         const currentGuessNumber = get(currentGuessAtom);
         return !hasWon && currentGuessNumber === 6;
     }
-)
+);
 
 export const currentGuessWordAtom = atom(
     get => {
@@ -51,7 +53,7 @@ export const currentGuessWordAtom = atom(
     } ,
     (get , set , action : GuessAction)=>{
 
-        const words = get(wordsAtom);
+        const words = get(wordsSetAtom);
         const currentGuessIndex = get(currentGuessAtom);
         const guesses = get(guessesAtom);
         const hasWon = get(hasWonNextleAtom);
@@ -59,7 +61,7 @@ export const currentGuessWordAtom = atom(
 
         if(hasWon || hasLost) return;
 
-        if(action.type === 'Enter' && words.includes(guesses[currentGuessIndex])){
+        if(action.type === 'Enter' && words.has(guesses[currentGuessIndex])){
             set(currentGuessAtom , currentGuessIndex + 1);
         }
 
@@ -78,8 +80,8 @@ export const currentGuessWordAtom = atom(
 
 export const isCurrentWordNotInPerimeterAtom = atom(
     get => {
-        const words = get(wordsAtom);
+        const words = get(wordsSetAtom);
         const currentWord = get(currentGuessWordAtom);
-        return currentWord?.length === 5 && !words.includes(currentWord);
+        return currentWord?.length === 5 && !words.has(currentWord);
     }
 );
