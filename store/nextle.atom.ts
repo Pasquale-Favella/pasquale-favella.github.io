@@ -31,7 +31,7 @@ export const hasWonNextleAtom = atom(
         const currentGuessIndex = get(currentGuessAtom);
         const guesses = get(guessesAtom);
         const word = get(wordAtom);
-        return guesses[currentGuessIndex - 1] === word
+        return guesses[currentGuessIndex - 1] === word;
     }
 )
 

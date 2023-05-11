@@ -15,22 +15,16 @@ export default function useNextle() {
     const hasLost = useAtomValue(hasLostNextleAtom);
     const dispatch = useSetAtom(currentGuessWordAtom);
 
-    const allGuesses = useMemo(() => guesses.slice(0, currentGuessNumber).join('').split('') , [guesses , currentGuessNumber]);
+    const allGuesses = useMemo(() => new Set(guesses.slice(0, currentGuessNumber).join('').split('')) , [guesses , currentGuessNumber]);
 
-    const exactGuesses = useMemo(() => {
-        return (
-            word
-              .split('')
-              .filter((letter, i) => {
-                return guesses
-                  .slice(0, currentGuessNumber)
-                  .map((word) => word[i])
-                  .includes(letter)
-              })
-          )
-    }, [guesses , currentGuessNumber]);
+    const exactGuesses = useMemo(() => new Set(
+        word
+        .split('')
+        .filter((letter, i) => guesses.slice(0, currentGuessNumber).map((word) => word[i]).includes(letter))
+    ),
+    [guesses , currentGuessNumber]);
 
-    const inexactGuesses = useMemo(() => word.split('').filter((letter) => allGuesses.includes(letter)) , [allGuesses]);
+    const inexactGuesses = useMemo(() => new Set(word.split('').filter((letter) => allGuesses.has(letter))) , [allGuesses]);
 
     const handleAction = ({ key }: KeyboardEvent | { key: string }) => {
 

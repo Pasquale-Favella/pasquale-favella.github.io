@@ -33,11 +33,11 @@ const Qwerty : FC<QwertyProps> = ()=> {
                 onClick={()=>handleAction({key : char})}
                 className={clsx(
                   'kbd font-semibold tracking-wider md:tracking-wide h-12 w-12',
-                  exactGuesses.includes(char) 
+                  exactGuesses.has(char) 
                     ? 'bg-primary bg-opacity-25' 
-                    : inexactGuesses.includes(char) 
+                    : inexactGuesses.has(char) 
                     ? 'bg-warning bg-opacity-25' 
-                    : allGuesses.includes(char)
+                    : allGuesses.has(char)
                     ? 'bg-base-300'
                     : 'bg-base-100',
                   char === 'Enter' && 'min-w-min'

@@ -8,7 +8,7 @@ type GuessProps = {
   index : number
 }
  
-const Guess : FC< GuessProps> = ({index})=> {
+const Guess : FC<GuessProps> = ({index})=> {
 
   const { word , guesses , currentGuessNumber , allGuesses } = useNextle();
 
@@ -29,7 +29,7 @@ const Guess : FC< GuessProps> = ({index})=> {
                 ? 'bg-primary bg-opacity-50' 
                 : word.includes(guess[i]) 
                 ? 'bg-warning bg-opacity-50' 
-                : allGuesses.includes(guess[i])
+                : allGuesses.has(guess[i])
                 ? 'bg-base-300'
                 : 'bg-base-100',
             )}
