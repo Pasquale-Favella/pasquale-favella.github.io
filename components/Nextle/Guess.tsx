@@ -2,7 +2,6 @@
 import { FC, memo } from "react"
 import clsx from "clsx"
 import useNextle from "@/hooks/use-nextle"
-import useIsMobile from "@/hooks/use-isMobile"
 import { Utils } from "@/utils"
 
 type GuessProps = { 
@@ -11,8 +10,7 @@ type GuessProps = {
  
 const Guess : FC< GuessProps> = ({index})=> {
 
-  const { word , guesses , currentGuessNumber } = useNextle();
-  const isMobile = useIsMobile();
+  const { word , guesses , currentGuessNumber , allGuesses } = useNextle();
 
   const guess = guesses[index];
   const isGuessed = index < currentGuessNumber;
@@ -25,8 +23,15 @@ const Guess : FC< GuessProps> = ({index})=> {
           <div key={Utils.uid()}
             className={clsx(
               'flex w-14 h-14 md:h-16 md:w-16 items-center justify-center rounded border border-base-300 font-bold uppercase',
-              !isGuessed ? 'bg-base-100' : guess[i] === word[i] ? 'bg-primary bg-opacity-50' : word.includes(guess[i]) ? 'bg-warning bg-opacity-50' : 'bg-base-100' ,
-              //isMobile ? 'w-10 h-10 scale-125' : ''
+              !isGuessed 
+                ? 'bg-base-100' 
+                : guess[i] === word[i] 
+                ? 'bg-primary bg-opacity-50' 
+                : word.includes(guess[i]) 
+                ? 'bg-warning bg-opacity-50' 
+                : allGuesses.includes(guess[i])
+                ? 'bg-base-300'
+                : 'bg-base-100',
             )}
           >
             {guess[i]}
