@@ -24,9 +24,9 @@ const Guess : FC< GuessProps> = ({index})=> {
         return (
           <div key={Utils.uid()}
             className={clsx(
-              'flex h-16 w-16 items-center justify-center rounded border border-base-300 font-bold uppercase',
+              'flex w-14 h-14 md:h-16 md:w-16 items-center justify-center rounded border border-base-300 font-bold uppercase',
               !isGuessed ? 'bg-base-100' : guess[i] === word[i] ? 'bg-primary bg-opacity-50' : word.includes(guess[i]) ? 'bg-warning bg-opacity-50' : 'bg-base-100' ,
-              isMobile ? 'h-14 w-14' : ''
+              //isMobile ? 'w-10 h-10 scale-125' : ''
             )}
           >
             {guess[i]}

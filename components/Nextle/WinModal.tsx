@@ -2,7 +2,7 @@ import { useMemo } from "react"
 import useNextle from "@/hooks/use-nextle"
 import { HiPlay } from "react-icons/hi"
 import { TbConfetti } from "react-icons/tb"
-import { GiPuzzle , GiDoubleDragon} from "react-icons/gi"
+import { GiPuzzle , GiDoubleDragon, GiSwordwoman } from "react-icons/gi"
 import { SiGunicorn } from "react-icons/si"
 
 
@@ -19,6 +19,8 @@ const WinModal = ()=>{
                 return <p className="flex gap-2 justify-start items-center"><GiDoubleDragon size={30} /> You&apos;re a true puzzle Dragon</p>
             case 3:
                 return <p className="flex gap-2 justify-start items-center"><SiGunicorn size={30} /> You&apos;re a true puzzle Unicorn</p>
+            case 4:
+                return <p className="flex gap-2 justify-start items-center"><GiSwordwoman size={30} /> You&apos;re a true puzzle Hero</p>
         
             default:
                 return <p className="flex gap-2 justify-start items-center"><TbConfetti size={30} /> Bravo! You&apos;ve cracked that puzzle with ease</p>
