@@ -31,6 +31,7 @@ jobs:
           NEXT_PUBLIC_GITHUB_SECRET: ${{secrets.NEXT_PUBLIC_GITHUB_SECRET}}
           NEXT_PUBLIC_SITE_URL: ${{secrets.NEXT_PUBLIC_SITE_URL}}
       - run: npm run sitemap:build
+      - run: mv sitemap*.xml robots.txt out/
       - run: touch ./out/.nojekyll
 
       - name: Deploy 🚀
