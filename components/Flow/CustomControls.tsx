@@ -8,7 +8,7 @@ import  {
 } from 'reactflow';
 import { HiOutlineViewGridAdd } from 'react-icons/hi';
 import { BsCardImage } from 'react-icons/bs';
-import { GrPowerReset } from 'react-icons/gr';
+import { RxReset } from 'react-icons/rx';
 
 
 type CustomControlProps = {}
@@ -80,7 +80,7 @@ const ResetButton : FC = ()=> {
   
     return (
         <ControlButton onClick={handleReset} title="reset flow">
-            <GrPowerReset />
+            <RxReset />
         </ControlButton>
     );
 }
