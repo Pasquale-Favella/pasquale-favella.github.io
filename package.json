@@ -5,10 +5,10 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "sitemap:build": "next-sitemap",
+    "postbuild": "next-sitemap",
     "start": "next start",
     "lint": "next lint",
-    "dev:serve-export": "npm run build && npm run sitemap:build && npx serve ./out",
+    "dev:serve-export": "npm run build && npx serve ./out",
     "dev:update-deps": "npx npm-upgrade"
   },
   "dependencies": {

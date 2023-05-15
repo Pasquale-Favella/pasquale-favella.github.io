@@ -30,17 +30,10 @@ jobs:
           NEXT_PUBLIC_GITHUB_CLIENTID: ${{secrets.NEXT_PUBLIC_GITHUB_CLIENTID}}
           NEXT_PUBLIC_GITHUB_SECRET: ${{secrets.NEXT_PUBLIC_GITHUB_SECRET}}
           NEXT_PUBLIC_SITE_URL: ${{secrets.NEXT_PUBLIC_SITE_URL}}
-      - run: npm run sitemap:build
-        env:
-          NEXT_PUBLIC_SITE_URL: ${{secrets.NEXT_PUBLIC_SITE_URL}}
+      #- run: npm run sitemap:build
+      #  env:
+      #    NEXT_PUBLIC_SITE_URL: ${{secrets.NEXT_PUBLIC_SITE_URL}}
       - run: mv ./public/sitemap*.xml ./public/robots.txt ./out/
-      # - run: touch ./out/.nojekyll
-
-      # - name: Deploy 🚀
-      #   uses: JamesIves/github-pages-deploy-action@v4.4.0
-      #   with:
-      #     branch: gh-pages # The branch the action should deploy to.
-      #     folder: out # The folder the action should deploy.
 
       - name: Deploy 🚀
         uses: peaceiris/actions-gh-pages@v3
