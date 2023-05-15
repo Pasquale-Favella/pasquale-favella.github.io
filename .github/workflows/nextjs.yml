@@ -30,9 +30,6 @@ jobs:
           NEXT_PUBLIC_GITHUB_CLIENTID: ${{secrets.NEXT_PUBLIC_GITHUB_CLIENTID}}
           NEXT_PUBLIC_GITHUB_SECRET: ${{secrets.NEXT_PUBLIC_GITHUB_SECRET}}
           NEXT_PUBLIC_SITE_URL: ${{secrets.NEXT_PUBLIC_SITE_URL}}
-      #- run: npm run sitemap:build
-      #  env:
-      #    NEXT_PUBLIC_SITE_URL: ${{secrets.NEXT_PUBLIC_SITE_URL}}
       - run: mv ./public/sitemap*.xml ./public/robots.txt ./out/
 
       - name: Deploy 🚀
