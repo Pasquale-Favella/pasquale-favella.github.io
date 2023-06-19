@@ -11,9 +11,7 @@ export type CodeState = {
   value: string
 }
 
-export type LangState = {
-    [key in EditorStateKey] : CodeState
-}
+export type LangState = Record<EditorStateKey, CodeState>;
 
 export type EditorState = {
     state : LangState ,
