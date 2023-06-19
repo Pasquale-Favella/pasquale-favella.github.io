@@ -7,7 +7,7 @@ import { GetStaticProps } from 'next';
 import { NextSeo } from 'next-seo';
 
 import { useState } from 'react';
-import { MdOutlineDoNotDisturb } from 'react-icons/md';
+import { BsPostcardFill } from 'react-icons/bs';
 
 type Props = {posts:GithubIssue[]}
 
@@ -40,12 +40,11 @@ const Blog : React.FC<Props>  = ({posts})=>{
 
         {Boolean(filteredPosts.length) 
           ? <PostList posts={filteredPosts}/>
-          : <div className='flex justify-items-center items-center'>
+          : <div className='flex justify-center items-center'>
               <span
-                
-                className='group my-8 flex items-center gap-4 text-lg font-medium'
+                className='group my-8 flex items-center gap-2 text-lg font-medium'
               >
-                <MdOutlineDoNotDisturb size={20} className='transition duration-200 group-hover:scale-125' />
+                <BsPostcardFill size={25} className='transition duration-200 group-hover:scale-125' />
                 <span>No post found</span>
               </span>
             </div>
