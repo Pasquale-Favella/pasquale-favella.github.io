@@ -22,24 +22,21 @@ const Blog : React.FC<Props>  = ({posts})=>{
       <NextSeo title='Blog' description='Pasquale Favella Blog'/>
       <main >   
 
-        <div className="form-control">
-          <label className="input-group">
-            <select className="select select-bordered focus:outline-none focus:border-primary  max-w-xs"
-              defaultValue={CONSTANTS.LABELS.ALL} value={selectedTag}
-              onChange={e => onTagSelect(e.target.value)}
-            >
-              {tags.map(tag=><option key={tag} value={tag}>{tag}</option>)}
-            </select>
-            <input type="text" 
-              placeholder='Search articles'
-              aria-label='Search articles' 
-              className="input input-bordered w-full focus:outline-none focus:border-primary" 
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-            />
-
-          </label>
-        </div>
+        <label className="join w-full">
+          <select className="select select-bordered focus:outline-none focus:border-primary max-w-xs join-item"
+            defaultValue={CONSTANTS.LABELS.ALL} value={selectedTag}
+            onChange={e => onTagSelect(e.target.value)}
+          >
+            {tags.map(tag=><option key={tag} value={tag}>{tag}</option>)}
+          </select>
+          <input type="text" 
+            placeholder='Search articles'
+            aria-label='Search articles' 
+            className="input input-bordered w-full focus:outline-none focus:border-primary join-item" 
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+          />
+        </label>
 
         {Boolean(filteredPosts.length) 
           ? <PostList posts={filteredPosts}/>
@@ -54,7 +51,6 @@ const Blog : React.FC<Props>  = ({posts})=>{
             </div>
         }
         
-
       </main>
     </>
   )
