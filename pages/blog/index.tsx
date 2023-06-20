@@ -1,3 +1,4 @@
+import ContentNotFound from '@/components/ContentNotFound';
 import PostList from '@/components/PostList';
 import { CONSTANTS } from '@/config';
 import { usePostSearch } from '@/hooks/use-postSearch';
@@ -37,17 +38,10 @@ const Blog : React.FC<Props>  = ({posts})=>{
             onChange={(e) => setSearchTerm(e.target.value)}
           />
         </label>
-
+        
         {Boolean(filteredPosts.length) 
           ? <PostList posts={filteredPosts}/>
-          : <div className='flex justify-center items-center'>
-              <span
-                className='group my-8 flex items-center gap-2 text-lg font-medium'
-              >
-                <BsPostcardFill size={25} className='transition duration-200 group-hover:scale-125' />
-                <span>No post found</span>
-              </span>
-            </div>
+          : <ContentNotFound Icon={BsPostcardFill} body='No post found'/>
         }
         
       </main>
