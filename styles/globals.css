@@ -41,7 +41,6 @@
 
 .codex-editor .ce-toolbar__actions svg{
     color: hsl(var(--bc)) !important;
-    fill: hsl(var(--bc)) !important;
 }
 
 .codex-editor .ce-toolbar__actions > *:hover{
@@ -60,4 +59,18 @@
 .codex-editor .ce-popover__search {
     background-color : hsl(var(--b1)) !important;
     color: hsl(var(--bc)) !important;
+}
+
+.codex-editor .ce-popover__search svg {
+    color: currentColor !important;
+    fill: none !important;
+    stroke: none;
+}
+
+.codex-editor .ce-popover-item:hover {
+    background-color : hsl(var(--b2)) !important;
+}
+
+.codex-editor .ce-popover-item__icon {
+    background-color : hsl(var(--b1)) !important;
 }

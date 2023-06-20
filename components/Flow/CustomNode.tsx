@@ -1,4 +1,4 @@
-import { memo, FC, CSSProperties, useMemo , useId , useCallback} from 'react';
+import { memo, FC, CSSProperties } from 'react';
 import { useTheme } from '@/hooks/use-theme';
 import useFlow from '@/hooks/use-flow';
 import { useAtom } from 'jotai';
@@ -6,8 +6,11 @@ import { Handle, Position, NodeProps } from 'reactflow';
 import { RiDeleteBinLine } from 'react-icons/ri';
 import { BiDotsVerticalRounded, BiMove } from 'react-icons/bi';
 import { CustomNodeData } from '@/store/flow.atom';
-import FlowEditor from './FlowEditor';
+import dynamic from "next/dynamic";
 
+const RichEditor = dynamic(() => import('../RichEditor'), {
+  ssr: false,
+});
 
 const sourceHandleStyleA: CSSProperties = { 
   left: 15 ,
@@ -69,7 +72,11 @@ const CustomNode: FC<NodeProps<CustomNodeData>> = ({ id }) => {
             />
           </h2>
 
-          <FlowEditor nodeId={id} />
+          <RichEditor 
+            placeholder="Type here to begin your flow..."
+            initialData={node?.data.body}  
+            onEditorChange={(outputData)=> handleChange({body : outputData})} 
+          />
         </div>
       </div>
 
