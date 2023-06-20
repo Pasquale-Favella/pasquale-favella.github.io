@@ -52,11 +52,13 @@
     --color-border: hsl(var(--b2)) !important;
     --color-text-primary: hsl(var(--bc)) !important;
     --color-background-item-confirm: hsl(var(--er)) !important;
-    --color-background-item-confirm-hover: hsl(var(--er)/.7) !important;
+    --color-background-item-confirm-hover: hsl(var(--nf)/.7) !important;
     --color-shadow: hsl(var(--b2)/.2) !important;
+    --color-text-icon-active: hsl(var(--p)) !important;
 }
 
-.codex-editor .ce-popover__search {
+.codex-editor .ce-popover__search ,
+.codex-editor .cdx-button{
     background-color : hsl(var(--b1)) !important;
     color: hsl(var(--bc)) !important;
 }
@@ -71,6 +73,14 @@
     background-color : hsl(var(--b2)) !important;
 }
 
+.codex-editor .ce-popover-item__title:hover {
+    color: hsl(var(--bc)) !important;
+}
+
 .codex-editor .ce-popover-item__icon {
     background-color : hsl(var(--b1)) !important;
+}
+
+.codex-editor .ce-block--selected .ce-block__content {
+    background-color : hsl(var(--nf)/.3) !important;
 }
