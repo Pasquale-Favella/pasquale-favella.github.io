@@ -5,10 +5,11 @@ import {
     Node,
     Edge,
 } from 'reactflow';
+import { OutputData } from "@editorjs/editorjs";
 
 export type CustomNodeData = {
     title : string,
-    body : string
+    body : OutputData
 }
 
 type FlowState = {

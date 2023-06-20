@@ -1,5 +1,4 @@
-import { memo, FC, CSSProperties, useMemo } from 'react';
-import dynamic from 'next/dynamic';
+import { memo, FC, CSSProperties, useMemo , useId , useCallback} from 'react';
 import { useTheme } from '@/hooks/use-theme';
 import useFlow from '@/hooks/use-flow';
 import { useAtom } from 'jotai';
@@ -7,9 +6,7 @@ import { Handle, Position, NodeProps } from 'reactflow';
 import { RiDeleteBinLine } from 'react-icons/ri';
 import { BiDotsVerticalRounded, BiMove } from 'react-icons/bi';
 import { CustomNodeData } from '@/store/flow.atom';
-
-const ReactQuill = dynamic(() => import("react-quill"), { ssr: false });
-import 'react-quill/dist/quill.snow.css';
+import FlowEditor from './FlowEditor';
 
 
 const sourceHandleStyleA: CSSProperties = { 
@@ -33,21 +30,6 @@ const CustomNode: FC<NodeProps<CustomNodeData>> = ({ id }) => {
   const handleChange = (value : Partial<CustomNodeData>)=> updateNode(value);
   const handleRemove = ()=> deleteNodeById(id);
 
-  const modules = useMemo(() => ({
-    toolbar: {
-      container: [
-        [{ header: [1, 2, 3, 4, false] }],
-        ["bold", "italic", "underline", "strike", "blockquote"],
-        [
-          { list: "ordered" },
-          { list: "bullet" },
-        ],
-        [{align: [ ]}],
-        ["link", "image",'code'],
-        ["clean"],
-      ],
-    }, 
-  }), []);
 
   return (
     <>
@@ -87,13 +69,7 @@ const CustomNode: FC<NodeProps<CustomNodeData>> = ({ id }) => {
             />
           </h2>
 
-          <ReactQuill 
-            theme="snow" 
-            value={node?.data.body ?? ''} 
-            onChange={body => handleChange({body})} 
-            modules={modules}
-          />
-          
+          <FlowEditor nodeId={id} />
         </div>
       </div>
 

@@ -28,8 +28,36 @@
     fill: hsl(var(--b3)) !important;
 }
 
-/* react-quill style overrides */
-.ql-container p code{
+/* editor js style overrides */
+.codex-editor .codex-editor__redactor {
+    padding-bottom: 0 !important;
+}
+
+.codex-editor textarea.ce-code__textarea ,
+.codex-editor code{
     background-color: hsl(var(--b2)) !important;
-    display: block;
+    color: hsl(var(--bc)) !important;
+}
+
+.codex-editor .ce-toolbar__actions svg{
+    color: hsl(var(--bc)) !important;
+    fill: hsl(var(--bc)) !important;
+}
+
+.codex-editor .ce-toolbar__actions > *:hover{
+    background-color: hsl(var(--b1)/.7) !important;
+}
+
+.codex-editor .ce-popover {
+    --color-background : hsl(var(--b1)) !important;
+    --color-border: hsl(var(--b2)) !important;
+    --color-text-primary: hsl(var(--bc)) !important;
+    --color-background-item-confirm: hsl(var(--er)) !important;
+    --color-background-item-confirm-hover: hsl(var(--er)/.7) !important;
+    --color-shadow: hsl(var(--b2)/.2) !important;
+}
+
+.codex-editor .ce-popover__search {
+    background-color : hsl(var(--b1)) !important;
+    color: hsl(var(--bc)) !important;
 }
