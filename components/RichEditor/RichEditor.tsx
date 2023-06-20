@@ -40,10 +40,16 @@ const EDITOR_TOOLS : EditorTools = {
 type RichEditorProps = {
     initialData : OutputData | undefined ,
     onEditorChange : (data : OutputData | undefined ) => void ,
-    placeholder : string
+    placeholder ?: string ,
+    className ?: string
 }
 
-const RichEditor: FC<RichEditorProps> = ({ initialData , onEditorChange , placeholder}) => {
+const RichEditor: FC<RichEditorProps> = ({ 
+    initialData , 
+    onEditorChange , 
+    placeholder = 'Insert text here...' , 
+    className = 'min-h-[50px]'
+}) => {
 
     const editorId = useId();
     const ref = useRef<EditorJS>();
@@ -68,14 +74,12 @@ const RichEditor: FC<RichEditorProps> = ({ initialData , onEditorChange , placeh
     
         //add a return function handle cleanup
         return () => {
-          if (ref.current && ref.current.destroy) {
-            ref.current.destroy();
-          }
+          if (ref.current && ref.current.destroy) ref.current.destroy();
         };
       }, []);
 
     return (
-        <div id={editorId} className='min-h-[100px]' />
+        <div id={editorId} className={className} />
     );
 }
 
