@@ -1,20 +1,15 @@
 import GitOwner from "@/config/owner"
-import { differenceInYears, parse } from "date-fns"
+import { differenceInYears, format, parse } from "date-fns"
+import { enUS } from 'date-fns/locale';
 
-const formatDateEN = (date : any) => {
-    const options : Intl.DateTimeFormatOptions= {
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric',
-    }
-    const now = new Date(date).toLocaleDateString('en-US', options)
-  
-    return now
-}
+const formatDateEN = (date : string) => {
+  const formattedDate = format(new Date(date), 'MMMM d, yyyy', { locale: enUS });
+  return formattedDate;
+};
 
 const calculateAge = ( dateToCalculate = new Date()) => {
-  const date = parse(GitOwner.dob, "dd/MM/yyyy", new Date());
-  const age = differenceInYears(new Date(), date);
+  const date = parse(GitOwner.dob, "dd/MM/yyyy", dateToCalculate);
+  const age = differenceInYears(dateToCalculate, date);
   return age;
 }
 

@@ -16,7 +16,7 @@ const getAllIssues = async ()=>{
     })
 }
 
-const getLatestIssues = async (qty = 4)=>{
+const getLatestIssues = async (qty = 3)=>{
     return await api.get<GithubIssue[]>(`repos/${GitOwner.owner}/${GitOwner.repo}/issues`,{
         params : {
             labels : CONSTANTS.LABELS.DOC,

@@ -12,7 +12,14 @@ const returnBase64FromFile = async(file: File) : Promise<string> => {
     })
 }
 
+const extractWords = (text : string , wordsAmount : number) => {
+    const words = text.trim().split(/\s+/);
+    const preview = words.slice(0, wordsAmount).join(' ');
+    return preview;
+  };
+
 export default {
     uid ,
-    returnBase64FromFile
+    returnBase64FromFile ,
+    extractWords
 } as const

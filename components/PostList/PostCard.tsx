@@ -1,18 +1,56 @@
+import { useMemo } from "react";
 import { CONSTANTS } from "@/config"
-import { GithubIssue } from "@/types"
-import { HiHashtag } from 'react-icons/hi';
-import DateUtils from "@/utils/DateUtils"
 import Link from "next/link"
+import { GithubIssue, GithubIssueLabel } from "@/types"
+import { default as DateUtils , Utils } from "@/utils"
+import { HiHashtag } from 'react-icons/hi';
 
-type Props = {post:GithubIssue}
+type Props = {
+  post : GithubIssue
+}
+
+const PostTag : React.FC<{label : GithubIssueLabel}>  = ({label})=>{
+  return(
+    <Link className="btn btn-ghost btn-sm text-primary"
+      href={{
+        pathname: '/blog',
+        query: { tag :  label.name},
+      }}
+      passHref
+      shallow
+    >
+      <HiHashtag/>
+      {label.name}
+    </Link>
+  )
+}
+
+const PostReadMore : React.FC<Props>  = ({post})=>{
+  return(
+    <Link
+      href={`/blog/${post.number}`}
+      className="font-medium leading-6 text-primary hover:text-primary/60 transition duration-200"
+      aria-label={`Read "${post.title}"`}
+    >
+      Read more &rarr;
+    </Link>
+  )
+}
 
 const PostCard : React.FC<Props>  = ({post})=>{
+
+  const filteredLabels = post.labels.filter(label => label.name.toLowerCase() !== CONSTANTS.LABELS.DOC);
+
+  const articleContentPreview = useMemo(()=> {
+    const extractedWords = Utils.extractWords(post.body , 40);
+    return `${extractedWords}...`
+  } , []);
 
   return (
             <div 
               className="group flex bg-transparent bg-opacity-20 px-2 transition duration-300 hover:scale-105 hover:rounded-md hover:bg-base-300" 
             >
-              <li className="py-6 w-full">
+              <li className="py-2 w-full">
                 <article>
                   <div className=" animate-tilt space-y-2 bg-transparent bg-opacity-20 p-2 transition duration-200 hover:rounded-md xl:grid xl:grid-cols-4 xl:items-baseline xl:space-y-0">
                     <dl>
@@ -32,37 +70,22 @@ const PostCard : React.FC<Props>  = ({post})=>{
                               {post.title}
                             </Link>
                           </h2>
+                          <small>{articleContentPreview}</small>
                         </div>
-                        <div className="flex flex-wrap">
-                          {post.labels?.length && post.labels.filter(label => label.name.toLowerCase() !== CONSTANTS.LABELS.DOC).map(label =>
-                          <Link className="mt-2 mr-3 btn btn-ghost btn-sm text-primary"  key={label.id}
-                            href={{
-                              pathname: '/blog',
-                              query: { tag :  label.name},
-                            }}
-                            passHref
-                            shallow
-                          >
-                            <HiHashtag/>
-                            {label.name}
-                          </Link>)}
+
+                        <div className="flex flex-col justify-between items-start md:flex-row md:items-center gap-2">
+
+                          <div className="flex flex-wrap">
+                            {filteredLabels.map(label => <PostTag key={label.id} label={label} />)}
+                          </div>
+
+                          <PostReadMore post={post}/>
                         </div>
                       </div>               
                     </div>
                   </div>
-                  
                 </article>
-                <div className="text-base font-medium leading-6 flex justify-end">
-                  <Link
-                    href={`/blog/${post.number}`}
-                    className="text-primary hover:text-primary/60 transition duration-200"
-                    aria-label={`Read "${post.title}"`}
-                  >
-                    Read more &rarr;
-                  </Link>
-                </div>
               </li>
-
             </div>
           )
 }
