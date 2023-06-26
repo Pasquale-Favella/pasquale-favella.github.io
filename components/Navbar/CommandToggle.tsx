@@ -9,7 +9,7 @@ const CommandToggle = ()=>{
     
     return(
         <div className="tooltip tooltip-bottom before:text-xs before:content-[attr(data-tip)]" data-tip="commands">
-            <button className="btn btn-ghost btn-circle normal-case btn-sm"
+            <button className="btn btn-ghost btn-circle btn-sm"
               onClick={() => query.toggle()}
             >
               <FiCommand size={20} />
