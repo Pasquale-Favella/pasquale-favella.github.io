@@ -24,35 +24,35 @@ export default {
 
     SKILLS : [
         {
-            icon: FaReact,
+            Icon: FaReact,
             name: 'React.js',
         },
         {
-            icon : SiNextdotjs,
+            Icon : SiNextdotjs,
             name: 'Next.js',
         },
         {
-            icon : FaAngular,
+            Icon : FaAngular,
             name: 'Angular',
         },
         {
-            icon : SiTailwindcss,
+            Icon : SiTailwindcss,
             name: 'Tailwind',
         },
         {
-            icon : SiExpress,
+            Icon : SiExpress,
             name: 'Express.js',
         },
         {
-            icon : SiSpringboot,
+            Icon : SiSpringboot,
             name: 'Spring Boot',
         },
         {
-            icon : AiOutlineConsoleSql,
+            Icon : AiOutlineConsoleSql,
             name: 'SQL',
         },
         {
-            icon : SiMongodb,
+            Icon : SiMongodb,
             name: 'MongoDB',
         }
     ]
