@@ -44,7 +44,7 @@ const PostCard : React.FC<Props>  = ({post})=>{
   const articleContentPreview = useMemo(()=> {
     const extractedWords = Utils.extractWords(post.body , 40);
     return `${extractedWords}...`
-  } , []);
+  } , [post.body]);
 
   return (
             <div 

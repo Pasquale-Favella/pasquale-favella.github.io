@@ -16,8 +16,11 @@ export const usePostSearch = ({posts , searchTerm} : Props)=>{
     const debouncedSearchTerm = useDebounce<string>(searchTerm, 300);
 
     const tags = useMemo(
-        ()=>Array.from(new Set([CONSTANTS.LABELS.ALL ,...posts.map(post=> post.labels.map(label => label.name)).flat().filter(tag=> tag!==CONSTANTS.LABELS.DOC)]))
-        ,[]
+        () => Array.from(new Set([
+            CONSTANTS.LABELS.ALL,
+            ...posts.map(post => post.labels.map(label => label.name)).flat().filter(tag => tag !== CONSTANTS.LABELS.DOC).sort()
+        ])),
+        []
     );
 
     const selectedTag = router.query?.tag as string|undefined ?? CONSTANTS.LABELS.ALL;

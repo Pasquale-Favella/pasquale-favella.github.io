@@ -24,12 +24,14 @@ const Blog : React.FC<Props>  = ({posts})=>{
 
         <label className="join w-full">
           <select className="select select-bordered focus:outline-none focus:border-primary max-w-xs join-item"
+            id="select-tag"
             value={selectedTag}
             onChange={e => onTagSelect(e.target.value)}
           >
             {tags.map(tag=><option key={tag} value={tag}>{tag}</option>)}
           </select>
-          <input type="text" 
+          <input type="text"
+            id="search-article" 
             placeholder='Search articles'
             aria-label='Search articles' 
             className="input input-bordered w-full focus:outline-none focus:border-primary join-item" 
