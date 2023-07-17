@@ -92,7 +92,7 @@ const HeroSection = () => {
           </div>
           <div className='flex gap-6'>
             {CONSTANTS.HERO_LINKS.map((link, i) => (
-              <Link key={i} href={link.href} className='hover:text-primary'>
+              <Link key={i} href={link.href} className='transition-all duration-300 hover:text-primary'>
                 <link.icon size={28}/>
               </Link>
             ))}
