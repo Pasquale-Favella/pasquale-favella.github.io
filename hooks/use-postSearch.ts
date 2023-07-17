@@ -20,7 +20,7 @@ export const usePostSearch = ({posts , searchTerm} : Props)=>{
         ,[]
     );
 
-    const selectedTag = router.query?.tag as string|undefined;
+    const selectedTag = router.query?.tag as string|undefined ?? CONSTANTS.LABELS.ALL;
 
     const onTagSelect = async (tagBeenSelected : string)=> await router.push({
             pathname : router.pathname ,

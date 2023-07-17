@@ -1,6 +1,5 @@
 import ContentNotFound from '@/components/ContentNotFound';
 import PostList from '@/components/PostList';
-import { CONSTANTS } from '@/config';
 import { usePostSearch } from '@/hooks/use-postSearch';
 import GithubService from '@/services/github.service';
 import { GithubIssue } from '@/types';
@@ -25,7 +24,7 @@ const Blog : React.FC<Props>  = ({posts})=>{
 
         <label className="join w-full">
           <select className="select select-bordered focus:outline-none focus:border-primary max-w-xs join-item"
-            defaultValue={CONSTANTS.LABELS.ALL} value={selectedTag}
+            value={selectedTag}
             onChange={e => onTagSelect(e.target.value)}
           >
             {tags.map(tag=><option key={tag} value={tag}>{tag}</option>)}
