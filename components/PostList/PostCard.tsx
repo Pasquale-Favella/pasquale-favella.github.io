@@ -70,7 +70,7 @@ const PostCard : React.FC<Props>  = ({post})=>{
                               {post.title}
                             </Link>
                           </h2>
-                          <small>{articleContentPreview}</small>
+                          <small className="line-clamp-3">{articleContentPreview}</small>
                         </div>
 
                         <div className="flex flex-col justify-between items-start md:flex-row md:items-center gap-2">
