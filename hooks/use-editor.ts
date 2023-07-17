@@ -1,4 +1,4 @@
-import { currentEditingAtom, editorStateAtom, previewEditorAtom, selectedEditorAtom, srcDocFrameAtom } from "@/store/editor.atom";
+import { currentEditingAtom, previewEditorAtom, selectedEditorAtom, srcDocFrameAtom } from "@/store/editor.atom";
 import { useAtom, useAtomValue } from "jotai";
 
 export default function useEditor() {
