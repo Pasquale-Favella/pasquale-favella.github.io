@@ -55,9 +55,12 @@ export const currentEditingAtom = atom(
     },
     (get , set , value : string)=>{
         const selectedTab = get(selectedEditorAtom);
-        const state = get(editorStateAtom)
-        state[selectedTab].value = value
-        set(editorStateAtom , state);
+        const state = get(editorStateAtom);
+        const updatedState = {
+            ...state , 
+            [selectedTab] : {...state[selectedTab] , value}
+        };
+        set(editorStateAtom , updatedState);
     }
 );
 
