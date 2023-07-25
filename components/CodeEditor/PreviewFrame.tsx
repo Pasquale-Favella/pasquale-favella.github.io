@@ -7,7 +7,7 @@ const PreviewFrame: FC<PreviewFrameProps> = () => {
     const { srcDoc } = useEditor();
 
     return (
-        <div className="mockup-browser border border-base-300">
+        <div className="mockup-browser rounded-md border border-base-300">
             <div className="mockup-browser-toolbar">
                 <div className="input border border-base-300">{window.location.origin}</div>
             </div>

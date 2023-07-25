@@ -4,6 +4,7 @@ import useEditor from '@/hooks/use-editor';
 import useIsMobile from '@/hooks/use-isMobile';
 import EditorTabs from './EditorTabs';
 import PreviewFrame from './PreviewFrame';
+import CodeEditorLoader from './CodeEditorLoader';
 
 const CodeEditor = () => {
 
@@ -28,6 +29,7 @@ const CodeEditor = () => {
           language={code.language}
           value={code.value}
           onChange={codeValue => handleChange(codeValue)}
+          loading={<CodeEditorLoader />}
           options={
             {
               minimap: { enabled: !isMobile }
