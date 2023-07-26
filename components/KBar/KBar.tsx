@@ -4,6 +4,7 @@ import { FiGithub, FiLinkedin } from 'react-icons/fi';
 import { RiArticleFill } from 'react-icons/ri';
 import { DiGitPullRequest } from 'react-icons/di';
 import { TfiThought } from 'react-icons/tfi';
+import { GoCodescan } from 'react-icons/go';
 
 import {
   Action,
@@ -45,12 +46,20 @@ const KBar = (props: KBarProps) => {
       icon: <BsGrid3X3Gap />,
     },
     {
-      id: 'diff',
+      id: 'editor',
       name: 'Editor',
       keywords: 'code editor helper',
       section: 'Apps',
       perform: () => router.push('/editor'),
       icon: <BiCodeBlock />,
+    },
+    {
+      id: 'diff',
+      name: 'Diff Editor',
+      keywords: 'diff code editor helper',
+      section: 'Apps',
+      perform: () => router.push('/diffeditor'),
+      icon: <GoCodescan />,
     },
     {
       id: 'projects',

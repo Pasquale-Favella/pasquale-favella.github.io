@@ -31,12 +31,14 @@ module.exports = {
           "accent": "#D99330",
           "neutral": "#110E0E",
           "base-100": "#171212",
-          "base-300": "#1E1E1E"
+          "base-300": "#1E1E1E",
+          "primary-content" : "rgb(166, 173, 186,0.1)"
         },
         light :{
           ...require("daisyui/src/theming/themes")["[data-theme=light]"],
           "primary":'#269926',
-          "warning": "#f2920a"
+          "warning": "#f2920a",
+          "primary-content" : "whitesmoke"
         }
       },
     ],
