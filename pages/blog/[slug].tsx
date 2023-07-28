@@ -10,6 +10,7 @@ import matter from 'gray-matter';
 import { Comments } from '@/components/PostList';
 import Link from 'next/link';
 import { MdKeyboardArrowLeft } from 'react-icons/md';
+import { Utils } from '@/utils';
 
 interface Params extends ParsedUrlQuery {
     slug : string;
@@ -18,10 +19,11 @@ interface Params extends ParsedUrlQuery {
 interface Props {
     content : string;
     slug : string;
-    title : string
+    title : string;
+    meta_description : string;
 }
 
-const BlogPage : React.FC<Props>  = ({content , title})=>{
+const BlogPage : React.FC<Props>  = ({content , title , meta_description})=>{
 
   const articleContent = useMemo(()=> md().use(highlightjs).use(codecopy,{
     buttonClass : 'btn btn-ghost btn-circle btn-sm',
@@ -30,7 +32,7 @@ const BlogPage : React.FC<Props>  = ({content , title})=>{
 
   return (
     <>
-      <NextSeo title={title} description={`Pasquale Favella Blog - ${title}`} />
+      <NextSeo title={title} description={`${title} - ${meta_description}`} />
        
       <Link
         href='/blog'
@@ -78,9 +80,10 @@ export const getStaticProps: GetStaticProps<Props , Params> = async (context) =>
   
     return {
       props: {
-        content,
+        content ,
         slug :context.params!.slug ,
-        title : post.title
+        title : post.title ,
+        meta_description : Utils.extractFirstPhrase(post.body)
       }
     };
 }
