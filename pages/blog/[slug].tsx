@@ -32,7 +32,7 @@ const BlogPage : React.FC<Props>  = ({content , title , meta_description})=>{
 
   return (
     <>
-      <NextSeo title={title} description={`${title} - ${meta_description}`} />
+      <NextSeo title={title} description={`${meta_description}`} />
        
       <Link
         href='/blog'
