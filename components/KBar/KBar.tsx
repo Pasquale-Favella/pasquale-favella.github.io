@@ -21,6 +21,7 @@ import Results from './Results';
 import { useRouter } from 'next/router';
 import GitOwner from '@/config/owner';
 import { BsGrid3X3Gap } from 'react-icons/bs';
+import { MdOutlineImageSearch } from 'react-icons/md';
   
 type KBarProps = WithChildren
   
@@ -60,6 +61,14 @@ const KBar = (props: KBarProps) => {
       section: 'Apps',
       perform: () => router.push('/diffeditor'),
       icon: <GoCodescan />,
+    },
+    {
+      id: 'ocr',
+      name: 'Image to Text',
+      keywords: 'extract text from image',
+      section: 'Apps',
+      perform: () => router.push('/ocr'),
+      icon: <MdOutlineImageSearch />,
     },
     {
       id: 'projects',
