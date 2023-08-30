@@ -31,6 +31,30 @@ const KBar = (props: KBarProps) => {
   
   const actions: Action[] = [
     {
+      id: 'projects',
+      name: 'Projects',
+      keywords: 'Visit Projects',
+      section: 'General',
+      perform: () => router.push('/projects'),
+      icon: <DiGitPullRequest />,
+    },
+    {
+      id: 'blog',
+      name: 'Blog',
+      keywords: 'Visit Blog',
+      section: 'General',
+      perform: () => router.push('/blog'),
+      icon: <RiArticleFill />,
+    },
+    {
+      id: 'source-code',
+      name: 'Source code',
+      keywords: 'source code github',
+      section: 'General',
+      perform: () => window.open(GitOwner.this_repo_url, '_blank'),
+      icon: <BiCodeAlt />,
+    },
+    {
       id: 'flow',
       name: 'Idea Flow',
       keywords: 'Flow your ideas',
@@ -69,30 +93,6 @@ const KBar = (props: KBarProps) => {
       section: 'Apps',
       perform: () => router.push('/ocr'),
       icon: <MdOutlineImageSearch />,
-    },
-    {
-      id: 'projects',
-      name: 'Projects',
-      keywords: 'Visit Projects',
-      section: 'General',
-      perform: () => router.push('/projects'),
-      icon: <DiGitPullRequest />,
-    },
-    {
-      id: 'blog',
-      name: 'Blog',
-      keywords: 'Visit Blog',
-      section: 'General',
-      perform: () => router.push('/blog'),
-      icon: <RiArticleFill />,
-    },
-    {
-      id: 'source-code',
-      name: 'Source code',
-      keywords: 'source code github',
-      section: 'General',
-      perform: () => window.open(GitOwner.this_repo_url, '_blank'),
-      icon: <BiCodeAlt />,
     },
     {
       id: 'github',
