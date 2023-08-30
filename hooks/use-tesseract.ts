@@ -35,7 +35,7 @@ export const useTesseract = (props?: UseTesseractProps) => {
         );
 
         const worker = await Tesseract.createWorker();
-        await worker.load();
+
         await worker.loadLanguage(langs);
         await worker.initialize(langs);
         return await worker.recognize(image);

@@ -1,5 +1,6 @@
-import { useState, useRef, ChangeEvent } from 'react';
+import { useRef, ChangeEvent } from 'react';
 import { useTesseract } from '@/hooks/use-tesseract';
+import { useStateWithPartialUpdates } from '@/hooks/use-stateWithPartialUpdate';
 import { BiErrorCircle } from 'react-icons/bi';
 
 type OcrResult = {
@@ -9,6 +10,7 @@ type OcrResult = {
     isLoading: boolean;
     isSearchFromUrl: boolean;
     confidence: number;
+    imgSrc : string;
 }
 
 const DEFAULT_OCR: OcrResult = {
@@ -17,23 +19,31 @@ const DEFAULT_OCR: OcrResult = {
     textResult: '',
     isLoading: false,
     isSearchFromUrl: false,
-    confidence: 0
+    confidence: 0 ,
+    imgSrc : ''
 }
 
 const Ocr = () => {
 
-    const [ocrResult, setOcrResult] = useState<OcrResult>(DEFAULT_OCR);
-    const handleOcrStateChange = (changes: Partial<OcrResult>) => setOcrResult(prev => ({ ...prev, ...changes }));
+    const [ocrResult, handleOcrStateChange] = useStateWithPartialUpdates(DEFAULT_OCR);
 
     const canvasRef = useRef<HTMLCanvasElement | null>(null);
     const imageRef = useRef<HTMLImageElement | null>(null);
 
     const { recognizeWorker, imagePreprocess } = useTesseract();
 
+    const isFromUrlDisabled = ocrResult.isSearchFromUrl && !Boolean(ocrResult.searchUrl);
+    const isFromFileDisabled = !ocrResult.isSearchFromUrl && !Boolean(ocrResult.imgSrc);
+
+    const isConvertDisabled = ocrResult.isLoading || isFromUrlDisabled || isFromFileDisabled;
+
     const handleFileChange = ({ target: { files } }: ChangeEvent<HTMLInputElement>) => {
         if (!files || !files[0]) return;
+        const fileToRead = files[0];
         const image = imageRef.current as HTMLImageElement;
-        image.src = URL.createObjectURL(files[0]);
+        const imgSrc = URL.createObjectURL(fileToRead);
+        handleOcrStateChange({imgSrc});
+        image.src = imgSrc;
     }
 
     const handleFromFile = () => {
@@ -65,7 +75,6 @@ const Ocr = () => {
             .catch(_err => handleOcrStateChange({ hasError: true }))
             .then(result => {
                 if (!result) return;
-                console.log({ result })
                 handleOcrStateChange({
                     textResult: result.data.text,
                     confidence: result.data.confidence
@@ -76,17 +85,15 @@ const Ocr = () => {
 
     return (
 
-        <section className="min-h-[calc(92vh-5rem)] flex flex-col items-center justify-start w-full mx-auto">
+        <section className="flex flex-col items-center justify-start mx-auto prose md:prose-lg lg:prose-xl">
 
             <img ref={imageRef} hidden />
             <canvas ref={canvasRef} hidden></canvas>
 
             <div className='flex flex-col gap-2 w-full md:w-1/2 max-w-80'>
 
-                {ocrResult.isSearchFromUrl
-                    ? <input type="url" placeholder="Type image url here" className="input input-bordered w-full" value={ocrResult.searchUrl} onChange={(e) => handleOcrStateChange({ searchUrl: e.target.value })} />
-                    : <input type="file" accept="image/*" className="file-input file-input-bordered w-full" onChange={handleFileChange} />
-                }
+                <input hidden={!ocrResult.isSearchFromUrl} type="url" placeholder="Type image url here" className="input input-bordered w-full" value={ocrResult.searchUrl} onChange={(e) => handleOcrStateChange({ searchUrl: e.target.value })} />
+                <input hidden={ocrResult.isSearchFromUrl} type="file" accept="image/*" className="file-input file-input-bordered w-full" onChange={handleFileChange} />
 
                 <div className='w-full flex justify-between items-center gap-5'>
 
@@ -102,7 +109,7 @@ const Ocr = () => {
                         </label>
                     </div>
 
-                    <button className="btn" onClick={handleClick} disabled={ocrResult.isLoading}>
+                    <button className="btn" onClick={handleClick} disabled={isConvertDisabled}>
                         {ocrResult.isLoading && <span className="loading loading-spinner"></span>}
                         Convert
                     </button>
@@ -115,19 +122,17 @@ const Ocr = () => {
                         <div className="card-actions justify-start">
                             <div className="badge badge-outline">confidence {ocrResult.confidence}%</div>
                         </div>
-                        <p className='prose md:prose-lg lg:prose-xl mx-auto' dangerouslySetInnerHTML={{ __html: ocrResult.textResult }} />
+                        <p dangerouslySetInnerHTML={{ __html: ocrResult.textResult }} />
                     </div>
                 </div>
             }
 
-            {ocrResult.hasError
-                && <div className="card w-full mt-2 bg-error shadow-xl">
-                    <div className="card-body text-base-300">
-                        <div className="card-actions justify-start">
-                            <BiErrorCircle size={40} />
-                        </div>
+            {ocrResult.hasError 
+                && <div className='flex w-full flex-1 items-center justify-start rounded-lg border border-error p-4 sm:px-6 mt-2'>
+                    <BiErrorCircle size={50} className='text-error'/> 
+                    <div className='px-4'>
                         <p>An issue occurred. Please make another attempt or consider altering the image.</p>
-                    </div>
+                    </div>      
                 </div>
             }
 

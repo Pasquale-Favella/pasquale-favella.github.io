@@ -16,7 +16,7 @@ const ProjectTopic : React.FC<{topic : string}>  = ({topic})=>{
 
 const GitHubTooltip : React.FC<Props> = ({project})=>{
     return (
-        <div className="tooltip tooltip-right tooltip-primary before:text-xs before:content-[attr(data-tip)]" data-tip={`view ${project.name} repo`}>
+        <div className="tooltip tooltip-right before:text-xs before:content-[attr(data-tip)]" data-tip={`view ${project.name} repo`}>
             <a className="btn btn-ghost btn-circle normal-case btn-sm" href={`${project.html_url}`} target="_blank" rel="noopener noreferrer">
                 <SiGithub size={30}/>
             </a>
