@@ -2,6 +2,7 @@ import { useRef, ChangeEvent } from 'react';
 import { useTesseract } from '@/hooks/use-tesseract';
 import { useStateWithPartialUpdates } from '@/hooks/use-stateWithPartialUpdate';
 import { BiErrorCircle } from 'react-icons/bi';
+import { RxCopy } from 'react-icons/rx';
 
 type OcrResult = {
     textResult: string;
@@ -32,18 +33,13 @@ const Ocr = () => {
 
     const { recognizeWorker, imagePreprocess } = useTesseract();
 
-    const isFromUrlDisabled = ocrResult.isSearchFromUrl && !Boolean(ocrResult.searchUrl);
-    const isFromFileDisabled = !ocrResult.isSearchFromUrl && !Boolean(ocrResult.imgSrc);
-
-    const isConvertDisabled = ocrResult.isLoading || isFromUrlDisabled || isFromFileDisabled;
+    const isConvertFromUrlDisabled = ocrResult.isSearchFromUrl && !Boolean(ocrResult.searchUrl);
+    const isConvertFromFileDisabled = !ocrResult.isSearchFromUrl && !Boolean(ocrResult.imgSrc);
+    const isConvertDisabled = ocrResult.isLoading || isConvertFromUrlDisabled || isConvertFromFileDisabled;
 
     const handleFileChange = ({ target: { files } }: ChangeEvent<HTMLInputElement>) => {
         if (!files || !files[0]) return;
-        const fileToRead = files[0];
-        const image = imageRef.current as HTMLImageElement;
-        const imgSrc = URL.createObjectURL(fileToRead);
-        handleOcrStateChange({imgSrc});
-        image.src = imgSrc;
+        handleOcrStateChange({imgSrc : URL.createObjectURL(files[0])});
     }
 
     const handleFromFile = () => {
@@ -83,17 +79,21 @@ const Ocr = () => {
             .finally(() => handleOcrStateChange({ isLoading: false }))
     }
 
+    const copyToClipboard = async ()=> {
+        await navigator.clipboard.writeText(ocrResult.textResult);
+    }
+
     return (
 
         <section className="flex flex-col items-center justify-start mx-auto prose md:prose-lg lg:prose-xl">
 
-            <img ref={imageRef} hidden />
+            <img ref={imageRef} src={ocrResult.imgSrc} hidden />
             <canvas ref={canvasRef} hidden></canvas>
 
             <div className='flex flex-col gap-2 w-full md:w-1/2 max-w-80'>
 
                 <input hidden={!ocrResult.isSearchFromUrl} type="url" placeholder="Type image url here" className="input input-bordered w-full" value={ocrResult.searchUrl} onChange={(e) => handleOcrStateChange({ searchUrl: e.target.value })} />
-                <input hidden={ocrResult.isSearchFromUrl} type="file" accept="image/*" className="file-input file-input-bordered w-full" onChange={handleFileChange} />
+                {!ocrResult.isSearchFromUrl && <input type="file" accept="image/*" className="file-input file-input-bordered w-full" onChange={handleFileChange} />}
 
                 <div className='w-full flex justify-between items-center gap-5'>
 
@@ -119,8 +119,14 @@ const Ocr = () => {
             {ocrResult.textResult
                 && <div className="card w-full mt-2 bg-base-200 shadow-xl">
                     <div className="card-body">
-                        <div className="card-actions justify-start">
+                        <div className="card-actions justify-between items-center">
                             <div className="badge badge-outline">confidence {ocrResult.confidence}%</div>
+                            
+                            <div className="tooltip tooltip-left before:text-xs before:content-[attr(data-tip)]" data-tip="copy">
+                                <button className="btn btn-ghost btn-circle btn-sm" onClick={copyToClipboard}>
+                                    <RxCopy size={20}/>
+                                </button>
+                            </div>
                         </div>
                         <p dangerouslySetInnerHTML={{ __html: ocrResult.textResult }} />
                     </div>
