@@ -8,6 +8,7 @@ import ContentNotFound from '@/components/ContentNotFound';
 import { CiSearch } from "react-icons/ci"
 import { useProjectSearch } from '@/hooks/use-projectSearch';
 import { AiOutlineProject } from 'react-icons/ai';
+import InputWithIcon from '@/components/InputWithIcon';
 
 type Props = {projects:GithubRepo[]};
 
@@ -25,23 +26,15 @@ const Projects : React.FC<Props>  = ({projects})=>{
       
       <main>
 
-        <div className='relative mb-5'>
-          <input
-            type='text'
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            placeholder='Search project'
-            aria-label='Search project'
-            className='w-full input input-bordered  pl-12 transition-colors duration-200 ease-linear focus:border-primary focus:outline-none'
-            id='search'
-          />
-          <label htmlFor='search'>
-            <CiSearch
-              className='absolute top-1/2 left-4 -translate-y-1/2'
-              size={20}
-            />
-          </label>
-        </div>
+        <InputWithIcon
+         type='text'
+         value={searchTerm}
+         onChange={(e) => setSearchTerm(e.target.value)}
+         placeholder='Search project'
+         aria-label='Search project'
+         Icon={CiSearch}
+         containerClassName='mb-5'
+        />
 
         {Boolean(filteredProjects.length) 
           ? <ProjectList projects={filteredProjects}/>

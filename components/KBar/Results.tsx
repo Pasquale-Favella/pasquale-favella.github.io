@@ -17,7 +17,7 @@ const Results = () => {
           <div
             className={clsx(
               'mx-3 flex cursor-pointer items-center justify-between rounded-lg px-3 py-3 transition-colors',
-              active ? 'bg-accent-2' : 'bg-transparent'
+              active ? 'bg-base-300' : 'bg-transparent'
             )}
           >
             <div className='flex items-center'>
