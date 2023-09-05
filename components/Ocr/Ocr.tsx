@@ -3,6 +3,7 @@ import { useTesseract } from '@/hooks/use-tesseract';
 import { useStateWithPartialUpdates } from '@/hooks/use-stateWithPartialUpdate';
 import { BiErrorCircle } from 'react-icons/bi';
 import { RxCopy } from 'react-icons/rx';
+import { TbUnlink } from 'react-icons/tb';
 
 type OcrResult = {
     textResult: string;
@@ -92,7 +93,24 @@ const Ocr = () => {
 
             <div className='flex flex-col gap-2 w-full md:w-1/2 max-w-80'>
 
-                <input hidden={!ocrResult.isSearchFromUrl} type="url" placeholder="Type image url here" className="input input-bordered w-full" value={ocrResult.searchUrl} onChange={(e) => handleOcrStateChange({ searchUrl: e.target.value })} />
+                <div className='relative' hidden={!ocrResult.isSearchFromUrl}>
+                    <input
+                        type='url'
+                        value={ocrResult.searchUrl} 
+                        onChange={(e) => handleOcrStateChange({ searchUrl: e.target.value })}
+                        placeholder='Type image url here'
+                        aria-label='Type image url here'
+                        className='w-full input input-bordered pl-12 transition-colors duration-200 ease-linear focus:border-primary focus:outline-none'
+                        id='convertUrl'
+                    />
+                    <label htmlFor='convertUrl'>
+                        <TbUnlink
+                        className='absolute top-1/2 left-4 -translate-y-1/2'
+                        size={20}
+                        />
+                    </label>
+                </div>
+
                 {!ocrResult.isSearchFromUrl && <input type="file" accept="image/*" className="file-input file-input-bordered w-full" onChange={handleFileChange} />}
 
                 <div className='w-full flex justify-between items-center gap-5'>

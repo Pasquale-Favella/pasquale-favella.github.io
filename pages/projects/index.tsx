@@ -32,7 +32,7 @@ const Projects : React.FC<Props>  = ({projects})=>{
             onChange={(e) => setSearchTerm(e.target.value)}
             placeholder='Search project'
             aria-label='Search project'
-            className='w-full rounded-md border bg-base-100 border py-2 px-3 pl-12 transition-colors duration-200 ease-linear focus:border-primary focus:outline-none'
+            className='w-full input input-bordered  pl-12 transition-colors duration-200 ease-linear focus:border-primary focus:outline-none'
             id='search'
           />
           <label htmlFor='search'>
