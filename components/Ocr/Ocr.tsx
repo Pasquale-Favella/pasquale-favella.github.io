@@ -4,6 +4,7 @@ import { useStateWithPartialUpdates } from '@/hooks/use-stateWithPartialUpdate';
 import { RxCopy } from 'react-icons/rx';
 import { TbUnlink } from 'react-icons/tb';
 import ErrorCard from '@/components/ErrorCard';
+import { MdOutlineImageSearch } from 'react-icons/md';
 
 type OcrResult = {
     textResult: string;
@@ -127,8 +128,8 @@ const Ocr = () => {
                         </label>
                     </div>
 
-                    <button className="btn" onClick={handleClick} disabled={isConvertDisabled}>
-                        {ocrResult.isLoading && <span className="loading loading-spinner"></span>}
+                    <button className="btn btn-sm" onClick={handleClick} disabled={isConvertDisabled}>
+                        {ocrResult.isLoading ? <span className="loading loading-spinner"></span> : <MdOutlineImageSearch size={20} />}
                         Convert
                     </button>
                 </div>
