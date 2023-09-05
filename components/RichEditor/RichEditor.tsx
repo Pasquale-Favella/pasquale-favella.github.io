@@ -59,8 +59,8 @@ const RichEditor: FC<RichEditorProps> = ({
         if (!ref.current) {
             const editor = new EditorJS({
                 holder: editorId,
-                async onChange() {
-                    const outputData = await ref.current?.save();
+                async onChange(api) {
+                    const outputData = await api.saver.save();
                     onEditorChange(outputData);
                 },
                 placeholder: placeholder,
