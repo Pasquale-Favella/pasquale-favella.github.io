@@ -1,9 +1,9 @@
 import { useRef, ChangeEvent } from 'react';
 import { useTesseract } from '@/hooks/use-tesseract';
 import { useStateWithPartialUpdates } from '@/hooks/use-stateWithPartialUpdate';
-import { BiErrorCircle } from 'react-icons/bi';
 import { RxCopy } from 'react-icons/rx';
 import { TbUnlink } from 'react-icons/tb';
+import ErrorCard from '@/components/ErrorCard';
 
 type OcrResult = {
     textResult: string;
@@ -151,15 +151,7 @@ const Ocr = () => {
                 </div>
             }
 
-            {ocrResult.hasError 
-                && <div className='flex w-full flex-1 items-center justify-start rounded-lg border border-error p-4 sm:px-6 mt-2'>
-                    <BiErrorCircle size={50} className='text-error'/> 
-                    <div className='px-4'>
-                        <p>An issue occurred. Please make another attempt or consider altering the image.</p>
-                    </div>      
-                </div>
-            }
-
+            {ocrResult.hasError && <ErrorCard message='An issue occurred. Please make another attempt or consider altering the image.'/>}
         </section>
     );
 }
