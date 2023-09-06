@@ -41,6 +41,12 @@ export default function App({ Component, pageProps }: AppProps) {
                 href:'/favicon.ico',
               },
             ]}
+            additionalMetaTags={[
+              {
+                name : 'google-site-verification' ,
+                content : process.env.NEXT_PUBLIC_GOOGLE_VERIFICATION_CONTENT as string
+              }
+            ]}
           />
           <Component {...pageProps} />
         </Layout>
