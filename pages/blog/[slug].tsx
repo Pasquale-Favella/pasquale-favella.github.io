@@ -11,19 +11,21 @@ import { Comments } from '@/components/PostList';
 import Link from 'next/link';
 import { MdKeyboardArrowLeft } from 'react-icons/md';
 import { Utils } from '@/utils';
+import { CONSTANTS } from '@/config';
 
 interface Params extends ParsedUrlQuery {
-    slug : string;
+  slug : string;
 }
 
 interface Props {
-    content : string;
-    slug : string;
-    title : string;
-    meta_description : string;
+  content : string;
+  slug : string;
+  title : string;
+  meta_description : string;
+  tags : string[];
 }
 
-const BlogPage : React.FC<Props>  = ({content , title , meta_description})=>{
+const BlogPage : React.FC<Props>  = ({content , title , meta_description , tags})=>{
 
   const articleContent = useMemo(()=> md().use(highlightjs).use(codecopy,{
     buttonClass : 'btn btn-ghost btn-circle btn-sm',
@@ -32,7 +34,16 @@ const BlogPage : React.FC<Props>  = ({content , title , meta_description})=>{
 
   return (
     <>
-      <NextSeo title={title} description={`${meta_description}`} />
+      <NextSeo 
+        title={title} 
+        description={`${meta_description}`} 
+        openGraph={{
+          type : 'article' , 
+          article : {
+            tags
+          }
+        }}
+      />
        
       <Link
         href='/blog'
@@ -55,37 +66,32 @@ const BlogPage : React.FC<Props>  = ({content , title , meta_description})=>{
 
 
 export async function getStaticPaths() {
-   
  
-    const { data } = await GithubService.getAllIssues();
-
-    
-    const paths = data.map(post=>({ params: { slug : post.number.toString() } }))
-
-    
-    return {
-      paths,
-      fallback: false,
-    };
-}
-    
+  const { data } = await GithubService.getAllIssues();
   
-    
+  const paths = data.map(post=>({ params: { slug : post.number.toString() } }))
+  
+  return {
+    paths,
+    fallback: false,
+  };
+}
   
 export const getStaticProps: GetStaticProps<Props , Params> = async (context) => {
   
-    const { data : post} = await GithubService.getIssueById(context.params!.slug);
-  
-    const { content } = matter(post.body);
-  
-    return {
-      props: {
-        content ,
-        slug :context.params!.slug ,
-        title : post.title ,
-        meta_description : Utils.extractFirstPhrase(post.body)
-      }
-    };
+  const { data : post} = await GithubService.getIssueById(context.params!.slug);
+
+  const { content } = matter(post.body);
+
+  return {
+    props: {
+      content ,
+      slug :context.params!.slug ,
+      title : post.title ,
+      meta_description : Utils.extractFirstPhrase(post.body) ,
+      tags : post.labels.map(label => label.name).filter(tag => tag !== CONSTANTS.LABELS.DOC)
+    }
+  };
 }
 
 export default BlogPage
