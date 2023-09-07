@@ -7,7 +7,7 @@ import md from 'markdown-it';
 import highlightjs from 'markdown-it-highlightjs';
 import codecopy from 'markdown-it-code-copy'
 import matter from 'gray-matter';
-import { Comments } from '@/components/PostList';
+import { Comments, PostTag } from '@/components/PostList';
 import Link from 'next/link';
 import { MdKeyboardArrowLeft } from 'react-icons/md';
 import { Utils } from '@/utils';
@@ -54,7 +54,11 @@ const BlogPage : React.FC<Props>  = ({content , title , meta_description , tags}
       </Link>
 
       <div className='prose md:prose-lg lg:prose-xl mx-auto  mb-3 lg:mb-5'>
-        <h1 className='text-4xl font-extrabold leading-tight md:text-5xl'>{title}</h1>
+        <h1 className='text-4xl font-extrabold leading-tight md:text-5xl !mb-4'>{title}</h1>
+      
+        <div className="flex gap-2">
+          {tags.map(tag => <PostTag tag={tag} key={tag}/>)}
+        </div>
       </div>
 
       <article className='prose md:prose-lg lg:prose-xl mx-auto' dangerouslySetInnerHTML={{ __html: articleContent }} />

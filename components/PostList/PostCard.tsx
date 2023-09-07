@@ -1,28 +1,12 @@
 import { useMemo } from "react";
 import { CONSTANTS } from "@/config"
 import Link from "next/link"
-import { GithubIssue, GithubIssueLabel } from "@/types"
+import { GithubIssue } from "@/types"
 import { default as DateUtils , Utils } from "@/utils"
-import { HiHashtag } from 'react-icons/hi';
+import Tag from "./Tag";
 
 type Props = {
   post : GithubIssue
-}
-
-const PostTag : React.FC<{label : GithubIssueLabel}>  = ({label})=>{
-  return(
-    <Link className="btn btn-ghost btn-sm text-primary"
-      href={{
-        pathname: '/blog',
-        query: { tag :  label.name},
-      }}
-      passHref
-      shallow
-    >
-      <HiHashtag/>
-      {label.name}
-    </Link>
-  )
 }
 
 const PostReadMore : React.FC<Props>  = ({post})=>{
@@ -52,7 +36,7 @@ const PostCard : React.FC<Props>  = ({post})=>{
             >
               <li className="py-2 w-full">
                 <article>
-                  <div className=" animate-tilt space-y-2 bg-transparent bg-opacity-20 p-2 transition duration-200 hover:rounded-md xl:grid xl:grid-cols-4 xl:items-baseline xl:space-y-0">
+                  <div className="animate-tilt space-y-2 bg-transparent bg-opacity-20 p-2 transition duration-200 hover:rounded-md xl:grid xl:grid-cols-4 xl:items-baseline xl:space-y-0">
                     <dl>
                       <dt className="sr-only">Published on</dt>
                       <dd className="text-sm font-normal leading-6 text-gray-500 dark:text-gray-400">
@@ -73,10 +57,10 @@ const PostCard : React.FC<Props>  = ({post})=>{
                           <small className="line-clamp-3">{articleContentPreview}</small>
                         </div>
 
-                        <div className="flex flex-col justify-between items-start md:flex-row md:items-center gap-2">
+                        <div className="flex flex-col justify-between items-start md:flex-row md:items-center gap-2 pt-1">
 
                           <div className="flex flex-wrap">
-                            {filteredLabels.map(label => <PostTag key={label.id} label={label} />)}
+                            {filteredLabels.map(label => <Tag key={label.id} tag={label.name} className="!py-2 hover:bg-base-300" />)}
                           </div>
 
                           <PostReadMore post={post}/>
