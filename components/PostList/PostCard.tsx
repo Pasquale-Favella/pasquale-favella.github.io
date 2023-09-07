@@ -60,7 +60,7 @@ const PostCard : React.FC<Props>  = ({post})=>{
                         <div className="flex flex-col justify-between items-start md:flex-row md:items-center gap-2 pt-1">
 
                           <div className="flex flex-wrap">
-                            {filteredLabels.map(label => <Tag key={label.id} tag={label.name} className="!py-2 hover:bg-base-300" />)}
+                            {filteredLabels.map(label => <Tag key={label.id} tag={label.name} className="!py-2 bg-base-300 border-base-100 hover:bg-base-100" />)}
                           </div>
 
                           <PostReadMore post={post}/>
