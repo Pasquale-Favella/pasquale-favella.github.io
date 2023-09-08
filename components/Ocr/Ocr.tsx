@@ -88,12 +88,12 @@ const Ocr = () => {
 
     return (
 
-        <section className="flex flex-col items-center justify-start mx-auto prose md:prose-lg lg:prose-xl">
+        <section className="flex flex-col items-center justify-start mx-auto ">
 
             <img ref={imageRef} src={ocrResult.imgSrc} hidden />
             <canvas ref={canvasRef} hidden></canvas>
 
-            <div className='flex flex-col gap-2 w-full md:w-1/2 max-w-80'>
+            <div className='flex flex-col gap-2 w-full md:w-2/3'>
 
                 <InputWithIcon hide={!ocrResult.isSearchFromUrl}
                  type='url'
@@ -139,7 +139,7 @@ const Ocr = () => {
                                 </button>
                             </div>
                         </div>
-                        <p dangerouslySetInnerHTML={{ __html: ocrResult.textResult }} />
+                        <p className="!my-1 text-left" dangerouslySetInnerHTML={{ __html: ocrResult.textResult }} />
                     </div>
                 </div>
             }
