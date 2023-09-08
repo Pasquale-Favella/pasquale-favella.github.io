@@ -7,7 +7,11 @@ const EditorPage : React.FC<Props>  = ()=>{
 
   return (
     <>
-      <NextSeo title='Editor' description='Pasquale Favella , code editor'/>
+      <NextSeo 
+        title='Editor' 
+        description='Create, edit, and preview your web projects in real-time with our HTML, CSS, and JS editor. Write and test HTML, CSS, and JavaScript code effortlessly. Visualize your changes instantly.'
+      />
+
       <CodeEditor />
     </>
   )

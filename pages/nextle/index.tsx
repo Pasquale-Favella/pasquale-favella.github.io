@@ -20,7 +20,11 @@ const NextlePage : React.FC<Props>  = ({ words })=> {
 
   return (
     <>
-      <NextSeo title='Nextle' description='Pasquale Favella , guess the hidden word in 6 tries.'/>
+      <NextSeo 
+        title='Nextle' 
+        description='Put your word-solving skills to the test with Nextle, a fun and addictive word puzzle game inspired by Wordle. Guess the hidden word in as few attempts as possible by deciphering the clues. Challenge your vocabulary and logic while having a blast. Play Nextle now and see how sharp your word-guessing skills really are!'
+      />
+
       <Nextle />
     </>
   )
