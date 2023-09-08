@@ -13,7 +13,7 @@ const Tag : FC<TagProps>  = ({tag , className , ...props})=>{
     return(
       <Link
         className={clsx(
-            'badge badge-lg hover:border-primary no-underline py-4',
+            'badge badge-lg border-base-content hover:border-accent-content hover:opacity-80 no-underline py-4',
             className
         )}
         href={{
