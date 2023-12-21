@@ -73,12 +73,14 @@ const Ocr = () => {
         recognizeWorker({ image: dataUrl })
             .catch(_err => handleOcrStateChange({ hasError: true }))
             .then(result => {
-                console.log({result})
                 if (!result) return;
-                handleOcrStateChange({
+
+                const outcome : Partial<OcrResult> = !Boolean(result?.data?.text) ? { hasError : true } : {
                     textResult: result.data.text,
                     confidence: result.data.confidence
-                })
+                }
+
+                handleOcrStateChange(outcome);
             })
             .finally(() => handleOcrStateChange({ isLoading: false }))
     }
