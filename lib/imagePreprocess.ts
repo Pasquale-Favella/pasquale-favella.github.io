@@ -1,20 +1,11 @@
 function imagePreprocess(canvas: HTMLCanvasElement) {
-    const ctx = canvas.getContext('2d');
+    const ctx = canvas.getContext('2d', { willReadFrequently: true });
     const image = ctx!.getImageData(0,0,canvas.width, canvas.height);
     // blurARGB(image.data, canvas, 1);
     // dilate(image.data, canvas);
     invertColors(image.data);
     thresholdFilter(image.data, 0.5);
     return image;
-   
-    // const ctx = canvas.getContext('2d')
-  
-    // ctx.drawImage(image, 0, 0);
-    // const imgData = ctx.getImageData(0, 0, canvas.height, canvas.width);
-    // thresholdFilter(imgData.data, 0.7);
-    // ctx.putImageData(imgData,0,0)
-    // dataUrl = canvas.toDataURL('image/jpeg');
-    // return imgData;
   }
   
   function getARGB (data: Uint8ClampedArray, i: number) {
