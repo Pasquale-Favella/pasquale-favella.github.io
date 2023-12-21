@@ -73,6 +73,7 @@ const Ocr = () => {
         recognizeWorker({ image: dataUrl })
             .catch(_err => handleOcrStateChange({ hasError: true }))
             .then(result => {
+                console.log({result})
                 if (!result) return;
                 handleOcrStateChange({
                     textResult: result.data.text,
