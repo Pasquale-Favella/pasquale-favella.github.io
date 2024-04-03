@@ -30,15 +30,13 @@ export const useTesseract = (props?: UseTesseractProps) => {
         const image = input?.image ?? props?.image;
         const langs = input?.langs ?? props?.langs;
 
-        if(!image) throw new Error(
-            'Tesseract image is required'
-        );
+        if(!image) throw new Error('Tesseract image is required');
 
-        const worker = await Tesseract.createWorker();
+        const worker = await Tesseract.createWorker(langs);
 
-        await worker.loadLanguage(langs);
-        await worker.initialize(langs);
-        return await worker.recognize(image);
+        return await worker.recognize(image).finally(async ()=> {
+            await worker.terminate();
+        });
     }
 
     return {

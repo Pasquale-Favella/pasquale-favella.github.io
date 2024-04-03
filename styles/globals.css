@@ -4,7 +4,7 @@
 
 /* nprogress style overrides */
 #nprogress  .bar {
-    background: hsl(var(--p) / 1) !important;
+    background: oklch(var(--p) / 1) !important;
 }
 
 /* reactflow style overrides */
@@ -13,19 +13,19 @@
 }
 
 .react-flow__controls-button{
-    background-color: hsl(var(--b3)) !important;
-    border-color: hsl(var(--b1)) !important;
-    color: hsl(var(--bc)) !important;
-    fill: hsl(var(--bc)) !important;
+    background-color: oklch(var(--b3)) !important;
+    border-color: oklch(var(--b1)) !important;
+    color: oklch(var(--bc)) !important;
+    fill: oklch(var(--bc)) !important;
 }
 
 .react-flow__minimap{
-    background-color: hsl(var(--b1)) !important;
+    background-color: oklch(var(--b1)) !important;
 }
 
 .react-flow__minimap-mask,
 .react-flow__minimap-node{
-    fill: hsl(var(--b3)) !important;
+    fill: oklch(var(--b3)) !important;
 }
 
 /* editor js style overrides */
@@ -35,16 +35,16 @@
 
 .codex-editor textarea.ce-code__textarea ,
 .codex-editor code{
-    background-color: hsl(var(--b2)) !important;
-    color: hsl(var(--bc)) !important;
+    background-color: oklch(var(--b2)) !important;
+    color: oklch(var(--bc)) !important;
 }
 
 .codex-editor .ce-toolbar__actions svg{
-    color: hsl(var(--bc)) !important;
+    color: oklch(var(--bc)) !important;
 }
 
 .codex-editor .ce-toolbar__actions > *:hover{
-    background-color: hsl(var(--bc)/.1) !important;
+    background-color: oklch(var(--bc)/.1) !important;
 }
 
 .codex-editor .ce-toolbar__actions > *{
@@ -53,19 +53,19 @@
 }
 
 .codex-editor .ce-popover {
-    --color-background : hsl(var(--b1)) !important;
-    --color-border: hsl(var(--b2)) !important;
-    --color-text-primary: hsl(var(--bc)) !important;
-    --color-background-item-confirm: hsl(var(--er)) !important;
-    --color-background-item-confirm-hover: hsl(var(--nf)/.7) !important;
-    --color-shadow: hsl(var(--b2)/.2) !important;
-    --color-text-icon-active: hsl(var(--p)) !important;
+    --color-background : oklch(var(--b1)) !important;
+    --color-border: oklch(var(--b2)) !important;
+    --color-text-primary: oklch(var(--bc)) !important;
+    --color-background-item-confirm: oklch(var(--er)) !important;
+    --color-background-item-confirm-hover: oklch(var(--nf)/.7) !important;
+    --color-shadow: oklch(var(--b2)/.2) !important;
+    --color-text-icon-active: oklch(var(--p)) !important;
 }
 
 .codex-editor .ce-popover__search ,
 .codex-editor .cdx-button{
-    background-color : hsl(var(--b1)) !important;
-    color: hsl(var(--bc)) !important;
+    background-color : oklch(var(--b1)) !important;
+    color: oklch(var(--bc)) !important;
 }
 
 .codex-editor .ce-popover__search svg {
@@ -75,17 +75,17 @@
 }
 
 .codex-editor .ce-popover-item:hover {
-    background-color : hsl(var(--b2)) !important;
+    background-color : oklch(var(--b2)) !important;
 }
 
 .codex-editor .ce-popover-item__title:hover {
-    color: hsl(var(--bc)) !important;
+    color: oklch(var(--bc)) !important;
 }
 
 .codex-editor .ce-popover-item__icon {
-    background-color : hsl(var(--b1)) !important;
+    background-color : oklch(var(--b1)) !important;
 }
 
 .codex-editor .ce-block--selected .ce-block__content {
-    background-color : hsl(var(--nf)/.3) !important;
+    background-color : oklch(var(--nf)/.3) !important;
 }

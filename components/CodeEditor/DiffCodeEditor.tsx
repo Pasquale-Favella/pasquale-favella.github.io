@@ -31,7 +31,7 @@ const DiffCodeEditor = () => {
             label: (aliases ? aliases[0] : id).toUpperCase()
         })),
         [monaco]
-    )
+    );
 
     return (
         <>

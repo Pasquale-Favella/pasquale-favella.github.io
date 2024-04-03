@@ -1,8 +1,7 @@
 import resolveConfig from 'tailwindcss/resolveConfig'
 import tailwindConfig from './../tailwind.config.js'
-import { Config } from 'tailwindcss';
 
-const tailwindConfigs = ()=> resolveConfig(tailwindConfig) as Config;
+const tailwindConfigs = ()=> resolveConfig(tailwindConfig);
 
 const daisyUI = tailwindConfigs().daisyui;
 
