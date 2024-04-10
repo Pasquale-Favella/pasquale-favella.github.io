@@ -16,7 +16,7 @@ const ConverterPage : React.FC<Props>  = ()=>{
                 Free Unlimited File Converter
             </h2>
 
-            <small className="text-accent-content">Convert any file with Ease!</small>
+            <small className="text-base-content">Convert any file with Ease!</small>
             
             <p className="md:!mt-3">
             Set your creativity free with <b>Converter</b> – the ultimate online tool for limitless and complimentary multimedia conversion. Effortlessly revamp images, audio, and videos without any constraints. Start converting now and take your content to new heights!.

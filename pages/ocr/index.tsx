@@ -16,7 +16,7 @@ const OcrPage : React.FC<Props>  = ()=>{
               Unlock the Power of OCR 
             </h2>
 
-            <small className="text-accent-content">Transform Text from Image or Url with Ease!</small>
+            <small className="text-base-content">Transform Text from Image or Url with Ease!</small>
             
             <p className="md:!mt-3">
               To utilize the potential of the OCR Converter, simply upload an image or enter a URL, and watch as it seamlessly converts text with just <b>one click</b>.
