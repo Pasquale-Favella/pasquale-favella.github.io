@@ -5,6 +5,7 @@ import { RiArticleFill } from 'react-icons/ri';
 import { DiGitPullRequest } from 'react-icons/di';
 import { TfiThought } from 'react-icons/tfi';
 import { GoCodescan } from 'react-icons/go';
+import { TbTransform } from "react-icons/tb";
 
 import {
   Action,
@@ -93,6 +94,14 @@ const KBar = (props: KBarProps) => {
       section: 'Apps',
       perform: () => router.push('/ocr'),
       icon: <MdOutlineImageSearch />,
+    },
+    {
+      id: 'converter',
+      name: 'File Converter',
+      keywords: 'Convert any file',
+      section: 'Apps',
+      perform: () => router.push('/converter'),
+      icon: <TbTransform />,
     },
     {
       id: 'github',
