@@ -12,7 +12,7 @@ export function useChatbot(onBotResponse : (botResponse : string)=> void){
 		workerRef.current = new Worker(new URL('./../ai.worker.ts', import.meta.url))
 		
 		const onMessageReceived = (event: MessageEvent) => {
-            console.log(event.data)
+
 			switch (event.data.status) {
 				case 'initiate':
 					setReady(false);
