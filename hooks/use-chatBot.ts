@@ -1,29 +1,40 @@
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef } from "react";
+import { useStateWithPartialUpdates } from "./use-stateWithPartialUpdate";
 
 const DEFAULT_ANSWER = `Apologies, I didn't quite grasp your query. Could you reformulate it or ask something else?`
 
 export function useChatbot(onBotResponse : (botResponse : string)=> void){
     const workerRef = useRef<Worker>();
 
-    const [ready, setReady] = useState(false);
-	const [progress, setProgress] = useState<number>(0);
+	const [{ready, progress, aiModelLoaded} , setChatbotState] = useStateWithPartialUpdates({
+		ready : false ,
+		progress : 0 ,
+		aiModelLoaded : false
+	})
 
     useEffect(() => {
-		workerRef.current = new Worker(new URL('./../ai.worker.ts', import.meta.url))
+		workerRef.current = new Worker(new URL('./../ai.worker.ts', import.meta.url));
 		
 		const onMessageReceived = (event: MessageEvent) => {
 
 			switch (event.data.status) {
 				case 'initiate':
-					setReady(false);
+					setChatbotState({ready : false});
 					break;
 				case 'ready':
-					setReady(true);
+					setChatbotState({ready : true});
 					break;
 				case 'progress':
-					setProgress(event.data.progress);
+					setChatbotState({progress : event.data.progress});
+					break;
+				case 'evaluating':
+					setChatbotState({ready : false});
 					break;
 				case 'complete':
+					setChatbotState({
+						ready : true ,
+						...(!aiModelLoaded) && {aiModelLoaded : true}
+					});
                     onBotResponse(event.data.output.answer || DEFAULT_ANSWER);
 					break;
 			}
@@ -42,7 +53,10 @@ export function useChatbot(onBotResponse : (botResponse : string)=> void){
         workerRef.current?.postMessage({ text: message });
     }
 
-    const isBotLoadingResponse = useMemo(()=> progress && !ready , [ready,progress]);
+    const isBotLoadingResponse = useMemo(
+		()=> Boolean(progress) && (!ready || !aiModelLoaded), 
+		[ready, progress, aiModelLoaded]
+	);
 
     return {
         isChatReady : ready ,

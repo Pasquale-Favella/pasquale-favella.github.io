@@ -31,14 +31,14 @@ const Chatbot = ()=> {
 
     const [messages , setMessages] = useState<ChatMessage[]>([{
         from : 'bot',
-        body : 'ask me something!'
+        body : 'Ask me something!'
     }]);
 
     const {isBotLoadingResponse, sendMessage} = useChatbot((botResponse => {
         setMessages(prevMessages => [...prevMessages , {from : 'bot', body : botResponse}]);
     }));
 
-    const messagesContainer = useChatScroll(messages);
+    const messagesContainer = useChatScroll([messages , isBotLoadingResponse]);
 
     const onSubmitMessage = (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
@@ -51,7 +51,6 @@ const Chatbot = ()=> {
 
         sendMessage(message);
     }
-
     
     return (
         <Popover>
@@ -66,7 +65,7 @@ const Chatbot = ()=> {
             <PopoverContent className="w-96">
                 <div className="grid gap-4">
 
-                    <div className="space-y-2" >
+                    <div className="space-y-2">
                         <h4 className="font-medium leading-none">Pakybot</h4>
                         <p className="text-sm text-base-content">
                             Ask some question about me

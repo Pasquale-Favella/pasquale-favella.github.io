@@ -18,7 +18,7 @@ class PipelineSingleton {
     static instance: any = null;
 
     static async getInstance(progress_callback: any = null) {
-        if (this.instance === null) {
+        if (!Boolean(this.instance)) {
             this.instance = pipeline(this.task, this.model, { progress_callback });
         }
         return this.instance;
@@ -26,6 +26,10 @@ class PipelineSingleton {
 }
 
 addEventListener('message', async (event: MessageEvent) => {
+    //send evaluating message to the main thread
+    postMessage({
+        status: 'evaluating'
+    });
     // Retrieve the answerer pipeline. When called for the first time,
     // this will load the pipeline and save it for future use.
     const answerer = await PipelineSingleton.getInstance((x: any) => {
