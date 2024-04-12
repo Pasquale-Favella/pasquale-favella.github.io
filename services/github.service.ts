@@ -11,7 +11,8 @@ const getAllIssues = async ()=>{
             labels : CONSTANTS.LABELS.DOC,
             per_page : 100,
             sort : 'created',
-            direction : 'desc'
+            direction : 'desc',
+            state : 'closed'
         }
     })
 }
@@ -22,7 +23,8 @@ const getLatestIssues = async (qty = 3)=>{
             labels : CONSTANTS.LABELS.DOC,
             per_page : qty ,
             sort : 'created',
-            direction : 'desc'
+            direction : 'desc',
+            state : 'closed'
         }
     })
 }

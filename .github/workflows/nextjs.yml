@@ -6,7 +6,7 @@ on:
   pull_request:
     branches: [main]
   issues:
-    types: [opened, edited]
+    types: [closed]
 
 jobs:
   build:
