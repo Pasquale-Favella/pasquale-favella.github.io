@@ -6,6 +6,7 @@ import { DiGitPullRequest } from 'react-icons/di';
 import { TfiThought } from 'react-icons/tfi';
 import { GoCodescan } from 'react-icons/go';
 import { TbTransform } from "react-icons/tb";
+import { LuPalette } from "react-icons/lu";
 
 import {
   Action,
@@ -103,6 +104,15 @@ const KBar = (props: KBarProps) => {
       perform: () => router.push('/converter'),
       icon: <TbTransform />,
     },
+    {
+      id: 'drawer',
+      name: 'Draw Tool',
+      keywords: 'draw tool',
+      section: 'Apps',
+      perform: () => router.push('/draw'),
+      icon: <LuPalette />,
+    },
+
     {
       id: 'github',
       name: 'GitHub',

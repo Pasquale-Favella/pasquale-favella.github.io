@@ -21,6 +21,7 @@
     "@editorjs/list": "1.9.0",
     "@editorjs/paragraph": "2.11.4",
     "@editorjs/table": "2.3.0",
+    "@excalidraw/excalidraw": "^0.17.6",
     "@ffmpeg/ffmpeg": "^0.12.10",
     "@ffmpeg/util": "^0.12.1",
     "@giscus/react": "3.0.0",
