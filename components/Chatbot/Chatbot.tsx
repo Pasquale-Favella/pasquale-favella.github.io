@@ -54,7 +54,7 @@ const Chatbot = ()=> {
     
     return (
         <Popover>
-            <PopoverTrigger asChild className="fixed bottom-4 right-1 sm:bottom-10 sm:right-6 z-100">
+            <PopoverTrigger asChild className="fixed bottom-4 right-1 sm:bottom-10 sm:right-6 z-50">
                 <div className="tooltip tooltip-left before:text-xs before:content-[attr(data-tip)]" data-tip="ask a question">
                     <button className="btn btn-ghost btn-circle " >
                         <BsFillChatQuoteFill size={40}/>
