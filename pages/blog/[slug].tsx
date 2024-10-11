@@ -71,7 +71,7 @@ const BlogPage : React.FC<Props>  = ({content , title , meta_description , tags}
 
 export async function getStaticPaths() {
  
-  const { data } = await GithubService.getAllIssues();
+  const data = await GithubService.getAllIssues();
   
   const paths = data.map(post=>({ params: { slug : post.number.toString() } }))
   

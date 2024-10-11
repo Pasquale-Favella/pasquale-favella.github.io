@@ -2,20 +2,39 @@ import { CONSTANTS } from "@/config"
 import GitOwner from "@/config/owner"
 import api from "@/lib/githubApi"
 import { GithubIssue, GithubRepo, NextleGist } from "@/types"
+import { Utils } from "@/utils"
 import axios from "axios"
 
+const getAllIssues = async () => {
+  const params = {
+    labels: CONSTANTS.LABELS.DOC,
+    per_page: 5,
+    sort: 'created',
+    direction: 'desc',
+    state: 'closed',
+  };
 
-const getAllIssues = async ()=>{
-    return await api.get<GithubIssue[]>(`repos/${GitOwner.owner}/${GitOwner.repo}/issues`,{
-        params : {
-            labels : CONSTANTS.LABELS.DOC,
-            per_page : 100,
-            sort : 'created',
-            direction : 'desc',
-            state : 'closed'
-        }
-    })
-}
+  const fetchIssues = async (
+    issues: GithubIssue[] = [],
+    page = 1,
+  ): Promise<GithubIssue[]> => {
+
+    const { data: issuesOnPage } = await Utils.withRetry(()=> api.get<GithubIssue[]>(
+        `repos/${GitOwner.owner}/${GitOwner.repo}/issues`,
+        { params: { ...params, page } }
+    ));
+
+    issues.push(...issuesOnPage);
+
+    if (issuesOnPage.length < params.per_page) {
+      return issues;
+    }
+
+    return fetchIssues(issues, page + 1);
+  };
+
+  return await fetchIssues();
+};
 
 const getLatestIssues = async (qty = 3)=>{
     return await api.get<GithubIssue[]>(`repos/${GitOwner.owner}/${GitOwner.repo}/issues`,{

@@ -51,13 +51,11 @@ const Blog : React.FC<Props>  = ({posts})=>{
 }
 
 export const getStaticProps: GetStaticProps<Props> = async () => {
-  
- const { data } = await GithubService.getAllIssues();
-   
+
+  const posts = await GithubService.getAllIssues();
+
   return {
-    props: {
-      posts : data
-    }
+    props: { posts }
   };
 }
 

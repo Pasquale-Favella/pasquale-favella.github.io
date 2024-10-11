@@ -1,15 +1,53 @@
-import { GithubIssue } from "@/types"
-import PostCard from "./PostCard"
+import { useRef } from "react";
+import { usePaginatedArray } from "@/hooks/use-paginated-array";
+import { useScrollTop } from "@/hooks/use-scroll-top";
+import { GithubIssue } from "@/types";
+import PostCard from "./PostCard";
 
-type Props = {posts:GithubIssue[]}
+type Props = {
+  posts: GithubIssue[];
+};
 
-const PostList : React.FC<Props>  = ({posts})=>{
+const PostList: React.FC<Props> = ({ posts }) => {
+  const { pageIndex, paginatedArray, totalPages, setPageIndex } = usePaginatedArray({array: posts, pageSize: 5});
 
-    return (
-      <ul className="border border-x-0 mt-5">
-        {posts.map((post) => <PostCard key={post.id} post={post}/>)}
+  const ulRef = useRef<HTMLUListElement>(null);
+
+  useScrollTop(Boolean(pageIndex));
+
+  const handlePrevPage = () => {
+    setPageIndex(pageIndex - 1);
+  };
+
+  const handleNextPage = () => {
+    setPageIndex(pageIndex + 1);
+  };
+
+  return (
+    <div className="grid grid-cols-1 gap-3 mt-3">
+      <ul ref={ulRef}>
+        {paginatedArray.map((post) => (
+          <PostCard key={post.id} post={post} />
+        ))}
       </ul>
-    )
-}
+      <div className="join grid grid-cols-2 m-auto max-w-fit">
+        <button
+          className="join-item btn btn-sm btn-outline btn-primary"
+          onClick={handlePrevPage}
+          disabled={pageIndex === 0}
+        >
+          Previous page
+        </button>
+        <button
+          className="join-item btn btn-sm btn-outline btn-primary"
+          onClick={handleNextPage}
+          disabled={pageIndex === totalPages - 1}
+        >
+          Next
+        </button>
+      </div>
+    </div>
+  );
+};
 
 export default PostList

@@ -31,9 +31,22 @@ const extractFirstPhrase = (str : string) =>  {
     return trimmedPhrase;
 }
 
+const withRetry = async <T>(fn: () => Promise<T>, retries = 3, delay = 1000): Promise<T> => {
+    try {
+      return await fn();
+    } catch (error) {
+      if (retries > 0) {
+        await new Promise(resolve => setTimeout(resolve, delay));
+        return withRetry(fn, retries - 1, delay);
+      } 
+      throw error;
+    }
+};
+
 export default {
     uid ,
     returnBase64FromFile ,
     extractWords ,
-    extractFirstPhrase
+    extractFirstPhrase ,
+    withRetry
 } as const
