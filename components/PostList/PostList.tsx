@@ -1,4 +1,5 @@
 import { useRef } from "react";
+import { cn } from "@/utils"
 import { usePaginatedArray } from "@/hooks/use-paginated-array";
 import { useScrollTop } from "@/hooks/use-scroll-top";
 import { GithubIssue } from "@/types";
@@ -9,7 +10,7 @@ type Props = {
 };
 
 const PostList: React.FC<Props> = ({ posts }) => {
-  const { pageIndex, paginatedArray, totalPages, setPageIndex } = usePaginatedArray({array: posts, pageSize: 5});
+  const { pageIndex, paginatedArray, totalPages, setPageIndex, isPageable } = usePaginatedArray({array: posts, pageSize: 5});
 
   const ulRef = useRef<HTMLUListElement>(null);
 
@@ -30,7 +31,7 @@ const PostList: React.FC<Props> = ({ posts }) => {
           <PostCard key={post.id} post={post} />
         ))}
       </ul>
-      <div className="join grid grid-cols-2 m-auto max-w-fit">
+<div className={cn("join grid grid-cols-2 m-auto max-w-fit", { hidden: !isPageable })}>
         <button
           className="join-item btn btn-sm btn-outline btn-primary"
           onClick={handlePrevPage}
