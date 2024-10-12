@@ -33,7 +33,7 @@ export const usePaginatedArray = <T>({
     setPageIndex(0);
   }, [array]);
 
-  const isPageable = pageIndex !== 0 && pageIndex !== totalPages - 1;
+  const isPageable = totalPages > 1;
 
   return {
     pageIndex,
