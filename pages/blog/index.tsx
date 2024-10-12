@@ -22,7 +22,7 @@ const Blog : React.FC<Props>  = ({posts})=>{
       <NextSeo title='Blog' description='Pasquale Favella Blog'/>
       <main >   
 
-        <label className="join w-full">
+        <label className="join w-full mb-5">
           <select className="select select-bordered focus:outline-none focus:border-primary max-w-xs join-item"
             id="select-tag"
             value={selectedTag}
