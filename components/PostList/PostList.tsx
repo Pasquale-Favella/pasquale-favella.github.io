@@ -25,7 +25,7 @@ const PostList: React.FC<Props> = ({ posts }) => {
   };
 
   return (
-    <div className="grid grid-cols-1 gap-3 mt-3">
+    <div className="grid grid-cols-1 gap-3">
       <ul ref={ulRef}>
         {paginatedArray.map((post) => (
           <PostCard key={post.id} post={post} />
