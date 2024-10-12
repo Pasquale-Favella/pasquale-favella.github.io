@@ -12,6 +12,7 @@ type UsePaginatedArrayType<T> = {
   totalPages: number;
   totalItems: number;
   setPageIndex: (index: number) => void;
+  isPageable: boolean;
 };
 
 export const usePaginatedArray = <T>({
