@@ -32,6 +32,8 @@ export const usePaginatedArray = <T>({
     setPageIndex(0);
   }, [array]);
 
+  const isPageable = pageIndex !== 0 && pageIndex !== totalPages - 1;
+
   return {
     pageIndex,
     pageSize,
@@ -39,5 +41,6 @@ export const usePaginatedArray = <T>({
     totalPages,
     totalItems,
     setPageIndex,
+    isPageable,
   };
 };
