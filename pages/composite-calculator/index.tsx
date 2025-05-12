@@ -8,8 +8,8 @@ const CompositeCalculatorPage : React.FC<Props>  = ()=>{
   return (
     <>
       <NextSeo 
-        title='Composite Calculator' 
-        description='Compose multiple functions and visualize the result with our Composite Calculator. Simplify complex calculations effortlessly.'
+        title='Tzai-Hill Composite Calculator' 
+        description='Calculate composite material properties and perform Tsai-Hill failure analysis with our interactive calculator. Determine safety and understand material behavior under stress.'
       />
 
       <CompositeCalculator />

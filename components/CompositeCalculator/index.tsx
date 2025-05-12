@@ -581,82 +581,89 @@ const CompositeCalculator: React.FC = () => {
               </button>
             </form>
             {results && (
-              <div className="space-y-6">
-                <h3 className="font-bold text-xl sm:text-2xl text-center mb-4">Calculated Properties & Failure Analysis</h3>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <div className="space-y-4">
-                    <h4 className="text-lg sm:text-xl font-semibold">Composite Properties</h4>
-                    <p><strong>Composite Density (ρc):</strong> {results.rho_c.toFixed(4)} g/cm³</p>
-                    <p><strong>Longitudinal Young's Modulus (E1):</strong> {results.E1.toFixed(4)} Gpa</p>
-                    <p><strong>Major Poisson's Ratio (ν12):</strong> {results.v12.toFixed(4)}</p>
-                    <p><strong>Transverse Young's Modulus (E2, Inverse ROM):</strong> {results.E2_inv.toFixed(4)} GPa</p>
-                    <p><strong>Transverse Young's Modulus (E2, Halpin-Tsai):</strong> {results.E2_ht.toFixed(4)} GPa</p>
-                    <p><strong>In-plane Shear Modulus (G12, Inverse ROM):</strong> {results.G12_inv.toFixed(4)} GPa</p>
-                    <p><strong>In-plane Shear Modulus (G12, Halpin-Tsai):</strong> {results.G12_ht.toFixed(4)} GPa</p>
-                  </div>
-                  <div className="space-y-4">
-                    <h4 className="text-lg sm:text-xl font-semibold">Tsai-Hill Failure Criterion</h4>
-                    <p><strong>Failure Index (H):</strong> {results.tsaiHillIndex.toFixed(4)}</p>
-                    <p>
-                      <strong>Failure Status:</strong>{' '}
-                      <span className={
-                        results.tsaiHillStatus === 'Safe' ? 'text-green-600 dark:text-green-400' :
-                          results.tsaiHillStatus === 'Incipient Failure' ? 'text-yellow-600 dark:text-yellow-400' :
-                            'text-red-600 dark:text-red-400'
-                      }>
-                        {results.tsaiHillStatus === 'Safe' && <IoCheckmarkCircleOutline className="inline-block ml-1 text-green-600 dark:text-green-400" />}
-                        {results.tsaiHillStatus === 'Incipient Failure' && <IoWarningOutline className="inline-block ml-1 text-yellow-600 dark:text-yellow-400" />}
-                        {results.tsaiHillStatus === 'Failed' && <IoClose className="inline-block ml-1 text-red-600 dark:text-red-400" />}
-                        {results.tsaiHillStatus}
-                      </span>
-                    </p>
+              <div role="tablist" className="tabs tabs-lifted">
+                <input type="radio" name="results_tabs" role="tab" className="tab" aria-label="Results" defaultChecked />
+                <div role="tabpanel" className="tab-content bg-base-100 border-base-300 rounded-box p-6">
+                  <h3 className="font-bold text-xl sm:text-2xl text-center mb-4">Calculated Properties & Failure Analysis</h3>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div className="space-y-4">
+                      <h4 className="text-lg sm:text-xl font-semibold">Composite Properties</h4>
+                      <p><strong>Composite Density (ρc):</strong> {results.rho_c.toFixed(4)} g/cm³</p>
+                      <p><strong>Longitudinal Young's Modulus (E1):</strong> {results.E1.toFixed(4)} Gpa</p>
+                      <p><strong>Major Poisson's Ratio (ν12):</strong> {results.v12.toFixed(4)}</p>
+                      <p><strong>Transverse Young's Modulus (E2, Inverse ROM):</strong> {results.E2_inv.toFixed(4)} GPa</p>
+                      <p><strong>Transverse Young's Modulus (E2, Halpin-Tsai):</strong> {results.E2_ht.toFixed(4)} GPa</p>
+                      <p><strong>In-plane Shear Modulus (G12, Inverse ROM):</strong> {results.G12_inv.toFixed(4)} GPa</p>
+                      <p><strong>In-plane Shear Modulus (G12, Halpin-Tsai):</strong> {results.G12_ht.toFixed(4)} GPa</p>
+                    </div>
+                    <div className="space-y-4">
+                      <h4 className="text-lg sm:text-xl font-semibold">Tsai-Hill Failure Criterion</h4>
+                      <p><strong>Failure Index (H):</strong> {results.tsaiHillIndex.toFixed(4)}</p>
+                      <p>
+                        <strong>Failure Status:</strong>{' '}
+                        <span className={
+                          results.tsaiHillStatus === 'Safe' ? 'text-green-600 dark:text-green-400' :
+                            results.tsaiHillStatus === 'Incipient Failure' ? 'text-yellow-600 dark:text-yellow-400' :
+                              'text-red-600 dark:text-red-400'
+                        }>
+                          {results.tsaiHillStatus === 'Safe' && <IoCheckmarkCircleOutline className="inline-block ml-1 text-green-600 dark:text-green-400" />}
+                          {results.tsaiHillStatus === 'Incipient Failure' && <IoWarningOutline className="inline-block ml-1 text-yellow-600 dark:text-yellow-400" />}
+                          {results.tsaiHillStatus === 'Failed' && <IoClose className="inline-block ml-1 text-red-600 dark:text-red-400" />}
+                          {results.tsaiHillStatus}
+                        </span>
+                      </p>
+                    </div>
                   </div>
                 </div>
-                {/* Failure Envelope Plot */}
-                <div className="mt-8">
-                  <h3 className="font-bold text-xl sm:text-2xl text-center mb-4">Tsai-Hill Failure Envelope (τ₁₂ = 0)</h3>
-                  <ResponsiveContainer width="100%" height={400}>
-                    <ScatterChart
-                      margin={{
-                        top: 20,
-                        right: 20,
-                        bottom: 20,
-                        left: 20,
-                      }}
-                    >
-                      <CartesianGrid />
-                      <XAxis
-                        type="number"
-                        dataKey="sigma1"
-                        name="σ₁ (MPa)"
-                        unit="MPa"
-                        domain={[
-                          Math.min(...results.failureEnvelopeData.map(d => d.sigma1), results.appliedStress.sigma1) * 1.1,
-                          Math.max(...results.failureEnvelopeData.map(d => d.sigma1), results.appliedStress.sigma1) * 1.1,
-                        ]}
-                      />
-                      <YAxis
-                        type="number"
-                        dataKey="sigma2"
-                        name="σ₂ (MPa)"
-                        unit="MPa"
-                        domain={[
-                          Math.min(...results.failureEnvelopeData.map(d => d.sigma2), results.appliedStress.sigma2) * 1.1,
-                          Math.max(...results.failureEnvelopeData.map(d => d.sigma2), results.appliedStress.sigma2) * 1.1,
-                        ]}
-                      />
-                      <Tooltip cursor={{ strokeDasharray: '3 3' }} />
-                      <Legend formatter={(value) => value} />
-                      <Scatter name="Failure Envelope" data={results.failureEnvelopeData} fill="#8884d8" line />
-                      <Scatter name="Applied Stress State" data={[results.appliedStress]} fill="#ff0000" shape="star" />
-                    </ScatterChart>
-                  </ResponsiveContainer>
-                  <div className="mt-4 text-sm text-gray-700 dark:text-gray-300">
-                    <p>
-                      <span className="tooltip tooltip-top text-left" data-tip="Tsai-Hill Failure Criterion: (σ₁/X)² - (σ₁ * σ₂) / X² + (σ₂/Y)² + (τ₁₂/S)² = 1; Applied Stress State: (σ₁, σ₂)">
-                        The <strong>Tsai-Hill Failure Envelope</strong> represents the boundary in the stress space (σ₁, σ₂) within which the composite material is considered safe under a given shear stress (τ₁₂ = 0 in this plot). Points falling inside the envelope indicate a safe stress state, while points on or outside the envelope indicate incipient or actual failure according to the Tsai-Hill criterion. The red star represents the applied stress state (σ₁, σ₂) on the composite lamina. <IoInformationCircleOutline className="inline-block ml-1" />
-                      </span>
-                    </p>
+
+                <input type="radio" name="results_tabs" role="tab" className="tab min-w-max" aria-label="Tsai-Hill Failure Envelope" />
+                <div role="tabpanel" className="tab-content bg-base-100 border-base-300 rounded-box p-6">
+                  {/* Failure Envelope Plot */}
+                  <div className="mt-8">
+                    <h3 className="font-bold text-xl sm:text-2xl text-center mb-4">Tsai-Hill Failure Envelope (τ₁₂ = 0)</h3>
+                    <ResponsiveContainer width="100%" height={400}>
+                      <ScatterChart
+                        margin={{
+                          top: 20,
+                          right: 20,
+                          bottom: 20,
+                          left: 20,
+                        }}
+                      >
+                        <CartesianGrid />
+                        <XAxis
+                          type="number"
+                          dataKey="sigma1"
+                          name="σ₁ (MPa)"
+                          unit="MPa"
+                          domain={[
+                            Math.min(...results.failureEnvelopeData.map(d => d.sigma1), results.appliedStress.sigma1) * 1.1,
+                            Math.max(...results.failureEnvelopeData.map(d => d.sigma1), results.appliedStress.sigma1) * 1.1,
+                          ]}
+                        />
+                        <YAxis
+                          type="number"
+                          dataKey="sigma2"
+                          name="σ₂ (MPa)"
+                          unit="MPa"
+                          domain={[
+                            Math.min(...results.failureEnvelopeData.map(d => d.sigma2), results.appliedStress.sigma2) * 1.1,
+                            Math.max(...results.failureEnvelopeData.map(d => d.sigma2), results.appliedStress.sigma2) * 1.1,
+                          ]}
+                        />
+                        <Tooltip cursor={{ strokeDasharray: '3 3' }} />
+                        <Legend formatter={(value) => value} />
+                        <Scatter name="Failure Envelope" data={results.failureEnvelopeData} fill="#8884d8" line />
+                        <Scatter name="Applied Stress State" data={[results.appliedStress]} fill="#ff0000" shape="star" />
+                      </ScatterChart>
+                    </ResponsiveContainer>
+                    <div className="mt-4 text-sm text-gray-700 dark:text-gray-300">
+                      <p>
+                        <span className="tooltip tooltip-top text-left" data-tip="Tsai-Hill Failure Criterion: (σ₁/X)² - (σ₁ * σ₂) / X² + (σ₂/Y)² + (τ₁₂/S)² = 1; Applied Stress State: (σ₁, σ₂)">
+                          The <strong>Tsai-Hill Failure Envelope</strong> represents the boundary in the stress space (σ₁, σ₂) within which the composite material is considered safe under a given shear stress (τ₁₂ = 0 in this plot). Points falling inside the envelope indicate a safe stress state, while points on or outside the envelope indicate incipient or actual failure according to the Tsai-Hill criterion. The red star represents the applied stress state (σ₁, σ₂) on the composite lamina. <IoInformationCircleOutline className="inline-block ml-1" />
+                        </span>
+                      </p>
+                    </div>
                   </div>
                 </div>
               </div>
