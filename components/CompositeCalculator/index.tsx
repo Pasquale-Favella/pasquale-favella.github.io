@@ -334,11 +334,11 @@ const CompositeCalculator: React.FC = () => {
               Please use the following units for inputs:
             </p>
             <ul className="list-disc list-inside text-sm mt-2">
-              <li>Young's Modulus (E): GPa</li>
+              <li>Young&apos;s Modulus (E): GPa</li>
               <li>Shear Modulus (G): GPa</li>
               <li>Density (ρ): g/cm³</li>
               <li>Volume Fraction (Vf): Dimensionless (between 0 and 1)</li>
-              <li>Poisson's Ratio (ν): Dimensionless</li>
+              <li>Poisson&apos;s Ratio (ν): Dimensionless</li>
               <li>Applied Stresses (σ₁, σ₂, τ₁₂): MPa</li>
               <li>Material Strengths (Xt, Xc, Yt, Yc, S12): MPa</li>
             </ul>
@@ -377,13 +377,13 @@ const CompositeCalculator: React.FC = () => {
                 </thead>
                 <tbody>
                   <tr>
-                    <td>Young's Modulus (E)</td>
+                    <td>Young&apos;s Modulus (E)</td>
                     <td>3.5 GPa</td>
                     <td>230 GPa</td>
                     <td>E1 (ROM): 139.4 GPa<br />E2 (Inv ROM): 8.33 GPa<br />E2 (Halpin-Tsai): 10.5 GPa</td>
                   </tr>
                   <tr>
-                    <td>Poisson's Ratio (ν)</td>
+                    <td>Poisson&apos;s Ratio (ν)</td>
                     <td>0.35</td>
                     <td>0.2</td>
                     <td>ν12 (ROM): 0.29</td>
@@ -420,7 +420,7 @@ const CompositeCalculator: React.FC = () => {
               {/* Em */}
               <div className="form-control w-full">
                 <label className="label">
-                  <span className="label-text">Young's Modulus (Em, GPa)</span>
+                  <span className="label-text">Young&apos;s Modulus (Em, GPa)</span>
                   <span className="tooltip tooltip-left" data-tip="The Young's Modulus of the matrix material (Em) is a measure of its stiffness. It describes how the material deforms elastically under tensile or compressive stress. A higher value indicates a stiffer material."><IoInformationCircleOutline className="inline-block ml-1" /></span>
                 </label>
                 <input
@@ -435,7 +435,7 @@ const CompositeCalculator: React.FC = () => {
               {/* vm */}
               <div className="form-control w-full">
                 <label className="label">
-                  <span className="label-text">Poisson's Ratio (νm)</span>
+                  <span className="label-text">Poisson&apos;s Ratio (νm)</span>
                   <span className="tooltip tooltip-left" data-tip="The Poisson's Ratio of the matrix material (νm) describes the ratio of transverse strain to axial strain when the material is subjected to axial stress. It quantifies the material's tendency to deform in directions perpendicular to the applied force."><IoInformationCircleOutline className="inline-block ml-1" /></span>
                 </label>
                 <input
@@ -469,7 +469,7 @@ const CompositeCalculator: React.FC = () => {
 
               <div className="form-control w-full">
                 <label className="label">
-                  <span className="label-text">Young's Modulus (Ef, GPa)</span>
+                  <span className="label-text">Young&apos;s Modulus (Ef, GPa)</span>
                   <span className="tooltip tooltip-left" data-tip="The Young's Modulus of the fiber material (Ef) is a key indicator of the fiber's stiffness. Fibers are typically much stiffer and stronger than the matrix, and Ef represents their resistance to elastic deformation under tensile or compressive stress, contributing significantly to the composite's longitudinal strength."><IoInformationCircleOutline className="inline-block ml-1" /></span>
                 </label>
                 <input
@@ -484,7 +484,7 @@ const CompositeCalculator: React.FC = () => {
 
               <div className="form-control w-full">
                 <label className="label">
-                  <span className="label-text">Poisson's Ratio (νf)</span>
+                  <span className="label-text">Poisson&apos;s Ratio (νf)</span>
                   <span className="tooltip tooltip-left" data-tip="The Poisson's Ratio of the fiber material (νf) describes the ratio of transverse strain to axial strain for the fiber under axial load. It defines the fiber's transverse deformation characteristics and is used in composite property calculations."><IoInformationCircleOutline className="inline-block ml-1" /></span>
                 </label>
                 <input
@@ -705,10 +705,10 @@ const CompositeCalculator: React.FC = () => {
                     <div className="space-y-4">
                       <h4 className="text-lg sm:text-xl font-semibold">Composite Properties</h4>
                       <p><strong>Composite Density (ρc):</strong> {results.rho_c.toFixed(4)} g/cm³</p>
-                      <p><strong>Longitudinal Young's Modulus (E1):</strong> {results.E1.toFixed(4)} Gpa</p>
-                      <p><strong>Major Poisson's Ratio (ν12):</strong> {results.v12.toFixed(4)}</p>
-                      <p><strong>Transverse Young's Modulus (E2, Inverse ROM):</strong> {results.E2_inv.toFixed(4)} GPa</p>
-                      <p><strong>Transverse Young's Modulus (E2, Halpin-Tsai):</strong> {results.E2_ht.toFixed(4)} GPa</p>
+                      <p><strong>Longitudinal Young&apos;s Modulus (E1):</strong> {results.E1.toFixed(4)} Gpa</p>
+                      <p><strong>Major Poisson&apos;s Ratio (ν12):</strong> {results.v12.toFixed(4)}</p>
+                      <p><strong>Transverse Young&apos;s Modulus (E2, Inverse ROM):</strong> {results.E2_inv.toFixed(4)} GPa</p>
+                      <p><strong>Transverse Young&apos;s Modulus (E2, Halpin-Tsai):</strong> {results.E2_ht.toFixed(4)} GPa</p>
                       <p><strong>In-plane Shear Modulus (G12, Inverse ROM):</strong> {results.G12_inv.toFixed(4)} GPa</p>
                       <p><strong>In-plane Shear Modulus (G12, Halpin-Tsai):</strong> {results.G12_ht.toFixed(4)} GPa</p>
                     </div>
