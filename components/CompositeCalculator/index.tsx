@@ -124,11 +124,11 @@ const CompositeCalculator: React.FC = () => {
     // Halpin-Tsai Model
     // E2
     const eta_E2 = ((Ef / Em) - 1) / ((Ef / Em) + 0.5); // xi = 2 for E2
-    const E2_ht = Em * ( (1 + 2 * Vf * eta_E2) / (1 - Vf * eta_E2) );
+    const E2_ht = Em * ((1 + 2 * Vf * eta_E2) / (1 - Vf * eta_E2));
 
     // G12
     const eta_G12 = ((Gf / Gm) - 1) / ((Gf / Gm) + 1); // xi = 1 for G12
-    const G12_ht = Gm * ( (1 + 1 * Vf * eta_G12) / (1 - Vf * eta_G12) );
+    const G12_ht = Gm * ((1 + 1 * Vf * eta_G12) / (1 - Vf * eta_G12));
 
     // Tsai-Hill Failure Criterion
     // Select appropriate strengths based on stress sign
@@ -186,6 +186,116 @@ const CompositeCalculator: React.FC = () => {
           This tool allows you to calculate key properties of a composite lamina and perform a Tsai-Hill failure analysis based on material properties and applied stresses.
           Enter the properties of the matrix and fiber materials, the fiber volume fraction, and the applied stresses to get the calculated composite properties and failure status.
         </p>
+
+        {/* Limitations and Assumptions */}
+        <div className="collapse collapse-arrow bg-base-200 mb-6">
+          <input type="checkbox" />
+          <div className="collapse-title text-lg sm:text-xl font-semibold">
+            Limitations and Assumptions
+          </div>
+          <div className="collapse-content">
+            <p className="text-sm text-gray-700 dark:text-gray-300">
+              This calculator uses simplified models (Rule of Mixtures, Halpin-Tsai) and the Tsai-Hill failure criterion. Key assumptions include:
+            </p>
+            <ul className="list-disc list-inside text-sm text-gray-700 dark:text-gray-300 mt-2">
+              <li>The composite is a unidirectional lamina.</li>
+              <li>Perfect bonding exists between the fibers and the matrix.</li>
+              <li>Materials are homogeneous and isotropic within their respective phases (matrix and fiber).</li>
+              <li>Calculations are based on linear elastic material behavior.</li>
+              <li>The Tsai-Hill criterion is an interaction criterion and does not predict the mode of failure.</li>
+            </ul>
+          </div>
+        </div>
+
+        {/* Units and Conventions */}
+        <div className="collapse collapse-arrow bg-base-200 mb-6">
+          <input type="checkbox" />
+          <div className="collapse-title text-lg sm:text-xl font-semibold">
+            Units and Conventions
+          </div>
+          <div className="collapse-content">
+            <p className="text-sm text-gray-700 dark:text-gray-300">
+              Please use the following units for inputs:
+            </p>
+            <ul className="list-disc list-inside text-sm text-gray-700 dark:text-gray-300 mt-2">
+              <li>Young's Modulus (E): GPa</li>
+              <li>Shear Modulus (G): GPa</li>
+              <li>Density (ρ): g/cm³</li>
+              <li>Volume Fraction (Vf): Dimensionless (between 0 and 1)</li>
+              <li>Poisson's Ratio (ν): Dimensionless</li>
+              <li>Applied Stresses (σ₁, σ₂, τ₁₂): MPa</li>
+              <li>Material Strengths (Xt, Xc, Yt, Yc, S12): MPa</li>
+            </ul>
+            <p className="text-sm text-gray-700 dark:text-gray-300 mt-2">
+              The convention for material directions is:
+            </p>
+            <ul className="list-disc list-inside text-sm text-gray-700 dark:text-gray-300 mt-2">
+              <li>Direction 1: Longitudinal (along the fibers)</li>
+              <li>Direction 2: Transverse (perpendicular to the fibers)</li>
+            </ul>
+            <p className="text-sm text-gray-700 dark:text-gray-300 mt-2">
+              Note on units: The calculator performs calculations assuming consistent units. Ensure all inputs are in the specified units (GPa, g/cm³, MPa) for accurate results. Conversions between GPa and MPa (1 GPa = 1000 MPa) may be necessary depending on your source data.
+            </p>
+          </div>
+        </div>
+
+        {/* Example Calculations */}
+        <div className="collapse collapse-arrow bg-base-200 mb-6">
+          <input type="checkbox" />
+          <div className="collapse-title text-lg sm:text-xl font-semibold">
+            Example Calculation
+          </div>
+          <div className="collapse-content">
+            <p className="text-sm text-gray-700 dark:text-gray-300 mb-4">
+              Here is an example calculation using typical properties for a Carbon Fiber/Epoxy composite:
+            </p>
+            <div className="overflow-x-auto">
+              <table className="table w-full text-sm text-gray-700 dark:text-gray-300">
+                <thead>
+                  <tr>
+                    <th>Property</th>
+                    <th>Matrix (Epoxy)</th>
+                    <th>Fiber (Carbon)</th>
+                    <th>Composite (Vf = 0.6)</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>Young's Modulus (E)</td>
+                    <td>3.5 GPa</td>
+                    <td>230 GPa</td>
+                    <td>E1 (ROM): 139.4 GPa<br />E2 (Inv ROM): 8.33 GPa<br />E2 (Halpin-Tsai): 10.5 GPa</td>
+                  </tr>
+                  <tr>
+                    <td>Poisson's Ratio (ν)</td>
+                    <td>0.35</td>
+                    <td>0.2</td>
+                    <td>ν12 (ROM): 0.29</td>
+                  </tr>
+                  <tr>
+                    <td>Shear Modulus (G)</td>
+                    <td>1.3 GPa</td> {/* Calculated from Em and vm */}
+                    <td>80 GPa</td>
+                    <td>G12 (Inv ROM): 2.5 GPa<br />G12 (Halpin-Tsai): 4.3 GPa</td>
+                  </tr>
+                  <tr>
+                    <td>Density (ρ)</td>
+                    <td>1.2 g/cm³</td>
+                    <td>1.8 g/cm³</td>
+                    <td>ρc (ROM): 1.56 g/cm³</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <p className="text-sm text-gray-700 dark:text-gray-300 mt-4">
+              Applied Stresses: σ₁ = 500 MPa, σ₂ = 20 MPa, τ₁₂ = 30 MPa<br />
+              Material Strengths: Xt = 1500 MPa, Xc = 1000 MPa, Yt = 40 MPa, Yc = 150 MPa, S12 = 60 MPa
+            </p>
+            <p className="text-sm text-gray-700 dark:text-gray-300 mt-2">
+              Tsai-Hill Failure Index: 0.1111 (Safe)
+            </p>
+          </div>
+        </div>
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-6 sm:space-y-8">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 md:gap-8">
             {/* Matrix Properties */}
@@ -207,7 +317,7 @@ const CompositeCalculator: React.FC = () => {
                 {errors.Em && <span className="text-red-500 text-sm">{errors.Em.message}</span>}
               </div>
               {/* vm */}
-               <div className="form-control w-full">
+              <div className="form-control w-full">
                 <label className="label">
                   <span className="label-text">Poisson's Ratio (νm)</span>
                   <span className="tooltip tooltip-left" data-tip="The Poisson's Ratio of the matrix material (νm) describes the ratio of transverse strain to axial strain when the material is subjected to axial stress. It quantifies the material's tendency to deform in directions perpendicular to the applied force."><IoInformationCircleOutline className="inline-block ml-1" /></span>
@@ -222,7 +332,7 @@ const CompositeCalculator: React.FC = () => {
                 {errors.vm && <span className="text-red-500 text-sm">{errors.vm.message}</span>}
               </div>
               {/* rhom */}
-               <div className="form-control w-full">
+              <div className="form-control w-full">
                 <label className="label">
                   <span className="label-text">Density (ρm, g/cm³)</span >
                   <span className="tooltip tooltip-left" data-tip="The density of the matrix material (ρm) is its mass per unit volume. This parameter is essential for calculating the overall composite density and weight, which are important for structural applications."><IoInformationCircleOutline className="inline-block ml-1" /></span>
@@ -256,7 +366,7 @@ const CompositeCalculator: React.FC = () => {
                 {errors.Ef && <span className="text-red-500 text-sm">{errors.Ef.message}</span>}
               </div>
 
-               <div className="form-control w-full">
+              <div className="form-control w-full">
                 <label className="label">
                   <span className="label-text">Poisson's Ratio (νf)</span>
                   <span className="tooltip tooltip-left" data-tip="The Poisson's Ratio of the fiber material (νf) describes the ratio of transverse strain to axial strain for the fiber under axial load. It defines the fiber's transverse deformation characteristics and is used in composite property calculations."><IoInformationCircleOutline className="inline-block ml-1" /></span>
@@ -271,7 +381,7 @@ const CompositeCalculator: React.FC = () => {
                 {errors.vf && <span className="text-red-500 text-sm">{errors.vf.message}</span>}
               </div>
 
-               <div className="form-control w-full">
+              <div className="form-control w-full">
                 <label className="label">
                   <span className="label-text">Shear Modulus (Gf, GPa)</span>
                   <span className="tooltip tooltip-left" data-tip="The Shear Modulus of the fiber material (Gf) measures its resistance to deformation when subjected to shear stress. This property is important for predicting the composite's shear behavior."><IoInformationCircleOutline className="inline-block ml-1" /></span>
@@ -286,7 +396,7 @@ const CompositeCalculator: React.FC = () => {
                 {errors.Gf && <span className="text-red-500 text-sm">{errors.Gf.message}</span>}
               </div>
 
-               <div className="form-control w-full">
+              <div className="form-control w-full">
                 <label className="label">
                   <span className="label-text">Density (ρf, g/cm³)</span>
                   <span className="tooltip tooltip-left" data-tip="The density of the fiber material (ρf) is its mass per unit volume. Along with the matrix density and fiber volume fraction, it is used to calculate the overall composite density."><IoInformationCircleOutline className="inline-block ml-1" /></span>
@@ -303,7 +413,7 @@ const CompositeCalculator: React.FC = () => {
             </div>
 
 
-             <div className="space-y-4 sm:space-y-6">
+            <div className="space-y-4 sm:space-y-6">
               <h3 className="text-lg sm:text-xl font-semibold  pb-2">Composite Properties</h3>
 
               <div className="form-control w-full">
@@ -491,8 +601,8 @@ const CompositeCalculator: React.FC = () => {
                       <strong>Failure Status:</strong>{' '}
                       <span className={
                         results.tsaiHillStatus === 'Safe' ? 'text-green-600 dark:text-green-400' :
-                        results.tsaiHillStatus === 'Incipient Failure' ? 'text-yellow-600 dark:text-yellow-400' :
-                        'text-red-600 dark:text-red-400'
+                          results.tsaiHillStatus === 'Incipient Failure' ? 'text-yellow-600 dark:text-yellow-400' :
+                            'text-red-600 dark:text-red-400'
                       }>
                         {results.tsaiHillStatus === 'Safe' && <IoCheckmarkCircleOutline className="inline-block ml-1 text-green-600 dark:text-green-400" />}
                         {results.tsaiHillStatus === 'Incipient Failure' && <IoWarningOutline className="inline-block ml-1 text-yellow-600 dark:text-yellow-400" />}
@@ -502,7 +612,7 @@ const CompositeCalculator: React.FC = () => {
                     </p>
                   </div>
                 </div>
-                 {/* Failure Envelope Plot */}
+                {/* Failure Envelope Plot */}
                 <div className="mt-8">
                   <h3 className="font-bold text-xl sm:text-2xl text-center mb-4">Tsai-Hill Failure Envelope (τ₁₂ = 0)</h3>
                   <ResponsiveContainer width="100%" height={400}>
@@ -530,18 +640,18 @@ const CompositeCalculator: React.FC = () => {
                         dataKey="sigma2"
                         name="σ₂ (MPa)"
                         unit="MPa"
-                         domain={[
+                        domain={[
                           Math.min(...results.failureEnvelopeData.map(d => d.sigma2), results.appliedStress.sigma2) * 1.1,
                           Math.max(...results.failureEnvelopeData.map(d => d.sigma2), results.appliedStress.sigma2) * 1.1,
                         ]}
                       />
-                       <Tooltip cursor={{ strokeDasharray: '3 3' }} />
-                       <Legend formatter={(value) => value} />
-                       <Scatter name="Failure Envelope" data={results.failureEnvelopeData} fill="#8884d8" line />
-                     <Scatter name="Applied Stress State" data={[results.appliedStress]} fill="#ff0000" shape="star" />
-                     </ScatterChart>
-                   </ResponsiveContainer>
-                    <div className="mt-4 text-sm text-gray-700 dark:text-gray-300">
+                      <Tooltip cursor={{ strokeDasharray: '3 3' }} />
+                      <Legend formatter={(value) => value} />
+                      <Scatter name="Failure Envelope" data={results.failureEnvelopeData} fill="#8884d8" line />
+                      <Scatter name="Applied Stress State" data={[results.appliedStress]} fill="#ff0000" shape="star" />
+                    </ScatterChart>
+                  </ResponsiveContainer>
+                  <div className="mt-4 text-sm text-gray-700 dark:text-gray-300">
                     <p>
                       <span className="tooltip tooltip-top text-left" data-tip="Tsai-Hill Failure Criterion: (σ₁/X)² - (σ₁ * σ₂) / X² + (σ₂/Y)² + (τ₁₂/S)² = 1; Applied Stress State: (σ₁, σ₂)">
                         The <strong>Tsai-Hill Failure Envelope</strong> represents the boundary in the stress space (σ₁, σ₂) within which the composite material is considered safe under a given shear stress (τ₁₂ = 0 in this plot). Points falling inside the envelope indicate a safe stress state, while points on or outside the envelope indicate incipient or actual failure according to the Tsai-Hill criterion. The red star represents the applied stress state (σ₁, σ₂) on the composite lamina. <IoInformationCircleOutline className="inline-block ml-1" />
