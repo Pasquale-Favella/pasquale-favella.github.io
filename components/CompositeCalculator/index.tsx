@@ -105,7 +105,43 @@ const CompositeCalculator: React.FC = () => {
   });
 
   const [results, setResults] = React.useState<CalculationResults | null>(null);
-  const [isModalOpen, setIsModalOpen] = useState(false); // State for modal visibility
+  const [isModalOpen, setIsModalState] = useState(false); // State for modal visibility
+
+  // State for conversion utility
+  const [conversionInput, setConversionInput] = useState('');
+  const [conversionResult, setConversionResult] = useState('');
+  const [conversionType, setConversionType] = useState('GPa_to_MPa'); // Default conversion
+
+  const handleConversion = () => {
+    const value = parseFloat(conversionInput);
+    if (isNaN(value)) {
+      setConversionResult('Invalid input');
+      return;
+    }
+
+    let result;
+    switch (conversionType) {
+      case 'GPa_to_MPa':
+        result = value * 1000;
+        setConversionResult(`${result} MPa`);
+        break;
+      case 'MPa_to_GPa':
+        result = value / 1000;
+        setConversionResult(`${result} GPa`);
+        break;
+      case 'g/cm³_to_kg/m³':
+        result = value * 1000;
+        setConversionResult(`${result} kg/m³`);
+        break;
+      case 'kg/m³_to_g/cm³':
+        result = value / 1000;
+        setConversionResult(`${result} g/cm³`);
+        break;
+      default:
+        setConversionResult('Select a conversion type');
+    }
+  };
+
 
   const calculateProperties = (data: FormData): CalculationResults => {
     const { Em, vm, Ef, vf, Gf, Vf, rhom, rhof, sigma1, sigma2, tau12, Xt, Xc, Yt, Yc, S12 } = data;
@@ -175,7 +211,7 @@ const CompositeCalculator: React.FC = () => {
   const onSubmit = (data: FormData) => {
     const calculatedResults = calculateProperties(data);
     setResults(calculatedResults);
-    setIsModalOpen(true); // Open the modal on submit
+    setIsModalState(true); // Open the modal on submit
   };
 
   return (
@@ -187,6 +223,45 @@ const CompositeCalculator: React.FC = () => {
           Enter the properties of the matrix and fiber materials, the fiber volume fraction, and the applied stresses to get the calculated composite properties and failure status.
         </p>
 
+        {/* Conversion Utility */}
+        <div className="collapse collapse-arrow bg-base-200 mb-6">
+          <input type="checkbox" />
+          <div className="collapse-title text-lg sm:text-xl font-semibold">
+            Unit Converter
+          </div>
+          <div className="collapse-content">
+            <p className="text-sm mb-4">
+              Quickly convert between common units used in composite mechanics.
+            </p>
+            <div className="flex flex-col sm:flex-row gap-4">
+              <select
+                className="select select-bordered w-full sm:w-auto"
+                value={conversionType}
+                onChange={(e) => setConversionType(e.target.value)}
+              >
+                <option value="GPa_to_MPa">GPa to MPa</option>
+                <option value="MPa_to_GPa">MPa to GPa</option>
+                <option value="g/cm³_to_kg/m³">g/cm³ to kg/m³</option>
+                <option value="kg/m³_to_g/cm³">kg/m³ to g/cm³</option>
+              </select>
+              <input
+                type="number"
+                step="any"
+                placeholder="Enter value"
+                className="input input-bordered w-full sm:flex-1"
+                value={conversionInput}
+                onChange={(e) => setConversionInput(e.target.value)}
+              />
+              <button className="btn btn-neutral sm:w-auto" onClick={handleConversion}>Convert</button>
+            </div>
+            {conversionResult && (
+              <div className="mt-4 text-sm font-semibold">
+                Result: {conversionResult}
+              </div>
+            )}
+          </div>
+        </div>
+
         {/* Limitations and Assumptions */}
         <div className="collapse collapse-arrow bg-base-200 mb-6">
           <input type="checkbox" />
@@ -194,10 +269,10 @@ const CompositeCalculator: React.FC = () => {
             Limitations and Assumptions
           </div>
           <div className="collapse-content">
-            <p className="text-sm text-gray-700 dark:text-gray-300">
+            <p className="text-sm">
               This calculator uses simplified models (Rule of Mixtures, Halpin-Tsai) and the Tsai-Hill failure criterion. Key assumptions include:
             </p>
-            <ul className="list-disc list-inside text-sm text-gray-700 dark:text-gray-300 mt-2">
+            <ul className="list-disc list-inside text-sm mt-2">
               <li>The composite is a unidirectional lamina.</li>
               <li>Perfect bonding exists between the fibers and the matrix.</li>
               <li>Materials are homogeneous and isotropic within their respective phases (matrix and fiber).</li>
@@ -214,10 +289,10 @@ const CompositeCalculator: React.FC = () => {
             Units and Conventions
           </div>
           <div className="collapse-content">
-            <p className="text-sm text-gray-700 dark:text-gray-300">
+            <p className="text-sm">
               Please use the following units for inputs:
             </p>
-            <ul className="list-disc list-inside text-sm text-gray-700 dark:text-gray-300 mt-2">
+            <ul className="list-disc list-inside text-sm mt-2">
               <li>Young's Modulus (E): GPa</li>
               <li>Shear Modulus (G): GPa</li>
               <li>Density (ρ): g/cm³</li>
@@ -226,14 +301,14 @@ const CompositeCalculator: React.FC = () => {
               <li>Applied Stresses (σ₁, σ₂, τ₁₂): MPa</li>
               <li>Material Strengths (Xt, Xc, Yt, Yc, S12): MPa</li>
             </ul>
-            <p className="text-sm text-gray-700 dark:text-gray-300 mt-2">
+            <p className="text-sm mt-2">
               The convention for material directions is:
             </p>
-            <ul className="list-disc list-inside text-sm text-gray-700 dark:text-gray-300 mt-2">
+            <ul className="list-disc list-inside text-sm mt-2">
               <li>Direction 1: Longitudinal (along the fibers)</li>
               <li>Direction 2: Transverse (perpendicular to the fibers)</li>
             </ul>
-            <p className="text-sm text-gray-700 dark:text-gray-300 mt-2">
+            <p className="text-sm mt-2">
               Note on units: The calculator performs calculations assuming consistent units. Ensure all inputs are in the specified units (GPa, g/cm³, MPa) for accurate results. Conversions between GPa and MPa (1 GPa = 1000 MPa) may be necessary depending on your source data.
             </p>
           </div>
@@ -246,11 +321,11 @@ const CompositeCalculator: React.FC = () => {
             Example Calculation
           </div>
           <div className="collapse-content">
-            <p className="text-sm text-gray-700 dark:text-gray-300 mb-4">
+            <p className="text-sm mb-4">
               Here is an example calculation using typical properties for a Carbon Fiber/Epoxy composite:
             </p>
             <div className="overflow-x-auto">
-              <table className="table w-full text-sm text-gray-700 dark:text-gray-300">
+              <table className="table w-full text-sm ">
                 <thead>
                   <tr>
                     <th>Property</th>
@@ -287,11 +362,11 @@ const CompositeCalculator: React.FC = () => {
                 </tbody>
               </table>
             </div>
-            <p className="text-sm text-gray-700 dark:text-gray-300 mt-4">
+            <p className="text-sm  mt-4">
               Applied Stresses: σ₁ = 500 MPa, σ₂ = 20 MPa, τ₁₂ = 30 MPa<br />
               Material Strengths: Xt = 1500 MPa, Xc = 1000 MPa, Yt = 40 MPa, Yc = 150 MPa, S12 = 60 MPa
             </p>
-            <p className="text-sm text-gray-700 dark:text-gray-300 mt-2">
+            <p className="text-sm  mt-2">
               Tsai-Hill Failure Index: 0.1111 (Safe)
             </p>
           </div>
@@ -576,7 +651,7 @@ const CompositeCalculator: React.FC = () => {
           <div className="modal-box w-11/12 max-w-5xl">
             <form method="dialog">
               {/* if there is a button in form, it will close the modal */}
-              <button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2" onClick={() => setIsModalOpen(false)}>
+              <button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2" onClick={() => setIsModalState(false)}>
                 <IoClose className="w-6 h-6" />
               </button>
             </form>
@@ -602,13 +677,13 @@ const CompositeCalculator: React.FC = () => {
                       <p>
                         <strong>Failure Status:</strong>{' '}
                         <span className={
-                          results.tsaiHillStatus === 'Safe' ? 'text-green-600 dark:text-green-400' :
-                            results.tsaiHillStatus === 'Incipient Failure' ? 'text-yellow-600 dark:text-yellow-400' :
-                              'text-red-600 dark:text-red-400'
+                          results.tsaiHillStatus === 'Safe' ? 'text-green-600' :
+                            results.tsaiHillStatus === 'Incipient Failure' ? 'text-yellow-600' :
+                              'text-red-600'
                         }>
-                          {results.tsaiHillStatus === 'Safe' && <IoCheckmarkCircleOutline className="inline-block ml-1 text-green-600 dark:text-green-400" />}
-                          {results.tsaiHillStatus === 'Incipient Failure' && <IoWarningOutline className="inline-block ml-1 text-yellow-600 dark:text-yellow-400" />}
-                          {results.tsaiHillStatus === 'Failed' && <IoClose className="inline-block ml-1 text-red-600 dark:text-red-400" />}
+                          {results.tsaiHillStatus === 'Safe' && <IoCheckmarkCircleOutline className="inline-block ml-1 text-green-600" />}
+                          {results.tsaiHillStatus === 'Incipient Failure' && <IoWarningOutline className="inline-block ml-1 text-yellow-600" />}
+                          {results.tsaiHillStatus === 'Failed' && <IoClose className="inline-block ml-1 text-red-600" />}
                           {results.tsaiHillStatus}
                         </span>
                       </p>
@@ -657,7 +732,7 @@ const CompositeCalculator: React.FC = () => {
                         <Scatter name="Applied Stress State" data={[results.appliedStress]} fill="#ff0000" shape="star" />
                       </ScatterChart>
                     </ResponsiveContainer>
-                    <div className="mt-4 text-sm text-gray-700 dark:text-gray-300">
+                    <div className="mt-4 text-sm ">
                       <p>
                         <span className="tooltip tooltip-top text-left" data-tip="Tsai-Hill Failure Criterion: (σ₁/X)² - (σ₁ * σ₂) / X² + (σ₂/Y)² + (τ₁₂/S)² = 1; Applied Stress State: (σ₁, σ₂)">
                           The <strong>Tsai-Hill Failure Envelope</strong> represents the boundary in the stress space (σ₁, σ₂) within which the composite material is considered safe under a given shear stress (τ₁₂ = 0 in this plot). Points falling inside the envelope indicate a safe stress state, while points on or outside the envelope indicate incipient or actual failure according to the Tsai-Hill criterion. The red star represents the applied stress state (σ₁, σ₂) on the composite lamina. <IoInformationCircleOutline className="inline-block ml-1" />
