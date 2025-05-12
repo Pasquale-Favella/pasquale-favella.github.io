@@ -24,6 +24,7 @@ import { useRouter } from 'next/router';
 import GitOwner from '@/config/owner';
 import { BsGrid3X3Gap } from 'react-icons/bs';
 import { MdOutlineImageSearch } from 'react-icons/md';
+import { SiMoleculer } from 'react-icons/si';
   
 type KBarProps = WithChildren
   
@@ -111,6 +112,14 @@ const KBar = (props: KBarProps) => {
       section: 'Apps',
       perform: () => router.push('/draw'),
       icon: <LuPalette />,
+    },
+    {
+      id: 'composite-calculator',
+      name: 'Tsai-Hill failure analysis',
+      keywords: 'Tsai-Hill failure analysis calculator',
+      section: 'Apps',
+      perform: () => router.push('/composite-calculator'),
+      icon: <SiMoleculer />,
     },
 
     {
