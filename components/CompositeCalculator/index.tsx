@@ -3,6 +3,7 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
 import { IoClose, IoInformationCircleOutline, IoCheckmarkCircleOutline, IoWarningOutline } from 'react-icons/io5'; // Import icons
+import { ScatterChart, Scatter, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts'; // Import Recharts components
 
 // Define the schema for input validation
 const formSchema = z.object({
@@ -39,7 +40,45 @@ interface CalculationResults {
   // New result for Tsai-Hill
   tsaiHillIndex: number;
   tsaiHillStatus: 'Safe' | 'Incipient Failure' | 'Failed';
+  failureEnvelopeData: FailureEnvelopePoint[];
+  appliedStress: { sigma1: number; sigma2: number };
 }
+
+interface FailureEnvelopePoint {
+  sigma1: number;
+  sigma2: number;
+}
+
+const calculateFailureEnvelope = (Xt: number, Xc: number, Yt: number, Yc: number): FailureEnvelopePoint[] => {
+  const data: FailureEnvelopePoint[] = [];
+  const numPoints = 100; // Number of points to generate for the envelope
+
+  // Iterate through angles to generate points on the ellipse
+  for (let i = 0; i <= numPoints; i++) {
+    const angle = (i / numPoints) * 2 * Math.PI;
+    const cos = Math.cos(angle);
+    const sin = Math.sin(angle);
+
+    // Determine X and Y based on the quadrant (sign of cos and sin)
+    const X = cos >= 0 ? Xt : Xc;
+    const Y = sin >= 0 ? Yt : Yc;
+
+    // Solve the Tsai-Hill equation for sigma1 and sigma2 with tau12 = 0
+    // (sigma1/X)^2 - (sigma1 * sigma2) / X^2 + (sigma2/Y)^2 = 1
+    // This is a quadratic form. We can parameterize it using sigma1 = r * cos(angle) and sigma2 = r * sin(angle)
+    // r^2 * (cos^2/X^2 - cos*sin/X^2 + sin^2/Y^2) = 1
+    // r = 1 / sqrt(cos^2/X^2 - cos*sin/X^2 + sin^2/Y^2)
+
+    const denominator = (cos * cos) / (X * X) - (cos * sin) / (X * X) + (sin * sin) / (Y * Y);
+
+    if (denominator > 0) {
+      const r = 1 / Math.sqrt(denominator);
+      data.push({ sigma1: r * cos, sigma2: r * sin });
+    }
+  }
+  return data;
+};
+
 
 const CompositeCalculator: React.FC = () => {
   const { register, handleSubmit, formState: { errors } } = useForm<FormData>({
@@ -114,6 +153,9 @@ const CompositeCalculator: React.FC = () => {
       tsaiHillStatus = 'Failed';
     }
 
+    // Calculate failure envelope data
+    const failureEnvelopeData = calculateFailureEnvelope(Xt, Xc, Yt, Yc);
+
 
     return {
       rho_c,
@@ -125,6 +167,8 @@ const CompositeCalculator: React.FC = () => {
       v12,
       tsaiHillIndex,
       tsaiHillStatus,
+      failureEnvelopeData, // Include failure envelope data in results
+      appliedStress: { sigma1: data.sigma1, sigma2: data.sigma2 }, // Include applied stress in results
     };
   };
 
@@ -454,6 +498,53 @@ const CompositeCalculator: React.FC = () => {
                         {results.tsaiHillStatus === 'Incipient Failure' && <IoWarningOutline className="inline-block ml-1 text-yellow-600 dark:text-yellow-400" />}
                         {results.tsaiHillStatus === 'Failed' && <IoClose className="inline-block ml-1 text-red-600 dark:text-red-400" />}
                         {results.tsaiHillStatus}
+                      </span>
+                    </p>
+                  </div>
+                </div>
+                 {/* Failure Envelope Plot */}
+                <div className="mt-8">
+                  <h3 className="font-bold text-xl sm:text-2xl text-center mb-4">Tsai-Hill Failure Envelope (τ₁₂ = 0)</h3>
+                  <ResponsiveContainer width="100%" height={400}>
+                    <ScatterChart
+                      margin={{
+                        top: 20,
+                        right: 20,
+                        bottom: 20,
+                        left: 20,
+                      }}
+                    >
+                      <CartesianGrid />
+                      <XAxis
+                        type="number"
+                        dataKey="sigma1"
+                        name="σ₁ (MPa)"
+                        unit="MPa"
+                        domain={[
+                          Math.min(...results.failureEnvelopeData.map(d => d.sigma1), results.appliedStress.sigma1) * 1.1,
+                          Math.max(...results.failureEnvelopeData.map(d => d.sigma1), results.appliedStress.sigma1) * 1.1,
+                        ]}
+                      />
+                      <YAxis
+                        type="number"
+                        dataKey="sigma2"
+                        name="σ₂ (MPa)"
+                        unit="MPa"
+                         domain={[
+                          Math.min(...results.failureEnvelopeData.map(d => d.sigma2), results.appliedStress.sigma2) * 1.1,
+                          Math.max(...results.failureEnvelopeData.map(d => d.sigma2), results.appliedStress.sigma2) * 1.1,
+                        ]}
+                      />
+                       <Tooltip cursor={{ strokeDasharray: '3 3' }} />
+                       <Legend formatter={(value) => value} />
+                       <Scatter name="Failure Envelope" data={results.failureEnvelopeData} fill="#8884d8" line />
+                     <Scatter name="Applied Stress State" data={[results.appliedStress]} fill="#ff0000" shape="star" />
+                     </ScatterChart>
+                   </ResponsiveContainer>
+                    <div className="mt-4 text-sm text-gray-700 dark:text-gray-300">
+                    <p>
+                      <span className="tooltip tooltip-top text-left" data-tip="Tsai-Hill Failure Criterion: (σ₁/X)² - (σ₁ * σ₂) / X² + (σ₂/Y)² + (τ₁₂/S)² = 1; Applied Stress State: (σ₁, σ₂)">
+                        The <strong>Tsai-Hill Failure Envelope</strong> represents the boundary in the stress space (σ₁, σ₂) within which the composite material is considered safe under a given shear stress (τ₁₂ = 0 in this plot). Points falling inside the envelope indicate a safe stress state, while points on or outside the envelope indicate incipient or actual failure according to the Tsai-Hill criterion. The red star represents the applied stress state (σ₁, σ₂) on the composite lamina. <IoInformationCircleOutline className="inline-block ml-1" />
                       </span>
                     </p>
                   </div>
