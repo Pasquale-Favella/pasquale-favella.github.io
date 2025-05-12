@@ -111,6 +111,7 @@ const CompositeCalculator: React.FC = () => {
   const [conversionInput, setConversionInput] = useState('');
   const [conversionResult, setConversionResult] = useState('');
   const [conversionType, setConversionType] = useState('GPa_to_MPa'); // Default conversion
+  const [copiedMessage, setCopiedMessage] = useState('');
 
   const handleConversion = () => {
     const value = parseFloat(conversionInput);
@@ -137,9 +138,41 @@ const CompositeCalculator: React.FC = () => {
         result = value / 1000;
         setConversionResult(`${result} g/cm³`);
         break;
+      case 'mm_to_inches':
+        result = value * 0.0393701;
+        setConversionResult(`${result} inches`);
+        break;
+      case 'inches_to_mm':
+        result = value * 25.4;
+        setConversionResult(`${result} mm`);
+        break;
+      case 'N_to_lbf':
+        result = value * 0.224809;
+        setConversionResult(`${result} lbf`);
+        break;
+      case 'lbf_to_N':
+        result = value * 4.44822;
+        setConversionResult(`${result} N`);
+        break;
+      case 'psi_to_MPa':
+        result = value * 0.00689476;
+        setConversionResult(`${result} MPa`);
+        break;
+      case 'MPa_to_psi':
+        result = value * 145.038;
+        setConversionResult(`${result} psi`);
+        break;
       default:
         setConversionResult('Select a conversion type');
     }
+  };
+
+  const handleCopy = () => {
+    navigator.clipboard.writeText(conversionResult);
+    setCopiedMessage('Copied!');
+    setTimeout(() => {
+      setCopiedMessage('');
+    }, 2000); // Clear message after 2 seconds
   };
 
 
@@ -243,6 +276,12 @@ const CompositeCalculator: React.FC = () => {
                 <option value="MPa_to_GPa">MPa to GPa</option>
                 <option value="g/cm³_to_kg/m³">g/cm³ to kg/m³</option>
                 <option value="kg/m³_to_g/cm³">kg/m³ to g/cm³</option>
+                <option value="mm_to_inches">mm to inches</option>
+                <option value="inches_to_mm">inches to mm</option>
+                <option value="N_to_lbf">N to lbf</option>
+                <option value="lbf_to_N">lbf to N</option>
+                <option value="psi_to_MPa">psi to MPa</option>
+                <option value="MPa_to_psi">MPa to psi</option>
               </select>
               <input
                 type="number"
@@ -255,8 +294,10 @@ const CompositeCalculator: React.FC = () => {
               <button className="btn btn-neutral sm:w-auto" onClick={handleConversion}>Convert</button>
             </div>
             {conversionResult && (
-              <div className="mt-4 text-sm font-semibold">
-                Result: {conversionResult}
+              <div className="mt-4 text-sm font-semibold flex items-center gap-2">
+                <span>Result: {conversionResult}</span>
+                <button className="btn btn-xs btn-outline" onClick={handleCopy}>Copy</button>
+                {copiedMessage && <span className="text-success text-xs">{copiedMessage}</span>}
               </div>
             )}
           </div>
