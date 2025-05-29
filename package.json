@@ -47,6 +47,7 @@
     "markdown-it": "14.1.0",
     "markdown-it-code-copy": "0.1.2",
     "markdown-it-highlightjs": "4.0.1",
+    "mathjs": "^14.5.0",
     "next": "14.1.4",
     "next-seo": "6.5.0",
     "next-themes": "0.3.0",
