@@ -9,7 +9,7 @@ const MailEditorPage: React.FC<Props> = () => {
     <>
       <NextSeo
         title="AI-Powered Mail Editor"
-        description="Create and edit beautiful, responsive emails with the help of AI. Choose your provider, model, and generate templates or get autocompletions."
+        description="Create and edit beautiful, responsive emails with the help of AI. Choose your provider, model, and generate templates."
       />
       <div className="text-center p-4">
         <h1 className="text-4xl font-bold">Craft Your Perfect Email with AI</h1>
