@@ -5,8 +5,11 @@ import { RiArticleFill } from 'react-icons/ri';
 import { DiGitPullRequest } from 'react-icons/di';
 import { TfiThought } from 'react-icons/tfi';
 import { GoCodescan } from 'react-icons/go';
-import { TbTransform } from "react-icons/tb";
+import { TbMailBolt, TbTransform } from "react-icons/tb";
 import { LuPalette } from "react-icons/lu";
+import { BsGrid3X3Gap } from 'react-icons/bs';
+import { MdOutlineImageSearch } from 'react-icons/md';
+import { SiMoleculer } from 'react-icons/si';
 
 import {
   Action,
@@ -22,9 +25,6 @@ import { WithChildren } from '@/types'
 import Results from './Results';
 import { useRouter } from 'next/router';
 import GitOwner from '@/config/owner';
-import { BsGrid3X3Gap } from 'react-icons/bs';
-import { MdOutlineImageSearch } from 'react-icons/md';
-import { SiMoleculer } from 'react-icons/si';
   
 type KBarProps = WithChildren
   
@@ -121,7 +121,14 @@ const KBar = (props: KBarProps) => {
       perform: () => router.push('/composite-calculator'),
       icon: <SiMoleculer />,
     },
-
+    {
+      id: 'mail-editor',
+      name: 'AI Mail Editor',
+      keywords: 'mail editor compose email',
+      section: 'Apps',
+      perform: () => router.push('/mail-editor'),
+      icon: <TbMailBolt />,
+    },
     {
       id: 'github',
       name: 'GitHub',
