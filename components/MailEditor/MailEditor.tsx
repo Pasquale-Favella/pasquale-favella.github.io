@@ -1,9 +1,10 @@
 import { FC, useCallback, useMemo, useState } from 'react';
 import { toast } from 'react-hot-toast';
-import { streamText, CoreMessage } from 'ai';
+import { streamText, CoreMessage, LanguageModelV1Middleware, wrapLanguageModel } from 'ai';
 import { createOpenAI } from '@ai-sdk/openai';
 import { createAnthropic } from '@ai-sdk/anthropic';
 import { createGoogleGenerativeAI } from '@ai-sdk/google';
+import DOMPurify from 'dompurify';
 import { useMailEditor } from '@/hooks/use-mail-editor';
 import { VscClippy } from 'react-icons/vsc';
 import { LuMonitor, LuTablet, LuSmartphone } from 'react-icons/lu';
@@ -122,16 +123,30 @@ const MailEditor: FC = () => {
           });
         }
 
-        const result = streamText({
+        const htmlSanitizerMiddleware: LanguageModelV1Middleware = {
+          wrapGenerate: async ({ doGenerate }) => {
+            const { text, ...rest } = await doGenerate();
+            const sanitizedText = text ? DOMPurify.sanitize(text) : text;
+            return { text: sanitizedText, ...rest };
+          },
+        };
+
+        const modelWithSanitizer = wrapLanguageModel({
           model: aiProvider(model),
+          middleware: htmlSanitizerMiddleware,
+        });
+
+        const result = streamText({
+          model: modelWithSanitizer,
           messages: [userMessage],
           system: systemPrompt,
           onError: (err) => {
             toast.error((err.error as Error).message);
           },
           onFinish: (step) => {
-            console.log({ step });
-            toast.success('Template generated successfully!');
+            if(step.finishReason === 'stop') {
+              toast.success('Template generated successfully!');
+            }
           },
         });
 
