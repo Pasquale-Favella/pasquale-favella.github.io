@@ -6,13 +6,15 @@ import { createAnthropic } from '@ai-sdk/anthropic';
 import { createGoogleGenerativeAI } from '@ai-sdk/google';
 import DOMPurify from 'dompurify';
 import { useMailEditor } from '@/hooks/use-mail-editor';
-import { VscClippy, VscHistory, VscClose } from 'react-icons/vsc';
+import { VscHistory, VscClose, VscEdit, VscCode, VscEye } from 'react-icons/vsc';
 import { LuMonitor, LuTablet, LuSmartphone } from 'react-icons/lu';
-import TipTapEditor from '../TipTapEditor';
 import MailPromptForm from './MailPromptForm';
 import { useForm, FormProvider } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { promptSchema, PromptFormValues } from '@/types/mail';
+import MailRichEditor from './MailRichEditor/MailRichEditor';
+import MailCodeEditor from './MailCodeEditor/MailCodeEditor';
+import MailPreview from './MailPreview/MailPreview';
 
 const MailEditor: FC = () => {
   const {
@@ -28,7 +30,7 @@ const MailEditor: FC = () => {
     setContentWithHistory,
   } = useMailEditor();
 
-  const [view, setView] = useState<'editor' | 'preview'>('editor');
+  const [view, setView] = useState<'rich' | 'code' | 'preview'>('rich'); // 'rich' for TipTap, 'code' for Monaco, 'preview' for HTML preview
   const [screenSize, setScreenSize] = useState<'desktop' | 'tablet' | 'mobile'>('desktop');
   const [isLoading, setIsLoading] = useState(false);
   const [isEnhancing, setIsEnhancing] = useState(false);
@@ -51,13 +53,6 @@ const MailEditor: FC = () => {
         return null;
     }
   }, [provider, apiKey]);
-
-  const handleEditorChange = useCallback(
-    (html: string) => {
-      setMailContent(html);
-    },
-    [setMailContent]
-  );
 
   const enhancePrompt = useCallback(
     async (prompt: string) => {
@@ -200,15 +195,31 @@ const MailEditor: FC = () => {
       <div className="drawer-content p-4">
         {/* Page content here */}
         <div className="flex flex-col sm:flex-row justify-between items-center mb-4 gap-2">
-          <div className="flex items-center gap-2">
-            <span className="font-semibold">Editor</span>
-            <input
-              type="checkbox"
-              className="toggle toggle-primary"
-              checked={view === 'preview'}
-              onChange={() => setView(view === 'editor' ? 'preview' : 'editor')}
-            />
-            <span className="font-semibold">Preview</span>
+          <div className="flex items-center gap-2 border rounded-md p-1">
+            <div className="tooltip" data-tip="Rich Editor">
+              <button
+                className={`btn btn-sm btn-ghost ${view === 'rich' ? 'btn-active' : ''}`}
+                onClick={() => setView('rich')}
+              >
+                <VscEdit size={20} />
+              </button>
+            </div>
+            <div className="tooltip" data-tip="Code Editor">
+              <button
+                className={`btn btn-sm btn-ghost ${view === 'code' ? 'btn-active' : ''}`}
+                onClick={() => setView('code')}
+              >
+                <VscCode size={20} />
+              </button>
+            </div>
+            <div className="tooltip" data-tip="Preview">
+              <button
+                className={`btn btn-sm btn-ghost ${view === 'preview' ? 'btn-active' : ''}`}
+                onClick={() => setView('preview')}
+              >
+                <VscEye size={20} />
+              </button>
+            </div>
           </div>
           {view === 'preview' && (
             <div className="flex items-center gap-2 border rounded-md p-1">
@@ -248,28 +259,15 @@ const MailEditor: FC = () => {
           </div>
         </div>
 
-        {view === 'editor' ? (
-          <TipTapEditor content={mailContent} onUpdate={handleEditorChange} />
+        {view === 'rich' ? (
+          <MailRichEditor content={mailContent} onUpdate={setMailContent} />
+        ) : view === 'code' ? (
+          <MailCodeEditor content={mailContent} onUpdate={setMailContent} />
         ) : (
-          <div className={`flex justify-center ${screenSize === 'desktop' ? 'w-full' : screenSize === 'tablet' ? 'w-3/4' : 'w-1/2'} mx-auto`}>
-            <div className="relative border p-4 rounded-lg min-h-48 w-full">
-              <div
-                className="prose prose-sm sm:prose lg:prose-lg xl:prose-2xl min-w-full"
-                dangerouslySetInnerHTML={{ __html: mailContent }}
-              />
-              <div
-                className="tooltip absolute top-2 right-2"
-                data-tip="Copy HTML"
-              >
-                <button
-                  onClick={() => navigator.clipboard.writeText(mailContent)}
-                  className="btn btn-square btn-sm"
-                >
-                  <VscClippy size={24} />
-                </button>
-              </div>
-            </div>
-          </div>
+          <MailPreview
+            content={mailContent}
+            screenSize={screenSize}
+          />
         )}
 
         <div className="space-y-4 mt-4">
@@ -302,9 +300,13 @@ const MailEditor: FC = () => {
               >
                 <div className="card-body p-3">
                   <h3 className="card-title text-sm">Version {index + 1}</h3>
-                  <div className="text-xs text-base-content opacity-60 line-clamp-2 text-ellipsis break-words"
-                    dangerouslySetInnerHTML={{ __html: version }}
-                  />
+                  <div className="text-xs text-base-content opacity-60 line-clamp-2 text-ellipsis break-words">
+                    <iframe
+                      title={`History Version ${index + 1}`}
+                      srcDoc={version}
+                      className="w-full h-24 border-none"
+                    />
+                  </div>
                 </div>
               </button>
             </li>
