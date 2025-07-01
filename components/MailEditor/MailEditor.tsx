@@ -6,6 +6,7 @@ import { createAnthropic } from '@ai-sdk/anthropic';
 import { createGoogleGenerativeAI } from '@ai-sdk/google';
 import { useMailEditor } from '@/hooks/use-mail-editor';
 import { VscClippy } from 'react-icons/vsc';
+import { LuMonitor, LuTablet, LuSmartphone } from 'react-icons/lu';
 import TipTapEditor from '../TipTapEditor';
 import MailPromptForm from './MailPromptForm';
 import { useForm, FormProvider } from 'react-hook-form';
@@ -17,6 +18,7 @@ const MailEditor: FC = () => {
     useMailEditor();
 
   const [view, setView] = useState<'editor' | 'preview'>('editor');
+  const [screenSize, setScreenSize] = useState<'desktop' | 'tablet' | 'mobile'>('desktop');
 
   const methods = useForm<PromptFormValues>({
     resolver: zodResolver(promptSchema),
@@ -160,7 +162,7 @@ const MailEditor: FC = () => {
 
   return (
     <div className="p-4">
-      <div className="flex justify-end items-center mb-4">
+      <div className="flex flex-col sm:flex-row justify-between items-center mb-4 gap-2">
         <div className="flex items-center gap-2">
           <span className="font-semibold">Editor</span>
           <input
@@ -171,13 +173,41 @@ const MailEditor: FC = () => {
           />
           <span className="font-semibold">Preview</span>
         </div>
+        {view === 'preview' && (
+          <div className="flex items-center gap-2 border rounded-md p-1">
+            <div className="tooltip" data-tip="Desktop">
+              <button
+                className={`btn btn-sm btn-ghost ${screenSize === 'desktop' ? 'btn-active' : ''}`}
+                onClick={() => setScreenSize('desktop')}
+              >
+                <LuMonitor size={20} />
+              </button>
+            </div>
+            <div className="tooltip" data-tip="Tablet">
+              <button
+                className={`btn btn-sm btn-ghost ${screenSize === 'tablet' ? 'btn-active' : ''}`}
+                onClick={() => setScreenSize('tablet')}
+              >
+                <LuTablet size={20} />
+              </button>
+            </div>
+            <div className="tooltip" data-tip="Mobile">
+              <button
+                className={`btn btn-sm btn-ghost ${screenSize === 'mobile' ? 'btn-active' : ''}`}
+                onClick={() => setScreenSize('mobile')}
+              >
+                <LuSmartphone size={20} />
+              </button>
+            </div>
+          </div>
+        )}
       </div>
 
       {view === 'editor' ? (
         <TipTapEditor content={content} onUpdate={handleEditorChange} />
       ) : (
-        <div>
-          <div className="relative border p-4 rounded-lg  min-h-48">
+        <div className={`flex justify-center ${screenSize === 'desktop' ? 'w-full' : screenSize === 'tablet' ? 'w-3/4' : 'w-1/2'} mx-auto`}>
+          <div className="relative border p-4 rounded-lg min-h-48 w-full">
             <div
               className="prose prose-sm sm:prose lg:prose-lg xl:prose-2xl min-w-full"
               dangerouslySetInnerHTML={{ __html: content }}
