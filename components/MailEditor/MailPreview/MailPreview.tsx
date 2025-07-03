@@ -1,5 +1,7 @@
-import { FC } from 'react';
+import { FC, useRef, useState } from 'react';
 import { VscClippy, VscScreenFull } from 'react-icons/vsc';
+import MailElementEditor from '../MailElementEditor';
+import { PiCursorClickLight } from 'react-icons/pi';
 
 interface MailPreviewProps {
   content: string;
@@ -7,6 +9,9 @@ interface MailPreviewProps {
 }
 
 const MailPreview: FC<MailPreviewProps> = ({ content, screenSize }) => {
+  const iframeRef = useRef<HTMLIFrameElement>(null); // Internal iframe ref
+  const [isSelectionModeActive, setIsSelectionModeActive] = useState(false);
+
   const handleFullscreen = () => {
     const newWindow = window.open('', '_blank');
     if (newWindow) {
@@ -23,6 +28,7 @@ const MailPreview: FC<MailPreviewProps> = ({ content, screenSize }) => {
           srcDoc={content}
           className="w-full h-full border-none"
           style={{ minHeight: '400px' }}
+          ref={iframeRef}
         />
         <div className="absolute top-2 right-4 flex gap-1">
           <div
@@ -47,8 +53,21 @@ const MailPreview: FC<MailPreviewProps> = ({ content, screenSize }) => {
               <VscClippy size={24} />
             </button>
           </div>
+          <div className="tooltip" data-tip="Select Element">
+            <button
+              className={`btn btn-square btn-sm ${isSelectionModeActive ? 'btn-active' : ''}`}
+              onClick={() => setIsSelectionModeActive(!isSelectionModeActive)}
+            >
+              <PiCursorClickLight size={24} />
+            </button>
+          </div>
         </div>
       </div>
+      <MailElementEditor
+        isSelectionModeActive={isSelectionModeActive}
+        iframeRef={iframeRef}
+        onClose={() => setIsSelectionModeActive(false)}
+      />
     </div>
   );
 };

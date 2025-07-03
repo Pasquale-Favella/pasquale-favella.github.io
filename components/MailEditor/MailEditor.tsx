@@ -25,9 +25,6 @@ const MailEditor: FC = () => {
     provider,
     model,
     apiKey,
-    history,
-    historyIndex,
-    setHistoryIndex,
     setContentWithHistory,
   } = useMailEditor();
 
@@ -35,7 +32,7 @@ const MailEditor: FC = () => {
   const [screenSize, setScreenSize] = useState<'desktop' | 'tablet' | 'mobile'>('desktop');
   const [isLoading, setIsLoading] = useState(false);
   const [isEnhancing, setIsEnhancing] = useState(false);
-  
+
   const methods = useForm<PromptFormValues>({
     resolver: zodResolver(promptSchema),
   });
