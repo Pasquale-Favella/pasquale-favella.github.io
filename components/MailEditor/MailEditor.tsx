@@ -6,7 +6,7 @@ import { createAnthropic } from '@ai-sdk/anthropic';
 import { createGoogleGenerativeAI } from '@ai-sdk/google';
 import DOMPurify from 'dompurify';
 import { useMailEditor } from '@/hooks/use-mail-editor';
-import { VscHistory, VscClose, VscEdit, VscCode, VscEye } from 'react-icons/vsc';
+import { VscEdit, VscCode, VscEye } from 'react-icons/vsc';
 import { LuMonitor, LuTablet, LuSmartphone } from 'react-icons/lu';
 import MailPromptForm from './MailPromptForm';
 import { useForm, FormProvider } from 'react-hook-form';
@@ -15,6 +15,7 @@ import { promptSchema, PromptFormValues } from '@/types/mail';
 import MailRichEditor from './MailRichEditor/MailRichEditor';
 import MailCodeEditor from './MailCodeEditor/MailCodeEditor';
 import MailPreview from './MailPreview/MailPreview';
+import MailHistoryDrawer from './MailHistoryDrawer';
 
 const MailEditor: FC = () => {
   const {
@@ -179,139 +180,89 @@ const MailEditor: FC = () => {
     ]
   );
 
-  const handleRollback = useCallback((index: number) => {
-    setHistoryIndex(index);
-    setMailContent(history[index]);
-    // Close the drawer after rollback
-    const drawerCheckbox = document.getElementById('history-drawer') as HTMLInputElement;
-    if (drawerCheckbox) {
-      drawerCheckbox.checked = false;
-    }
-  }, [history, setHistoryIndex, setMailContent]);
-
   return (
-    <div className="drawer drawer-end z-50">
-      <input id="history-drawer" type="checkbox" className="drawer-toggle" />
-      <div className="drawer-content p-4">
-        {/* Page content here */}
-        <div className="flex flex-col sm:flex-row justify-between items-center mb-4 gap-2">
+    <div className="p-4">
+      <div className="flex flex-col sm:flex-row justify-between items-center mb-4 gap-2">
+        <div className="flex items-center gap-2 border rounded-md p-1">
+          <div className="tooltip" data-tip="Rich Editor">
+            <button
+              className={`btn btn-sm btn-ghost ${view === 'rich' ? 'btn-active' : ''}`}
+              onClick={() => setView('rich')}
+            >
+              <VscEdit size={20} />
+            </button>
+          </div>
+          <div className="tooltip" data-tip="Code Editor">
+            <button
+              className={`btn btn-sm btn-ghost ${view === 'code' ? 'btn-active' : ''}`}
+              onClick={() => setView('code')}
+            >
+              <VscCode size={20} />
+            </button>
+          </div>
+          <div className="tooltip" data-tip="Preview">
+            <button
+              className={`btn btn-sm btn-ghost ${view === 'preview' ? 'btn-active' : ''}`}
+              onClick={() => setView('preview')}
+            >
+              <VscEye size={20} />
+            </button>
+          </div>
+        </div>
+        {view === 'preview' && (
           <div className="flex items-center gap-2 border rounded-md p-1">
-            <div className="tooltip" data-tip="Rich Editor">
+            <div className="tooltip" data-tip="Desktop">
               <button
-                className={`btn btn-sm btn-ghost ${view === 'rich' ? 'btn-active' : ''}`}
-                onClick={() => setView('rich')}
+                className={`btn btn-sm btn-ghost ${screenSize === 'desktop' ? 'btn-active' : ''}`}
+                onClick={() => setScreenSize('desktop')}
               >
-                <VscEdit size={20} />
+                <LuMonitor size={20} />
               </button>
             </div>
-            <div className="tooltip" data-tip="Code Editor">
+            <div className="tooltip" data-tip="Tablet">
               <button
-                className={`btn btn-sm btn-ghost ${view === 'code' ? 'btn-active' : ''}`}
-                onClick={() => setView('code')}
+                className={`btn btn-sm btn-ghost ${screenSize === 'tablet' ? 'btn-active' : ''}`}
+                onClick={() => setScreenSize('tablet')}
               >
-                <VscCode size={20} />
+                <LuTablet size={20} />
               </button>
             </div>
-            <div className="tooltip" data-tip="Preview">
+            <div className="tooltip" data-tip="Mobile">
               <button
-                className={`btn btn-sm btn-ghost ${view === 'preview' ? 'btn-active' : ''}`}
-                onClick={() => setView('preview')}
+                className={`btn btn-sm btn-ghost ${screenSize === 'mobile' ? 'btn-active' : ''}`}
+                onClick={() => setScreenSize('mobile')}
               >
-                <VscEye size={20} />
+                <LuSmartphone size={20} />
               </button>
             </div>
           </div>
-          {view === 'preview' && (
-            <div className="flex items-center gap-2 border rounded-md p-1">
-              <div className="tooltip" data-tip="Desktop">
-                <button
-                  className={`btn btn-sm btn-ghost ${screenSize === 'desktop' ? 'btn-active' : ''}`}
-                  onClick={() => setScreenSize('desktop')}
-                >
-                  <LuMonitor size={20} />
-                </button>
-              </div>
-              <div className="tooltip" data-tip="Tablet">
-                <button
-                  className={`btn btn-sm btn-ghost ${screenSize === 'tablet' ? 'btn-active' : ''}`}
-                  onClick={() => setScreenSize('tablet')}
-                >
-                  <LuTablet size={20} />
-                </button>
-              </div>
-              <div className="tooltip" data-tip="Mobile">
-                <button
-                  className={`btn btn-sm btn-ghost ${screenSize === 'mobile' ? 'btn-active' : ''}`}
-                  onClick={() => setScreenSize('mobile')}
-                >
-                  <LuSmartphone size={20} />
-                </button>
-              </div>
-            </div>
-          )}
-          <div className="flex items-center gap-2">
-            <div className="tooltip" data-tip="AI Generation History">
-              <label htmlFor="history-drawer" className="btn btn-sm btn-outline btn-primary drawer-button">
-                <VscHistory size={20} />
-                <span className="font-semibold">History</span>
-              </label>
-            </div>
-          </div>
-        </div>
-
-        {view === 'rich' ? (
-          <MailRichEditor content={mailContent} onUpdate={setMailContent} />
-        ) : view === 'code' ? (
-          <MailCodeEditor content={mailContent} onUpdate={setMailContent} />
-        ) : (
-          <MailPreview
-            content={mailContent}
-            screenSize={screenSize}
-          />
         )}
-
-        <div className="space-y-4 mt-4">
-          <FormProvider {...methods}>
-            <MailPromptForm
-              onSubmit={generateTemplate}
-              onEnhance={enhancePrompt}
-              isLoading={isLoading}
-              isEnhancing={isEnhancing}
-              apiKey={apiKey}
-            />
-          </FormProvider>
-        </div>
+        
+        <MailHistoryDrawer />
+          
       </div>
-      <div className="drawer-side">
-        <label htmlFor="history-drawer" aria-label="close sidebar" className="drawer-overlay"></label>
-        <ul className="menu p-4 w-96 min-h-full bg-base-200 text-base-content">
-          {/* Sidebar content here */}
-          <div className="flex justify-between items-center mb-4">
-            <h2 className="text-xl font-bold">AI Generation History</h2>
-            <label htmlFor="history-drawer" className="btn btn-square btn-sm btn-ghost">
-              <VscClose size={20} />
-            </label>
-          </div>
-          {history.map((version, index) => (
-            <li key={index} className="mb-3 px-2">
-              <button
-                className={`card w-full bg-base-100 shadow-md cursor-pointer transition-all duration-200 ease-in-out ${index === historyIndex ? 'border-2 border-primary ring-2 ring-primary' : 'hover:shadow-lg hover:scale-[1.01]'}`}
-                onClick={() => handleRollback(index)}
-              >
-                <div className="card-body p-3">
-                  <h3 className="card-title text-sm">Version {index + 1}</h3>
-                  <div className="text-xs text-base-content opacity-60 line-clamp-2 text-ellipsis break-words">
-                    <iframe
-                      title={`History Version ${index + 1}`}
-                      srcDoc={version}
-                      className="w-full h-24 border-none"
-                    />
-                  </div>
-                </div>
-              </button>
-            </li>
-          ))}
-        </ul>
+
+      {view === 'rich' ? (
+        <MailRichEditor content={mailContent} onUpdate={setMailContent} />
+      ) : view === 'code' ? (
+        <MailCodeEditor content={mailContent} onUpdate={setMailContent} />
+      ) : (
+        <MailPreview
+          content={mailContent}
+          screenSize={screenSize}
+        />
+      )}
+
+      <div className="space-y-4 mt-4">
+        <FormProvider {...methods}>
+          <MailPromptForm
+            onSubmit={generateTemplate}
+            onEnhance={enhancePrompt}
+            isLoading={isLoading}
+            isEnhancing={isEnhancing}
+            apiKey={apiKey}
+          />
+        </FormProvider>
       </div>
     </div>
   );

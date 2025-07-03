@@ -20,7 +20,7 @@ module.exports = {
       }
     },
   },
-  plugins: [require("daisyui"),require('@tailwindcss/typography'),require('@tailwindcss/aspect-ratio')],
+  plugins: [require("daisyui"),require('@tailwindcss/typography'),require("tailwindcss-animate"),require('@tailwindcss/aspect-ratio')],
   daisyui: {
     themes: [
       {
