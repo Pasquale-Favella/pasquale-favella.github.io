@@ -1,6 +1,7 @@
 import { FC, useCallback } from 'react';
 import Editor from '@monaco-editor/react';
 import CodeEditorLoader from '@/components/CodeEditor/CodeEditorLoader';
+import { useTheme } from '@/hooks/use-theme';
 
 interface MailCodeEditorProps {
   content: string;
@@ -8,6 +9,8 @@ interface MailCodeEditorProps {
 }
 
 const MailCodeEditor: FC<MailCodeEditorProps> = ({ content, onUpdate }) => {
+  const { isDarkMode } = useTheme();
+
   const handleCodeEditorChange = useCallback(
     (codeValue: string | undefined) => {
       onUpdate(codeValue ?? '');
@@ -18,7 +21,7 @@ const MailCodeEditor: FC<MailCodeEditorProps> = ({ content, onUpdate }) => {
   return (
     <div className="h-[500px] overflow-auto border rounded-lg">
       <Editor
-        theme='vs-dark'
+        theme={isDarkMode ? 'vs-dark' : 'light'}
         language='html'
         value={content}
         onChange={handleCodeEditorChange}

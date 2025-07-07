@@ -12,7 +12,6 @@ import MailPromptForm from './MailPromptForm';
 import { useForm, FormProvider } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { promptSchema, PromptFormValues } from '@/types/mail';
-import MailRichEditor from './MailRichEditor/MailRichEditor';
 import MailCodeEditor from './MailCodeEditor/MailCodeEditor';
 import MailPreview from './MailPreview/MailPreview';
 import MailHistoryDrawer from './MailHistoryDrawer';
@@ -28,7 +27,7 @@ const MailEditor: FC = () => {
     setContentWithHistory,
   } = useMailEditor();
 
-  const [view, setView] = useState<'rich' | 'code' | 'preview'>('rich'); // 'rich' for TipTap, 'code' for Monaco, 'preview' for HTML preview
+  const [view, setView] = useState<'code' | 'preview'>('preview');
   const [screenSize, setScreenSize] = useState<'desktop' | 'tablet' | 'mobile'>('desktop');
   const [isLoading, setIsLoading] = useState(false);
   const [isEnhancing, setIsEnhancing] = useState(false);
@@ -181,28 +180,21 @@ const MailEditor: FC = () => {
     <div className="p-4">
       <div className="flex flex-col sm:flex-row justify-between items-center mb-4 gap-2">
         <div className="flex items-center gap-2 border rounded-md p-1">
-          <div className="tooltip" data-tip="Rich Editor">
-            <button
-              className={`btn btn-sm btn-ghost ${view === 'rich' ? 'btn-active' : ''}`}
-              onClick={() => setView('rich')}
-            >
-              <VscEdit size={20} />
-            </button>
-          </div>
-          <div className="tooltip" data-tip="Code Editor">
-            <button
-              className={`btn btn-sm btn-ghost ${view === 'code' ? 'btn-active' : ''}`}
-              onClick={() => setView('code')}
-            >
-              <VscCode size={20} />
-            </button>
-          </div>
           <div className="tooltip" data-tip="Preview">
             <button
               className={`btn btn-sm btn-ghost ${view === 'preview' ? 'btn-active' : ''}`}
               onClick={() => setView('preview')}
             >
               <VscEye size={20} />
+            </button>
+          </div>
+
+          <div className="tooltip" data-tip="Code Editor">
+            <button
+              className={`btn btn-sm btn-ghost ${view === 'code' ? 'btn-active' : ''}`}
+              onClick={() => setView('code')}
+            >
+              <VscCode size={20} />
             </button>
           </div>
         </div>
@@ -239,9 +231,7 @@ const MailEditor: FC = () => {
           
       </div>
 
-      {view === 'rich' ? (
-        <MailRichEditor content={mailContent} onUpdate={setMailContent} />
-      ) : view === 'code' ? (
+      {view === 'code' ? (
         <MailCodeEditor content={mailContent} onUpdate={setMailContent} />
       ) : (
         <MailPreview

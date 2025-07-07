@@ -31,7 +31,77 @@ export const mailProviderAtom = atomWithStorage<MailProvider>('mail-provider', '
 export const mailModelAtom = atomWithStorage<string>('mail-model', providerModels.google[1]);
 export const mailApiKeyAtom = atomWithStorage<string>('mail-api-key', '');
 
-const initialContent = `<h1>Welcome to your new email editor!</h1><p>This is a sample email to get you started. You can edit this content, or start from scratch.</p><p>Here are a few things you can do:</p><ul><li><p>Use the toolbar to format your text (bold, italics, etc.)</p></li><li><p>Add headings, lists, and other elements.</p></li><li><p>Use the AI assistant to help you write and edit your emails.</p></li></ul><p>Happy emailing!</p>`;
+const initialContent = `<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome to Your New Email Editor!</title>
+    <style>
+        body {
+            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            line-height: 1.6;
+            color: #333333;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+            -webkit-text-size-adjust: 100%;
+            -ms-text-size-adjust: 100%;
+        }
+        .container {
+            max-width: 600px;
+            margin: 20px auto;
+            background-color: #ffffff;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            color: #0056b3;
+            text-align: center;
+            margin-bottom: 25px;
+            font-size: 28px;
+        }
+        p {
+            margin-bottom: 15px;
+            font-size: 16px;
+        }
+        ul {
+            list-style-type: disc;
+            padding-left: 25px;
+            margin-bottom: 20px;
+        }
+        ul li {
+            margin-bottom: 10px;
+            font-size: 16px;
+        }
+        ul li p {
+            margin: 0; /* Remove default paragraph margin inside list items */
+        }
+        .footer {
+            text-align: center;
+            margin-top: 30px;
+            font-size: 14px;
+            color: #777777;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Welcome to your new email editor!</h1>
+        <p>This is a sample email to get you started. You can edit this content, or start from scratch.</p>
+        <p>Here are a few things you can do:</p>
+        <ul>
+            <li><p>Use the AI assistant to help you write and edit your emails.</p></li>
+            <li><p>Directly edit the underlying HTML code, similar to a professional code editor like VS Code.</p></li>
+        </ul>
+        <p>Happy emailing!</p>
+        <div class="footer">
+            <p>This email was sent from your new email editor.</p>
+        </div>
+    </div>
+</body>
+</html>`;
 
 export const mailContentAtom = atom<string>(initialContent);
 export const mailContentHistoryAtom = atom<string[]>([initialContent]);
