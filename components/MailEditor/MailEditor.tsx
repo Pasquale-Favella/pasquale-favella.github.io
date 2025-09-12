@@ -1,6 +1,7 @@
 import { FC, useCallback, useMemo, useState } from 'react';
 import { toast } from 'react-hot-toast';
-import { streamText, CoreMessage, LanguageModelV1Middleware, wrapLanguageModel } from 'ai';
+import { LanguageModelV2Middleware } from '@ai-sdk/provider';
+import { streamText, ModelMessage, wrapLanguageModel } from 'ai';
 import { createOpenAI } from '@ai-sdk/openai';
 import { createAnthropic } from '@ai-sdk/anthropic';
 import { createGoogleGenerativeAI } from '@ai-sdk/google';
@@ -96,7 +97,7 @@ const MailEditor: FC = () => {
       let fullCompletion = '';
 
       try {
-        const userMessage: CoreMessage = {
+        const userMessage: ModelMessage = {
           role: 'user',
           content: [
             {
@@ -124,11 +125,23 @@ const MailEditor: FC = () => {
           });
         }
 
-        const htmlSanitizerMiddleware: LanguageModelV1Middleware = {
-          wrapGenerate: async ({ doGenerate }) => {
-            const { text, ...rest } = await doGenerate();
-            const sanitizedText = text ? DOMPurify.sanitize(text) : text;
-            return { text: sanitizedText, ...rest };
+        const htmlSanitizerMiddleware: LanguageModelV2Middleware = {
+          wrapStream: async ({ doStream }) => {
+            const { stream, ...rest } = await doStream();
+            const transformedStream = stream.pipeThrough(
+              new TransformStream({
+                transform(chunk, controller) {
+                  controller.enqueue(chunk.type === "text-delta" && chunk.delta ? {
+                    ...chunk,
+                    textDelta: DOMPurify.sanitize(chunk.delta),
+                  } : chunk)
+                },
+              }),
+            );
+            return {
+              ...rest,
+              stream: transformedStream,
+            }
           },
         };
 

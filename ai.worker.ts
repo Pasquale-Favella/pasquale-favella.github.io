@@ -1,14 +1,15 @@
-import { pipeline, env, PipelineType } from "@xenova/transformers";
+import { pipeline, env, PipelineType } from "@huggingface/transformers";
 
 // Skip local model check
 // @ts-ignore
 env.allowLocalModels = false;
 
 const RESPONSE_CONTEXT = `
-Pasquale Favella, a software engineer hailing from the charming city of Naples, Italy, embodies the fusion of technical prowess with a creative spirit. Born in 1991, Pasquale initially embarked on a journey into the realm of chemical engineering, only to find his true calling in the intricate world of software programming and crafting.
-While Pasquale holds a degree in chemical engineering, his heart beats to the rhythm of coding. With a penchant for full-stack development, he finds solace and excitement in frontend design, where his true passion lies. Whether it's architecting captivating user interfaces or diving deep into the intricacies of user experience, Pasquale thrives on the creative challenges that frontend development presents.
-His toolkit is adorned with Angular and Java, tools he wields with finesse and expertise. Yet, it's his unwavering fascination with React and Next.js that sets his soul on fire. Pasquale's eyes light up with enthusiasm as he delves into the world of React components, crafting seamless and engaging user experiences that leave a lasting impression.
-In the bustling world of software engineering, Pasquale Favella stands out as a beacon of innovation and dedication. His journey from chemical engineering to software development reflects his relentless pursuit of passion and excellence in every endeavor he undertakes. With each line of code he writes, Pasquale leaves an indelible mark on the digital landscape, shaping the future of technology with his ingenuity and expertise.
+Pasquale Favella is a software engineer from Naples, Italy, born in 1991, whose journey reflects the uncommon fusion of analytical precision and creative vision. After earning a degree in chemical engineering, he redirected his curiosity and problem-solving skills toward software development, where he discovered a true vocation.
+With more than a decade of experience, Pasquale has worked across diverse industries—banking, energy, and maritime logistics—designing complex systems that range from big data pipelines to high-impact frontend platforms. His toolkit spans Java, Spring Boot, Angular, and databases like MongoDB and Oracle, but his true passion lies in frontend design, particularly with React and Next.js, where he brings ideas to life through clean, engaging, and user-centered interfaces.
+Beyond technical delivery, Pasquale thrives as a mentor and enabler. He has guided juniors and seniors alike, often transforming underperforming teams into cohesive groups capable of delivering ambitious projects. His leadership style is grounded in active listening, empathy, and the ability to reveal potential in others, earning him recognition as both a reliable engineer and a trusted tutor.
+What sets Pasquale apart is his ability to connect technical depth with human impact: from orchestrating microservices pipelines for major banks, to creating intuitive onboarding apps with non-technical colleagues, to experimenting with local-first applications and AI-driven user experiences in his personal projects. Each project carries his signature blend of rigor, creativity, and curiosity.
+Pasquale Favella embodies the figure of the modern engineer: not only a builder of systems, but a catalyst for growth, collaboration, and innovation.
 `
 
 // Use the Singleton pattern to enable lazy construction of the pipeline.

@@ -5,7 +5,7 @@ import { RiArticleFill } from 'react-icons/ri';
 import { DiGitPullRequest } from 'react-icons/di';
 import { TfiThought } from 'react-icons/tfi';
 import { GoCodescan } from 'react-icons/go';
-import { TbMailBolt, TbTransform } from "react-icons/tb";
+import { TbDatabaseStar, TbMailBolt, TbTransform } from "react-icons/tb";
 import { LuPalette } from "react-icons/lu";
 import { BsGrid3X3Gap } from 'react-icons/bs';
 import { MdOutlineImageSearch } from 'react-icons/md';
@@ -128,6 +128,14 @@ const KBar = (props: KBarProps) => {
       section: 'Apps',
       perform: () => router.push('/mail-editor'),
       icon: <TbMailBolt />,
+    },
+    {
+      id: 'client-rag',
+      name: 'AI Rag Client',
+      keywords: 'ai rag client chat',
+      section: 'Apps',
+      perform: () => router.push('/client-rag'),
+      icon: <TbDatabaseStar />,
     },
     {
       id: 'github',

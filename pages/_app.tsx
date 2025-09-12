@@ -8,9 +8,9 @@ import type { AppProps } from 'next/app';
 import Router from 'next/router';
 import NProgress from 'nprogress';
 import { ThemeProvider } from 'next-themes';
-import { Provider as JotaiProvider} from 'jotai'
+import { Provider as JotaiProvider} from 'jotai';
 import Layout from '@/components/Layout';
-import DefaultSeo from '@/components/Seo/DefaultSeo'
+import DefaultSeo from '@/components/Seo/DefaultSeo';
 
 NProgress.configure({showSpinner : false})
 

@@ -43,10 +43,21 @@ const withRetry = async <T>(fn: () => Promise<T>, retries = 3, delay = 1000): Pr
     }
 };
 
+
+function removeFirstMatchImmutable<T>(
+  arr: T[],
+  predicate: (element: T) => boolean
+): T[] {
+  const index = arr.findIndex(predicate);
+  if (index === -1) return [...arr];
+  return [...arr.slice(0, index), ...arr.slice(index + 1)];
+}
+
 export default {
     uid ,
     returnBase64FromFile ,
     extractWords ,
     extractFirstPhrase ,
-    withRetry
+    withRetry,
+    removeFirstMatchImmutable
 } as const

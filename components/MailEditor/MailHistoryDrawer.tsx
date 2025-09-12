@@ -31,7 +31,7 @@ const MailHistoryDrawer: FC = () => {
         <SheetHeader>
           <SheetTitle>AI Generation History</SheetTitle>
         </SheetHeader>
-        <ul className="menu p-4 min-h-full">
+        <ul className="menu p-4 min-h-full flex-nowrap overflow-auto gap-2">
           {history.map((version, index) => (
             <li key={index} className="mb-3 px-2">
               <button
