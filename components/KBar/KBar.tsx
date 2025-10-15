@@ -8,7 +8,7 @@ import { GoCodescan } from 'react-icons/go';
 import { TbDatabaseStar, TbMailBolt, TbTransform } from "react-icons/tb";
 import { LuPalette } from "react-icons/lu";
 import { BsGrid3X3Gap } from 'react-icons/bs';
-import { MdOutlineImageSearch } from 'react-icons/md';
+import { MdOutlineDesignServices, MdOutlineImageSearch } from 'react-icons/md';
 import { SiMoleculer } from 'react-icons/si';
 
 import {
@@ -136,6 +136,14 @@ const KBar = (props: KBarProps) => {
       section: 'Apps',
       perform: () => router.push('/client-rag'),
       icon: <TbDatabaseStar />,
+    },
+    {
+      id: 'de-sign',
+      name: 'AI sketch designer',
+      keywords: 'ai sketch designer',
+      section: 'Apps',
+      perform: () => router.push('/de-sign'),
+      icon: <MdOutlineDesignServices />,
     },
     {
       id: 'github',
