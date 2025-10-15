@@ -9,7 +9,7 @@ const EditorPage : React.FC<Props>  = ()=>{
     <>
       <NextSeo 
         title='De-sign' 
-        description='TODO: ....'
+        description='de-sign is an AI design tool integrating multiple providers to generate and refine UI layouts in a real-time canvas.'
       />
 
       <DeSign />
