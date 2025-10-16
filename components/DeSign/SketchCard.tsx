@@ -3,6 +3,7 @@ import { Sketch } from '@/store/sketch.atom';
 import { Editor } from '@monaco-editor/react';
 import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { FiEdit, FiTrash2, FiCode, FiEye, FiCopy, FiMaximize2 } from 'react-icons/fi';
+import { PiArrowsOutSimpleBold } from 'react-icons/pi';
 import CodeEditorLoader from '../CodeEditor/CodeEditorLoader';
 
 interface SketchCardProps {
@@ -31,61 +32,95 @@ const SketchCard: React.FC<SketchCardProps> = ({
     const { isDarkMode } = useTheme();
     const [isDragging, setIsDragging] = useState(false);
     const [isResizing, setIsResizing] = useState(false);
+    const [localPosition, setLocalPosition] = useState({ x: sketch.x, y: sketch.y });
+    const [localSize, setLocalSize] = useState({ width: sketch.width, height: sketch.height });
+    
     const dragStartPos = useRef({ x: 0, y: 0 });
     const elementStartPos = useRef({ x: 0, y: 0 });
+    const resizeStartSize = useRef({ width: 0, height: 0 });
+    const animationFrameId = useRef<number | null>(null);
+
+    useEffect(() => {
+        if (!isDragging && !isResizing) {
+            setLocalPosition({ x: sketch.x, y: sketch.y });
+            setLocalSize({ width: sketch.width, height: sketch.height });
+        }
+    }, [sketch.x, sketch.y, sketch.width, sketch.height, isDragging, isResizing]);
 
     const handleDragStart = (e: React.MouseEvent<HTMLDivElement>) => {
         e.stopPropagation();
+        e.preventDefault();
         onSelect();
         setIsDragging(true);
         dragStartPos.current = { x: e.clientX, y: e.clientY };
         elementStartPos.current = { x: sketch.x, y: sketch.y };
     };
 
-    const handleResizeStart = (e: React.MouseEvent<HTMLDivElement>) => {
+    const handleResizeStart = (e: React.MouseEvent<HTMLButtonElement>) => {
         e.stopPropagation();
+        e.preventDefault();
         onSelect();
         setIsResizing(true);
         dragStartPos.current = { x: e.clientX, y: e.clientY };
+        resizeStartSize.current = { width: sketch.width, height: sketch.height };
     };
 
     const handleMouseMove = useCallback((e: MouseEvent) => {
+        if (animationFrameId.current) {
+            cancelAnimationFrame(animationFrameId.current);
+        }
+
+        animationFrameId.current = requestAnimationFrame(() => {
+            if (isDragging) {
+                const dx = (e.clientX - dragStartPos.current.x) / canvasScale;
+                const dy = (e.clientY - dragStartPos.current.y) / canvasScale;
+                const newX = elementStartPos.current.x + dx;
+                const newY = elementStartPos.current.y + dy;
+                setLocalPosition({ x: newX, y: newY });
+            }
+            if (isResizing) {
+                const dx = (e.clientX - dragStartPos.current.x) / canvasScale;
+                const dy = (e.clientY - dragStartPos.current.y) / canvasScale;
+                
+                const newWidth = Math.max(200, resizeStartSize.current.width + dx);
+                const newHeight = Math.max(150, resizeStartSize.current.height + dy);
+                
+                setLocalSize({ width: newWidth, height: newHeight });
+            }
+        });
+    }, [isDragging, isResizing, canvasScale]);
+
+    const handleMouseUp = useCallback(() => {
+        if (animationFrameId.current) {
+            cancelAnimationFrame(animationFrameId.current);
+        }
+
         if (isDragging) {
-            const dx = (e.clientX - dragStartPos.current.x) / canvasScale;
-            const dy = (e.clientY - dragStartPos.current.y) / canvasScale;
             onUpdate(sketch.id, {
-                x: elementStartPos.current.x + dx,
-                y: elementStartPos.current.y + dy
+                x: localPosition.x,
+                y: localPosition.y
             });
         }
         if (isResizing) {
-            const dx = (e.clientX - dragStartPos.current.x) / canvasScale;
-            const dy = (e.clientY - dragStartPos.current.y) / canvasScale;
             onUpdate(sketch.id, {
-                width: Math.max(200, sketch.width + dx),
-                height: Math.max(150, sketch.height + dy)
+                width: localSize.width,
+                height: localSize.height
             });
-            dragStartPos.current = { x: e.clientX, y: e.clientY };
         }
-    }, [isDragging, isResizing, canvasScale, onUpdate, sketch.id, sketch.width, sketch.height]);
-
-    const handleMouseUp = useCallback(() => {
+        
         setIsDragging(false);
         setIsResizing(false);
-    }, []);
+    }, [isDragging, isResizing, sketch.id, localPosition, localSize, onUpdate]);
 
     useEffect(() => {
         if (isDragging || isResizing) {
             document.addEventListener('mousemove', handleMouseMove);
             document.addEventListener('mouseup', handleMouseUp);
-        } else {
-            document.removeEventListener('mousemove', handleMouseMove);
-            document.removeEventListener('mouseup', handleMouseUp);
+            return () => {
+                document.removeEventListener('mousemove', handleMouseMove);
+                document.removeEventListener('mouseup', handleMouseUp);
+            };
         }
-        return () => {
-            document.removeEventListener('mousemove', handleMouseMove);
-            document.removeEventListener('mouseup', handleMouseUp);
-        };
     }, [isDragging, isResizing, handleMouseMove, handleMouseUp]);
 
     const toggleView = () => {
@@ -108,11 +143,12 @@ const SketchCard: React.FC<SketchCardProps> = ({
         <div
             style={{
                 position: 'absolute',
-                left: sketch.x,
-                top: sketch.y,
-                width: sketch.width,
-                height: sketch.height,
+                left: localPosition.x,
+                top: localPosition.y,
+                width: localSize.width,
+                height: localSize.height,
                 cursor: isDragging ? 'grabbing' : 'grab',
+                userSelect: 'none',
             }}
             className={`card bg-base-200 shadow-xl flex flex-col transition-shadow duration-200 ${isSelected ? 'ring-2 ring-primary' : ''
                 }`}
@@ -120,7 +156,7 @@ const SketchCard: React.FC<SketchCardProps> = ({
             onClick={(e) => e.stopPropagation()}
         >
             <div
-                className="card-title bg-base-300/50 rounded-t-2xl flex items-center justify-between px-3 py-2 cursor-grab"
+                className="card-title bg-base-300/50 rounded-t-2xl flex items-center justify-between px-3 py-2 cursor-grab select-none"
                 onMouseDown={handleDragStart}
             >
                 <div className="flex items-center gap-2 text-xs opacity-70 overflow-hidden whitespace-nowrap">
@@ -175,13 +211,14 @@ const SketchCard: React.FC<SketchCardProps> = ({
                 </div>
             </div>
 
-            <div className="flex-grow w-full h-full bg-base-100 relative overflow-hidden rounded-b-2xl">
+            <div className="flex-grow w-full h-full bg-base-100 relative overflow-hidden rounded-b-2xl pointer-events-auto">
                 {sketch.view === 'result' ? (
                     <iframe
                         srcDoc={iframeSrcDoc}
                         title="Sketch Result"
                         sandbox="allow-scripts allow-same-origin"
                         className="w-full h-full border-0"
+                        style={{ pointerEvents: isDragging || isResizing ? 'none' : 'auto' }}
                     />
                 ) : (
                     <Editor
@@ -197,11 +234,15 @@ const SketchCard: React.FC<SketchCardProps> = ({
                     />
                 )}
             </div>
-
-            <div
-                className="absolute -bottom-1.5 -right-1.5 w-3 h-3 bg-primary rounded-full border-2 border-base-200 cursor-se-resize"
-                onMouseDown={handleResizeStart}
-            />
+            <div className="tooltip z-10 absolute bottom-0.5 right-0.5 " data-tip="Resize">
+                <button
+                    type="button"
+                    onMouseDown={handleResizeStart}
+                    className="cursor-se-resize btn btn-ghost btn-sm btn-circle"
+                >
+                    <PiArrowsOutSimpleBold className="text-primary size-5" />
+                </button>
+            </div>
         </div>
     );
 };
