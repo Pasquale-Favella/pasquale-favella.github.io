@@ -240,7 +240,7 @@ const SketchCard: React.FC<SketchCardProps> = ({
                     onMouseDown={handleResizeStart}
                     className="cursor-se-resize btn btn-ghost btn-sm btn-circle"
                 >
-                    <PiArrowsOutSimpleBold className="text-primary size-5" />
+                    <PiArrowsOutSimpleBold className="size-5" />
                 </button>
             </div>
         </div>
