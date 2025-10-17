@@ -1,0 +1,926 @@
+<!DOCTYPE html><html lang="en"><head><meta charSet="utf-8"/><meta name="viewport" content="width=device-width"/><meta property="og:url" content="https://pasquale-favella.github.io/"/><meta property="og:image" content="https://pasquale-favella.github.io/og-image.png"/><meta property="og:locale" content="en_US"/><meta property="og:site_name" content="Pasquale Favella blogfolio"/><meta name="google-site-verification" content="BF08ecEW9P2w_w4mwWTU2LxdORMDiIO3XUeZLW7UC4o"/><link rel="icon" href="https://pasquale-favella.github.io/favicon.ico"/><title>Pasquale Favella | NGRX vs RXJS</title><meta name="robots" content="index,follow"/><meta name="description" content="State management in modern Angular applications is a critical battleground"/><meta property="og:title" content="Pasquale Favella | NGRX vs RXJS"/><meta property="og:description" content="State management in modern Angular applications is a critical battleground"/><meta property="og:type" content="article"/><meta property="article:tag" content="Angular"/><meta property="article:tag" content="Rxjs"/><meta name="next-head-count" content="16"/><link data-next-font="" rel="preconnect" href="/" crossorigin="anonymous"/><link rel="preload" href="/_next/static/css/3b7b549399615939.css" as="style" crossorigin=""/><link rel="stylesheet" href="/_next/static/css/3b7b549399615939.css" crossorigin="" data-n-g=""/><noscript data-n-css=""></noscript><script defer="" crossorigin="" nomodule="" src="/_next/static/chunks/polyfills-c67a75d1b6f99dc8.js"></script><script src="/_next/static/chunks/webpack-f3ec281a508fd4c5.js" defer="" crossorigin=""></script><script src="/_next/static/chunks/framework-314c182fa7e2bf37.js" defer="" crossorigin=""></script><script src="/_next/static/chunks/main-a767d6d8830842fe.js" defer="" crossorigin=""></script><script src="/_next/static/chunks/pages/_app-d4b37b118c0a48d3.js" defer="" crossorigin=""></script><script src="/_next/static/chunks/5d416436-a14b58fb3359beff.js" defer="" crossorigin=""></script><script src="/_next/static/chunks/29107295-4cc022cea922dbb4.js" defer="" crossorigin=""></script><script src="/_next/static/chunks/738-d0de949e184775d4.js" defer="" crossorigin=""></script><script src="/_next/static/chunks/pages/blog/%5Bslug%5D-d13018a4707e2059.js" defer="" crossorigin=""></script><script src="/_next/static/RHGHCub-nt6FBtRy5YMos/_buildManifest.js" defer="" crossorigin=""></script><script src="/_next/static/RHGHCub-nt6FBtRy5YMos/_ssgManifest.js" defer="" crossorigin=""></script></head><body><div id="__next"><script>!function(){try{var d=document.documentElement,n='data-theme',s='setAttribute';var e=localStorage.getItem('theme');if('system'===e||(!e&&true)){var t='(prefers-color-scheme: dark)',m=window.matchMedia(t);if(m.media!==t||m.matches){d.style.colorScheme = 'dark';d[s](n,'dark')}else{d.style.colorScheme = 'light';d[s](n,'light')}}else if(e){d[s](n,e|| '')}if(e==='light'||e==='dark')d.style.colorScheme=e}catch(e){}}()</script><header class="fixed top-0 left-0 right-0 z-40 shadow-sm backdrop-blur-[10px] bg-base-100/80 saturate-100"><div class="mx-auto flex h-[60px] max-w-6xl items-center justify-between px-8"><div><a aria-label="Pasquale&#x27;s website" href="/"><div class="flex items-center justify-between text-xl font-semibold">~ P: /blog<div class="Typewriter" data-testid="typewriter-wrapper"></div></div></a></div><div class="flex items-center gap-2"><div class="tooltip tooltip-bottom before:text-xs before:content-[attr(data-tip)]" data-tip="commands"><button class="btn btn-ghost btn-circle btn-sm"><svg stroke="currentColor" fill="none" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round" height="20" width="20" xmlns="http://www.w3.org/2000/svg"><path d="M18 3a3 3 0 0 0-3 3v12a3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3H6a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3V6a3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3h12a3 3 0 0 0 3-3 3 3 0 0 0-3-3z"></path></svg></button></div><div class="tooltip tooltip-bottom before:text-xs before:content-[attr(data-tip)]" data-tip="change theme"><label class="swap swap-rotate btn btn-ghost btn-circle btn-sm"><input id="theme-toggle" type="checkbox"/><svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 512 512" class="swap-on" height="20" width="20" xmlns="http://www.w3.org/2000/svg"><path d="M256 160c-52.9 0-96 43.1-96 96s43.1 96 96 96 96-43.1 96-96-43.1-96-96-96zm246.4 80.5l-94.7-47.3 33.5-100.4c4.5-13.6-8.4-26.5-21.9-21.9l-100.4 33.5-47.4-94.8c-6.4-12.8-24.6-12.8-31 0l-47.3 94.7L92.7 70.8c-13.6-4.5-26.5 8.4-21.9 21.9l33.5 100.4-94.7 47.4c-12.8 6.4-12.8 24.6 0 31l94.7 47.3-33.5 100.5c-4.5 13.6 8.4 26.5 21.9 21.9l100.4-33.5 47.3 94.7c6.4 12.8 24.6 12.8 31 0l47.3-94.7 100.4 33.5c13.6 4.5 26.5-8.4 21.9-21.9l-33.5-100.4 94.7-47.3c13-6.5 13-24.7.2-31.1zm-155.9 106c-49.9 49.9-131.1 49.9-181 0-49.9-49.9-49.9-131.1 0-181 49.9-49.9 131.1-49.9 181 0 49.9 49.9 49.9 131.1 0 181z"></path></svg><svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 24 24" class="swap-off" height="20" width="20" xmlns="http://www.w3.org/2000/svg"><path d="M10 6C10 10.4183 13.5817 14 18 14C19.4386 14 20.7885 13.6203 21.9549 12.9556C21.4738 18.0302 17.2005 22 12 22C6.47715 22 2 17.5228 2 12C2 6.79948 5.9698 2.52616 11.0444 2.04507C10.3797 3.21152 10 4.56142 10 6ZM4 12C4 16.4183 7.58172 20 12 20C14.9654 20 17.5757 18.3788 18.9571 15.9546C18.6407 15.9848 18.3214 16 18 16C12.4772 16 8 11.5228 8 6C8 5.67863 8.01524 5.35933 8.04536 5.04293C5.62119 6.42426 4 9.03458 4 12ZM18.1642 2.29104L19 2.5V3.5L18.1642 3.70896C17.4476 3.8881 16.8881 4.4476 16.709 5.16417L16.5 6H15.5L15.291 5.16417C15.1119 4.4476 14.5524 3.8881 13.8358 3.70896L13 3.5V2.5L13.8358 2.29104C14.5524 2.1119 15.1119 1.5524 15.291 0.835829L15.5 0H16.5L16.709 0.835829C16.8881 1.5524 17.4476 2.1119 18.1642 2.29104ZM23.1642 7.29104L24 7.5V8.5L23.1642 8.70896C22.4476 8.8881 21.8881 9.4476 21.709 10.1642L21.5 11H20.5L20.291 10.1642C20.1119 9.4476 19.5524 8.8881 18.8358 8.70896L18 8.5V7.5L18.8358 7.29104C19.5524 7.1119 20.1119 6.5524 20.291 5.83583L20.5 5H21.5L21.709 5.83583C21.8881 6.5524 22.4476 7.1119 23.1642 7.29104Z"></path></svg></label></div></div></div></header><main class="relative mx-auto min-h-layout max-w-6xl px-8 pt-20 mb-2"><a class="group fixed top-24 hidden items-center justify-center text-sm font-medium xl:inline-flex" href="/blog"><svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 24 24" class="h-4 w-4 transition duration-200 group-hover:translate-x-1" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><path fill="none" d="M0 0h24v24H0V0z"></path><path d="M15.41 16.59 10.83 12l4.58-4.59L14 6l-6 6 6 6 1.41-1.41z"></path></svg><span>See all Posts</span></a><div class="prose md:prose-lg lg:prose-xl mx-auto  mb-3 lg:mb-5"><h1 class="text-4xl font-extrabold leading-tight md:text-5xl !mb-4">NGRX vs RXJS</h1><div class="flex gap-2"><a class="badge badge-lg border-base-content hover:border-accent-content hover:opacity-80 no-underline py-4" href="/blog?tag=Angular"><svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 20 20" aria-hidden="true" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M9.243 3.03a1 1 0 01.727 1.213L9.53 6h2.94l.56-2.243a1 1 0 111.94.486L14.53 6H17a1 1 0 110 2h-2.97l-1 4H15a1 1 0 110 2h-2.47l-.56 2.242a1 1 0 11-1.94-.485L10.47 14H7.53l-.56 2.242a1 1 0 11-1.94-.485L5.47 14H3a1 1 0 110-2h2.97l1-4H5a1 1 0 110-2h2.47l.56-2.243a1 1 0 011.213-.727zM9.03 8l-1 4h2.938l1-4H9.031z" clip-rule="evenodd"></path></svg>Angular</a><a class="badge badge-lg border-base-content hover:border-accent-content hover:opacity-80 no-underline py-4" href="/blog?tag=Rxjs"><svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 20 20" aria-hidden="true" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M9.243 3.03a1 1 0 01.727 1.213L9.53 6h2.94l.56-2.243a1 1 0 111.94.486L14.53 6H17a1 1 0 110 2h-2.97l-1 4H15a1 1 0 110 2h-2.47l-.56 2.242a1 1 0 11-1.94-.485L10.47 14H7.53l-.56 2.242a1 1 0 11-1.94-.485L5.47 14H3a1 1 0 110-2h2.97l1-4H5a1 1 0 110-2h2.47l.56-2.243a1 1 0 011.213-.727zM9.03 8l-1 4h2.938l1-4H9.031z" clip-rule="evenodd"></path></svg>Rxjs</a></div></div><article class="prose md:prose-lg lg:prose-xl mx-auto"><p>State management in modern Angular applications is a critical battleground. While <strong>RxJS</strong> provides the reactive sinews for handling asynchronous data streams, <strong>NGRX</strong> stands as a heavily-armored, Redux-inspired framework for orchestrating complex, application-wide state. Both promise to tame complexity, but the choice between RxJS's raw flexibility and NGRX's opinionated architecture can profoundly impact your project's performance, maintainability, and developer experience. This guide cuts through the noise with clean, modern NGRX examples for real-world scenarios like product catalogs and shopping carts, benchmark-compares the two approaches, and delivers actionable strategies to pick the victor for <em>your specific use case</em>.</p>
+<h2>Understanding the Combatants: NGRX and Plain RxJS</h2>
+<p><strong>What is &quot;Plain RxJS&quot; for State Management?</strong>
+Plain RxJS involves leveraging constructs like <code>BehaviorSubject</code> or <code>ReplaySubject</code> within Angular services. Components subscribe to these <code>Observable</code> streams for state updates and invoke service methods to trigger state changes. Direct, lean, but potentially chaotic at scale.</p>
+<ul>
+<li><strong>Primary Use Cases (Plain RxJS):</strong> Local component state, simple feature-specific data, rapid prototyping.</li>
+</ul>
+<p><strong>What is NGRX?</strong>
+NGRX is a comprehensive framework implementing the Redux pattern in Angular. It enforces a unidirectional data flow and clear separation of concerns: Store, Actions, Reducers, Selectors, Effects.</p>
+<p>Explore the official <a href="https://rxjs.dev/">RxJS documentation</a> and <a href="https://ngrx.io/">NGRX documentation</a>.</p>
+<h2>Performance Bottlenecks &amp; Architectural Quagmires</h2>
+<p><strong>1. The Perils of Plain RxJS in Complex Scenarios (The &quot;Wild West&quot; of State):</strong>
+*   Lack of Enforced Structure
+*   Debugging Nightmares
+*   Reinventing the Wheel
+*   Compromised Testability</p>
+<p><strong>2. NGRX: The Overzealous Behemoth for Trivial Tasks:</strong>
+*   Significant Boilerplate Overhead (though modern NGRX, like <code>createFeature</code>, mitigates this)
+*   Steep Initial Learning Curve</p>
+<h2>Head-to-Head: Conceptual Benchmarks &amp; Developer Experience Impact</h2>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">Feature / Metric</th>
+<th style="text-align:left">Plain RxJS (e.g., BehaviorSubject)</th>
+<th style="text-align:left">NGRX (with Modern Best Practices)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>Initial Development Effort</strong></td>
+<td style="text-align:left">Low</td>
+<td style="text-align:left">Medium</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Boilerplate Code</strong></td>
+<td style="text-align:left">Minimal</td>
+<td style="text-align:left">Reduced (with <code>createFeature</code>)</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Scalability (Complex State)</strong></td>
+<td style="text-align:left">Medium (risk of chaos)</td>
+<td style="text-align:left">High</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Predictability</strong></td>
+<td style="text-align:left">Medium</td>
+<td style="text-align:left">High</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Debugging / Tooling</strong></td>
+<td style="text-align:left">Limited</td>
+<td style="text-align:left">Excellent (Redux DevTools)</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Testability</strong></td>
+<td style="text-align:left">Good for isolated services</td>
+<td style="text-align:left">Excellent</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Performance</strong></td>
+<td style="text-align:left">Implementation-dependent</td>
+<td style="text-align:left">Good (memoized selectors)</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Enforced Structure</strong></td>
+<td style="text-align:left">Low</td>
+<td style="text-align:left">High</td>
+</tr>
+</tbody>
+</table>
+<h2>Solutions and Strategic Maneuvers: Real-World Examples – Product Catalog &amp; Shopping Cart (Modern NGRX)</h2>
+<p>Let's illustrate with an e-commerce scenario, focusing on cleaner, modern NGRX using <code>createFeature</code>.</p>
+<p><strong>Scenario:</strong></p>
+<ul>
+<li><strong>Products:</strong> Fetched asynchronously, filterable.</li>
+<li><strong>Shopping Cart:</strong> Users add/remove products, update quantities, view totals.</li>
+</ul>
+<hr>
+<h3><strong>Approach 1: Plain RxJS – The &quot;Do-It-Yourself&quot; E-commerce State</strong></h3>
+<p>(These Plain RxJS examples are kept concise for direct comparison.)</p>
+<p><strong>1. Product Management (<code>product-rxjs.service.ts</code>):</strong></p>
+
+<div style="position: relative">
+	<pre><code class="hljs language-typescript"><span class="hljs-keyword">import</span> { <span class="hljs-title class_">Injectable</span> } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@angular/core&#x27;</span>;
+<span class="hljs-keyword">import</span> { <span class="hljs-title class_">BehaviorSubject</span>, <span class="hljs-title class_">Observable</span>, <span class="hljs-keyword">of</span>, timer, map } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;rxjs&#x27;</span>;
+<span class="hljs-keyword">import</span> { tap, catchError, switchMap } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;rxjs/operators&#x27;</span>;
+
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">interface</span> <span class="hljs-title class_">Product</span> { <span class="hljs-attr">id</span>: <span class="hljs-built_in">string</span>; <span class="hljs-attr">name</span>: <span class="hljs-built_in">string</span>; <span class="hljs-attr">price</span>: <span class="hljs-built_in">number</span>; <span class="hljs-attr">category</span>: <span class="hljs-built_in">string</span>; <span class="hljs-attr">stock</span>: <span class="hljs-built_in">number</span>; }
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">interface</span> <span class="hljs-title class_">ProductFilters</span> { category?: <span class="hljs-built_in">string</span>; searchTerm?: <span class="hljs-built_in">string</span>; }
+
+<span class="hljs-keyword">const</span> mockProductsApi = (filters?: <span class="hljs-title class_">ProductFilters</span>): <span class="hljs-title class_">Observable</span>&lt;<span class="hljs-title class_">Product</span>[]&gt; =&gt; {
+  <span class="hljs-keyword">let</span> <span class="hljs-attr">products</span>: <span class="hljs-title class_">Product</span>[] = [ <span class="hljs-comment">/* ... mock product data ... */</span>
+    { <span class="hljs-attr">id</span>: <span class="hljs-string">&#x27;p1&#x27;</span>, <span class="hljs-attr">name</span>: <span class="hljs-string">&#x27;Awesome Gadget X&#x27;</span>, <span class="hljs-attr">price</span>: <span class="hljs-number">29.99</span>, <span class="hljs-attr">category</span>: <span class="hljs-string">&#x27;electronics&#x27;</span>, <span class="hljs-attr">stock</span>: <span class="hljs-number">10</span> },
+    { <span class="hljs-attr">id</span>: <span class="hljs-string">&#x27;p2&#x27;</span>, <span class="hljs-attr">name</span>: <span class="hljs-string">&#x27;Super Widget Pro&#x27;</span>, <span class="hljs-attr">price</span>: <span class="hljs-number">49.50</span>, <span class="hljs-attr">category</span>: <span class="hljs-string">&#x27;tools&#x27;</span>, <span class="hljs-attr">stock</span>: <span class="hljs-number">5</span> },
+    { <span class="hljs-attr">id</span>: <span class="hljs-string">&#x27;p3&#x27;</span>, <span class="hljs-attr">name</span>: <span class="hljs-string">&#x27;Mega Gizmo Plus&#x27;</span>, <span class="hljs-attr">price</span>: <span class="hljs-number">99.00</span>, <span class="hljs-attr">category</span>: <span class="hljs-string">&#x27;electronics&#x27;</span>, <span class="hljs-attr">stock</span>: <span class="hljs-number">0</span> },
+  ];
+  <span class="hljs-keyword">if</span> (filters?.<span class="hljs-property">category</span>) products = products.<span class="hljs-title function_">filter</span>(<span class="hljs-function"><span class="hljs-params">p</span> =&gt;</span> p.<span class="hljs-property">category</span> === filters.<span class="hljs-property">category</span>);
+  <span class="hljs-keyword">if</span> (filters?.<span class="hljs-property">searchTerm</span>) products = products.<span class="hljs-title function_">filter</span>(<span class="hljs-function"><span class="hljs-params">p</span> =&gt;</span> p.<span class="hljs-property">name</span>.<span class="hljs-title function_">toLowerCase</span>().<span class="hljs-title function_">includes</span>(filters.<span class="hljs-property">searchTerm</span>!.<span class="hljs-title function_">toLowerCase</span>()));
+  <span class="hljs-keyword">return</span> <span class="hljs-title function_">timer</span>(<span class="hljs-number">500</span>).<span class="hljs-title function_">pipe</span>(<span class="hljs-title function_">map</span>(<span class="hljs-function">() =&gt;</span> products));
+};
+
+<span class="hljs-meta">@Injectable</span>({ <span class="hljs-attr">providedIn</span>: <span class="hljs-string">&#x27;root&#x27;</span> })
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">ProductRxjsService</span> {
+  <span class="hljs-keyword">private</span> productsSource = <span class="hljs-keyword">new</span> <span class="hljs-title class_">BehaviorSubject</span>&lt;<span class="hljs-title class_">Product</span>[]&gt;([]);
+  <span class="hljs-attr">products$</span>: <span class="hljs-title class_">Observable</span>&lt;<span class="hljs-title class_">Product</span>[]&gt; = <span class="hljs-variable language_">this</span>.<span class="hljs-property">productsSource</span>.<span class="hljs-title function_">asObservable</span>();
+
+  <span class="hljs-keyword">private</span> activeFiltersSource = <span class="hljs-keyword">new</span> <span class="hljs-title class_">BehaviorSubject</span>&lt;<span class="hljs-title class_">ProductFilters</span>&gt;({});
+  <span class="hljs-attr">activeFilters$</span>: <span class="hljs-title class_">Observable</span>&lt;<span class="hljs-title class_">ProductFilters</span>&gt; = <span class="hljs-variable language_">this</span>.<span class="hljs-property">activeFiltersSource</span>.<span class="hljs-title function_">asObservable</span>();
+
+  <span class="hljs-keyword">private</span> isLoadingSource = <span class="hljs-keyword">new</span> <span class="hljs-title class_">BehaviorSubject</span>&lt;<span class="hljs-built_in">boolean</span>&gt;(<span class="hljs-literal">false</span>);
+  <span class="hljs-attr">isLoading$</span>: <span class="hljs-title class_">Observable</span>&lt;<span class="hljs-built_in">boolean</span>&gt; = <span class="hljs-variable language_">this</span>.<span class="hljs-property">isLoadingSource</span>.<span class="hljs-title function_">asObservable</span>();
+
+  <span class="hljs-keyword">private</span> errorSource = <span class="hljs-keyword">new</span> <span class="hljs-title class_">BehaviorSubject</span>&lt;<span class="hljs-built_in">string</span> | <span class="hljs-literal">null</span>&gt;(<span class="hljs-literal">null</span>);
+  <span class="hljs-attr">error$</span>: <span class="hljs-title class_">Observable</span>&lt;<span class="hljs-built_in">string</span> | <span class="hljs-literal">null</span>&gt; = <span class="hljs-variable language_">this</span>.<span class="hljs-property">errorSource</span>.<span class="hljs-title function_">asObservable</span>();
+
+  <span class="hljs-title function_">constructor</span>(<span class="hljs-params"></span>) {
+    <span class="hljs-variable language_">this</span>.<span class="hljs-property">activeFiltersSource</span>.<span class="hljs-title function_">pipe</span>(
+      <span class="hljs-title function_">tap</span>(<span class="hljs-function">() =&gt;</span> <span class="hljs-variable language_">this</span>.<span class="hljs-property">isLoadingSource</span>.<span class="hljs-title function_">next</span>(<span class="hljs-literal">true</span>)),
+      <span class="hljs-title function_">switchMap</span>(<span class="hljs-function"><span class="hljs-params">filters</span> =&gt;</span> <span class="hljs-title function_">mockProductsApi</span>(filters).<span class="hljs-title function_">pipe</span>(
+        <span class="hljs-title function_">tap</span>(<span class="hljs-function"><span class="hljs-params">products</span> =&gt;</span> {
+          <span class="hljs-variable language_">this</span>.<span class="hljs-property">productsSource</span>.<span class="hljs-title function_">next</span>(products);
+          <span class="hljs-variable language_">this</span>.<span class="hljs-property">errorSource</span>.<span class="hljs-title function_">next</span>(<span class="hljs-literal">null</span>);
+        }),
+        <span class="hljs-title function_">catchError</span>(<span class="hljs-function"><span class="hljs-params">err</span> =&gt;</span> {
+          <span class="hljs-variable language_">this</span>.<span class="hljs-property">errorSource</span>.<span class="hljs-title function_">next</span>(<span class="hljs-string">&#x27;Failed to load products&#x27;</span>);
+          <span class="hljs-variable language_">this</span>.<span class="hljs-property">productsSource</span>.<span class="hljs-title function_">next</span>([]);
+          <span class="hljs-keyword">return</span> <span class="hljs-title function_">of</span>(<span class="hljs-literal">null</span>); <span class="hljs-comment">// Or rethrow, or provide a default empty value</span>
+        }),
+        <span class="hljs-title function_">tap</span>(<span class="hljs-function">() =&gt;</span> <span class="hljs-variable language_">this</span>.<span class="hljs-property">isLoadingSource</span>.<span class="hljs-title function_">next</span>(<span class="hljs-literal">false</span>)) <span class="hljs-comment">// Ensure loading is false after success/error</span>
+      ))
+    ).<span class="hljs-title function_">subscribe</span>();
+  }
+
+  <span class="hljs-title function_">setFilters</span>(<span class="hljs-attr">filters</span>: <span class="hljs-title class_">ProductFilters</span>): <span class="hljs-built_in">void</span> {
+    <span class="hljs-variable language_">this</span>.<span class="hljs-property">activeFiltersSource</span>.<span class="hljs-title function_">next</span>(filters);
+  }
+}
+</code></pre>
+
+	<button class="markdown-it-code-copy btn btn-ghost btn-circle btn-sm" data-clipboard-text="import { Injectable } from &apos;@angular/core&apos;;
+import { BehaviorSubject, Observable, of, timer, map } from &apos;rxjs&apos;;
+import { tap, catchError, switchMap } from &apos;rxjs/operators&apos;;
+
+export interface Product { id: string; name: string; price: number; category: string; stock: number; }
+export interface ProductFilters { category?: string; searchTerm?: string; }
+
+const mockProductsApi = (filters?: ProductFilters): Observable<Product[]> => {
+  let products: Product[] = [ /* ... mock product data ... */
+    { id: &apos;p1&apos;, name: &apos;Awesome Gadget X&apos;, price: 29.99, category: &apos;electronics&apos;, stock: 10 },
+    { id: &apos;p2&apos;, name: &apos;Super Widget Pro&apos;, price: 49.50, category: &apos;tools&apos;, stock: 5 },
+    { id: &apos;p3&apos;, name: &apos;Mega Gizmo Plus&apos;, price: 99.00, category: &apos;electronics&apos;, stock: 0 },
+  ];
+  if (filters?.category) products = products.filter(p => p.category === filters.category);
+  if (filters?.searchTerm) products = products.filter(p => p.name.toLowerCase().includes(filters.searchTerm!.toLowerCase()));
+  return timer(500).pipe(map(() => products));
+};
+
+@Injectable({ providedIn: &apos;root&apos; })
+export class ProductRxjsService {
+  private productsSource = new BehaviorSubject<Product[]>([]);
+  products$: Observable<Product[]> = this.productsSource.asObservable();
+
+  private activeFiltersSource = new BehaviorSubject<ProductFilters>({});
+  activeFilters$: Observable<ProductFilters> = this.activeFiltersSource.asObservable();
+
+  private isLoadingSource = new BehaviorSubject<boolean>(false);
+  isLoading$: Observable<boolean> = this.isLoadingSource.asObservable();
+
+  private errorSource = new BehaviorSubject<string | null>(null);
+  error$: Observable<string | null> = this.errorSource.asObservable();
+
+  constructor() {
+    this.activeFiltersSource.pipe(
+      tap(() => this.isLoadingSource.next(true)),
+      switchMap(filters => mockProductsApi(filters).pipe(
+        tap(products => {
+          this.productsSource.next(products);
+          this.errorSource.next(null);
+        }),
+        catchError(err => {
+          this.errorSource.next(&apos;Failed to load products&apos;);
+          this.productsSource.next([]);
+          return of(null); // Or rethrow, or provide a default empty value
+        }),
+        tap(() => this.isLoadingSource.next(false)) // Ensure loading is false after success/error
+      ))
+    ).subscribe();
+  }
+
+  setFilters(filters: ProductFilters): void {
+    this.activeFiltersSource.next(filters);
+  }
+}
+" style="position: absolute; top: 7.5px; right: 6px; cursor: pointer; outline: none;" title="Copy">
+		<span style="font-size: 21px; opacity: 0.4;" class="fa fa-solid fa-clone text-neutral-content"></span>
+	</button>
+</div>
+<p><strong>2. Cart Management (<code>cart-rxjs.service.ts</code>):</strong></p>
+
+<div style="position: relative">
+	<pre><code class="hljs language-typescript"><span class="hljs-keyword">import</span> { <span class="hljs-title class_">Injectable</span> } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@angular/core&#x27;</span>;
+<span class="hljs-keyword">import</span> { <span class="hljs-title class_">BehaviorSubject</span>, <span class="hljs-title class_">Observable</span> } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;rxjs&#x27;</span>;
+<span class="hljs-keyword">import</span> { map } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;rxjs/operators&#x27;</span>;
+<span class="hljs-keyword">import</span> { <span class="hljs-title class_">Product</span> } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;./product-rxjs.service&#x27;</span>;
+
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">interface</span> <span class="hljs-title class_">CartItem</span> { <span class="hljs-attr">productId</span>: <span class="hljs-built_in">string</span>; <span class="hljs-attr">product</span>: <span class="hljs-title class_">Product</span>; <span class="hljs-attr">quantity</span>: <span class="hljs-built_in">number</span>; }
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">interface</span> <span class="hljs-title class_">Cart</span> { <span class="hljs-attr">items</span>: <span class="hljs-title class_">CartItem</span>[]; <span class="hljs-attr">totalItems</span>: <span class="hljs-built_in">number</span>; <span class="hljs-attr">totalPrice</span>: <span class="hljs-built_in">number</span>; }
+
+<span class="hljs-meta">@Injectable</span>({ <span class="hljs-attr">providedIn</span>: <span class="hljs-string">&#x27;root&#x27;</span> })
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">CartRxjsService</span> {
+  <span class="hljs-keyword">private</span> cartItemsSource = <span class="hljs-keyword">new</span> <span class="hljs-title class_">BehaviorSubject</span>&lt;<span class="hljs-title class_">Map</span>&lt;<span class="hljs-built_in">string</span>, <span class="hljs-title class_">CartItem</span>&gt;&gt;(<span class="hljs-keyword">new</span> <span class="hljs-title class_">Map</span>());
+  <span class="hljs-attr">cartItems$</span>: <span class="hljs-title class_">Observable</span>&lt;<span class="hljs-title class_">CartItem</span>[]&gt; = <span class="hljs-variable language_">this</span>.<span class="hljs-property">cartItemsSource</span>.<span class="hljs-title function_">pipe</span>(<span class="hljs-title function_">map</span>(<span class="hljs-function"><span class="hljs-params">map</span> =&gt;</span> <span class="hljs-title class_">Array</span>.<span class="hljs-title function_">from</span>(map.<span class="hljs-title function_">values</span>())));
+
+  <span class="hljs-attr">cartState$</span>: <span class="hljs-title class_">Observable</span>&lt;<span class="hljs-title class_">Cart</span>&gt;;
+
+  <span class="hljs-title function_">constructor</span>(<span class="hljs-params"></span>) {
+    <span class="hljs-variable language_">this</span>.<span class="hljs-property">cartState$</span> = <span class="hljs-variable language_">this</span>.<span class="hljs-property">cartItems$</span>.<span class="hljs-title function_">pipe</span>(
+      <span class="hljs-title function_">map</span>(<span class="hljs-function"><span class="hljs-params">items</span> =&gt;</span> {
+        <span class="hljs-keyword">const</span> totalItems = items.<span class="hljs-title function_">reduce</span>(<span class="hljs-function">(<span class="hljs-params">sum, item</span>) =&gt;</span> sum + item.<span class="hljs-property">quantity</span>, <span class="hljs-number">0</span>);
+        <span class="hljs-keyword">const</span> totalPrice = items.<span class="hljs-title function_">reduce</span>(<span class="hljs-function">(<span class="hljs-params">sum, item</span>) =&gt;</span> sum + (item.<span class="hljs-property">product</span>.<span class="hljs-property">price</span> * item.<span class="hljs-property">quantity</span>), <span class="hljs-number">0</span>);
+        <span class="hljs-keyword">return</span> { items, totalItems, totalPrice };
+      })
+    );
+  }
+
+  <span class="hljs-title function_">addItem</span>(<span class="hljs-attr">product</span>: <span class="hljs-title class_">Product</span>, <span class="hljs-attr">quantity</span>: <span class="hljs-built_in">number</span> = <span class="hljs-number">1</span>): <span class="hljs-built_in">void</span> {
+    <span class="hljs-keyword">const</span> currentMap = <span class="hljs-keyword">new</span> <span class="hljs-title class_">Map</span>(<span class="hljs-variable language_">this</span>.<span class="hljs-property">cartItemsSource</span>.<span class="hljs-title function_">getValue</span>());
+    <span class="hljs-keyword">const</span> existingItem = currentMap.<span class="hljs-title function_">get</span>(product.<span class="hljs-property">id</span>);
+    <span class="hljs-keyword">const</span> newQuantity = existingItem ? <span class="hljs-title class_">Math</span>.<span class="hljs-title function_">min</span>(existingItem.<span class="hljs-property">quantity</span> + quantity, product.<span class="hljs-property">stock</span>) : <span class="hljs-title class_">Math</span>.<span class="hljs-title function_">min</span>(quantity, product.<span class="hljs-property">stock</span>);
+
+    <span class="hljs-keyword">if</span> (newQuantity &gt; <span class="hljs-number">0</span>) {
+      currentMap.<span class="hljs-title function_">set</span>(product.<span class="hljs-property">id</span>, { <span class="hljs-attr">productId</span>: product.<span class="hljs-property">id</span>, product, <span class="hljs-attr">quantity</span>: newQuantity });
+    } <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (existingItem) {
+      currentMap.<span class="hljs-title function_">delete</span>(product.<span class="hljs-property">id</span>); <span class="hljs-comment">// Remove if quantity becomes zero or less</span>
+    }
+    <span class="hljs-variable language_">this</span>.<span class="hljs-property">cartItemsSource</span>.<span class="hljs-title function_">next</span>(currentMap);
+  }
+
+  <span class="hljs-title function_">updateQuantity</span>(<span class="hljs-attr">productId</span>: <span class="hljs-built_in">string</span>, <span class="hljs-attr">quantity</span>: <span class="hljs-built_in">number</span>): <span class="hljs-built_in">void</span> {
+    <span class="hljs-keyword">const</span> currentMap = <span class="hljs-keyword">new</span> <span class="hljs-title class_">Map</span>(<span class="hljs-variable language_">this</span>.<span class="hljs-property">cartItemsSource</span>.<span class="hljs-title function_">getValue</span>());
+    <span class="hljs-keyword">const</span> item = currentMap.<span class="hljs-title function_">get</span>(productId);
+    <span class="hljs-keyword">if</span> (!item) <span class="hljs-keyword">return</span>;
+
+    <span class="hljs-keyword">if</span> (quantity &lt;= <span class="hljs-number">0</span>) {
+      currentMap.<span class="hljs-title function_">delete</span>(productId);
+    } <span class="hljs-keyword">else</span> {
+      <span class="hljs-keyword">const</span> newQuantity = <span class="hljs-title class_">Math</span>.<span class="hljs-title function_">min</span>(quantity, item.<span class="hljs-property">product</span>.<span class="hljs-property">stock</span>);
+      currentMap.<span class="hljs-title function_">set</span>(productId, { ...item, <span class="hljs-attr">quantity</span>: newQuantity });
+    }
+    <span class="hljs-variable language_">this</span>.<span class="hljs-property">cartItemsSource</span>.<span class="hljs-title function_">next</span>(currentMap);
+  }
+
+  <span class="hljs-title function_">removeItem</span>(<span class="hljs-attr">productId</span>: <span class="hljs-built_in">string</span>): <span class="hljs-built_in">void</span> {
+    <span class="hljs-keyword">const</span> currentMap = <span class="hljs-keyword">new</span> <span class="hljs-title class_">Map</span>(<span class="hljs-variable language_">this</span>.<span class="hljs-property">cartItemsSource</span>.<span class="hljs-title function_">getValue</span>());
+    currentMap.<span class="hljs-title function_">delete</span>(productId);
+    <span class="hljs-variable language_">this</span>.<span class="hljs-property">cartItemsSource</span>.<span class="hljs-title function_">next</span>(currentMap);
+  }
+
+  <span class="hljs-title function_">clearCart</span>(): <span class="hljs-built_in">void</span> {
+    <span class="hljs-variable language_">this</span>.<span class="hljs-property">cartItemsSource</span>.<span class="hljs-title function_">next</span>(<span class="hljs-keyword">new</span> <span class="hljs-title class_">Map</span>());
+  }
+}
+</code></pre>
+
+	<button class="markdown-it-code-copy btn btn-ghost btn-circle btn-sm" data-clipboard-text="import { Injectable } from &apos;@angular/core&apos;;
+import { BehaviorSubject, Observable } from &apos;rxjs&apos;;
+import { map } from &apos;rxjs/operators&apos;;
+import { Product } from &apos;./product-rxjs.service&apos;;
+
+export interface CartItem { productId: string; product: Product; quantity: number; }
+export interface Cart { items: CartItem[]; totalItems: number; totalPrice: number; }
+
+@Injectable({ providedIn: &apos;root&apos; })
+export class CartRxjsService {
+  private cartItemsSource = new BehaviorSubject<Map<string, CartItem>>(new Map());
+  cartItems$: Observable<CartItem[]> = this.cartItemsSource.pipe(map(map => Array.from(map.values())));
+
+  cartState$: Observable<Cart>;
+
+  constructor() {
+    this.cartState$ = this.cartItems$.pipe(
+      map(items => {
+        const totalItems = items.reduce((sum, item) => sum + item.quantity, 0);
+        const totalPrice = items.reduce((sum, item) => sum + (item.product.price * item.quantity), 0);
+        return { items, totalItems, totalPrice };
+      })
+    );
+  }
+
+  addItem(product: Product, quantity: number = 1): void {
+    const currentMap = new Map(this.cartItemsSource.getValue());
+    const existingItem = currentMap.get(product.id);
+    const newQuantity = existingItem ? Math.min(existingItem.quantity + quantity, product.stock) : Math.min(quantity, product.stock);
+
+    if (newQuantity > 0) {
+      currentMap.set(product.id, { productId: product.id, product, quantity: newQuantity });
+    } else if (existingItem) {
+      currentMap.delete(product.id); // Remove if quantity becomes zero or less
+    }
+    this.cartItemsSource.next(currentMap);
+  }
+
+  updateQuantity(productId: string, quantity: number): void {
+    const currentMap = new Map(this.cartItemsSource.getValue());
+    const item = currentMap.get(productId);
+    if (!item) return;
+
+    if (quantity <= 0) {
+      currentMap.delete(productId);
+    } else {
+      const newQuantity = Math.min(quantity, item.product.stock);
+      currentMap.set(productId, { ...item, quantity: newQuantity });
+    }
+    this.cartItemsSource.next(currentMap);
+  }
+
+  removeItem(productId: string): void {
+    const currentMap = new Map(this.cartItemsSource.getValue());
+    currentMap.delete(productId);
+    this.cartItemsSource.next(currentMap);
+  }
+
+  clearCart(): void {
+    this.cartItemsSource.next(new Map());
+  }
+}
+" style="position: absolute; top: 7.5px; right: 6px; cursor: pointer; outline: none;" title="Copy">
+		<span style="font-size: 21px; opacity: 0.4;" class="fa fa-solid fa-clone text-neutral-content"></span>
+	</button>
+</div>
+<hr>
+<h3><strong>Approach 2: NGRX – The Structured E-commerce State Fortress (with <code>createFeature</code>)</strong></h3>
+<p><code>createFeature</code> (available in NGRX 14+) significantly reduces boilerplate by co-locating actions, reducers, and selectors.</p>
+<p><strong>1. Product Feature (<code>products.feature.ts</code>):</strong></p>
+
+<div style="position: relative">
+	<pre><code class="hljs language-typescript"><span class="hljs-keyword">import</span> { createFeature, createReducer, on, props, createAction } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@ngrx/store&#x27;</span>;
+<span class="hljs-keyword">import</span> { <span class="hljs-title class_">EntityState</span>, <span class="hljs-title class_">EntityAdapter</span>, createEntityAdapter } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@ngrx/entity&#x27;</span>;
+
+<span class="hljs-comment">// Models</span>
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">interface</span> <span class="hljs-title class_">Product</span> { <span class="hljs-attr">id</span>: <span class="hljs-built_in">string</span>; <span class="hljs-attr">name</span>: <span class="hljs-built_in">string</span>; <span class="hljs-attr">price</span>: <span class="hljs-built_in">number</span>; <span class="hljs-attr">category</span>: <span class="hljs-built_in">string</span>; <span class="hljs-attr">stock</span>: <span class="hljs-built_in">number</span>; }
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">interface</span> <span class="hljs-title class_">ProductFilters</span> { category?: <span class="hljs-built_in">string</span>; searchTerm?: <span class="hljs-built_in">string</span>; }
+
+<span class="hljs-comment">// --- State &amp; Adapter ---</span>
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">interface</span> <span class="hljs-title class_">ProductsState</span> <span class="hljs-keyword">extends</span> <span class="hljs-title class_">EntityState</span>&lt;<span class="hljs-title class_">Product</span>&gt; {
+  <span class="hljs-attr">isLoading</span>: <span class="hljs-built_in">boolean</span>;
+  <span class="hljs-attr">error</span>: <span class="hljs-built_in">string</span> | <span class="hljs-literal">null</span>;
+  <span class="hljs-attr">activeFilters</span>: <span class="hljs-title class_">ProductFilters</span>;
+}
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> <span class="hljs-attr">productAdapter</span>: <span class="hljs-title class_">EntityAdapter</span>&lt;<span class="hljs-title class_">Product</span>&gt; = createEntityAdapter&lt;<span class="hljs-title class_">Product</span>&gt;();
+<span class="hljs-keyword">const</span> <span class="hljs-attr">initialProductsState</span>: <span class="hljs-title class_">ProductsState</span> = productAdapter.<span class="hljs-title function_">getInitialState</span>({
+  <span class="hljs-attr">isLoading</span>: <span class="hljs-literal">false</span>,
+  <span class="hljs-attr">error</span>: <span class="hljs-literal">null</span>,
+  <span class="hljs-attr">activeFilters</span>: {},
+});
+
+<span class="hljs-comment">// --- Actions (can be defined inline or separately) ---</span>
+<span class="hljs-comment">// If defined separately:</span>
+<span class="hljs-comment">// import * as ProductPageActions from &#x27;./product-page.actions&#x27;;</span>
+<span class="hljs-comment">// import * as ProductApiActions from &#x27;./product-api.actions&#x27;;</span>
+
+<span class="hljs-comment">// --- Feature Definition ---</span>
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> productsFeature = <span class="hljs-title function_">createFeature</span>({
+  <span class="hljs-attr">name</span>: <span class="hljs-string">&#x27;products&#x27;</span>, <span class="hljs-comment">// This will be the feature key</span>
+  <span class="hljs-attr">reducer</span>: <span class="hljs-title function_">createReducer</span>(
+    initialProductsState,
+    <span class="hljs-title function_">on</span>(
+      <span class="hljs-title function_">createAction</span>(<span class="hljs-string">&#x27;[Products Page] Set Filters&#x27;</span>, props&lt;{ <span class="hljs-attr">filters</span>: <span class="hljs-title class_">ProductFilters</span> }&gt;()),
+      <span class="hljs-function">(<span class="hljs-params">state, { filters }</span>) =&gt;</span> ({ ...state, <span class="hljs-attr">activeFilters</span>: filters })
+    ),
+    <span class="hljs-title function_">on</span>(
+      <span class="hljs-title function_">createAction</span>(<span class="hljs-string">&#x27;[Products Page] Load Products&#x27;</span>, props&lt;{ <span class="hljs-attr">filters</span>: <span class="hljs-title class_">ProductFilters</span> }&gt;()),
+      <span class="hljs-function">(<span class="hljs-params">state, { filters }</span>) =&gt;</span> ({ ...state, <span class="hljs-attr">isLoading</span>: <span class="hljs-literal">true</span>, <span class="hljs-attr">error</span>: <span class="hljs-literal">null</span>, <span class="hljs-attr">activeFilters</span>: filters })
+    ),
+    <span class="hljs-title function_">on</span>(
+      <span class="hljs-title function_">createAction</span>(<span class="hljs-string">&#x27;[Products API] Load Products Success&#x27;</span>, props&lt;{ <span class="hljs-attr">products</span>: <span class="hljs-title class_">Product</span>[] }&gt;()),
+      <span class="hljs-function">(<span class="hljs-params">state, { products }</span>) =&gt;</span> productAdapter.<span class="hljs-title function_">setAll</span>(products, { ...state, <span class="hljs-attr">isLoading</span>: <span class="hljs-literal">false</span> })
+    ),
+    <span class="hljs-title function_">on</span>(
+      <span class="hljs-title function_">createAction</span>(<span class="hljs-string">&#x27;[Products API] Load Products Failure&#x27;</span>, props&lt;{ <span class="hljs-attr">error</span>: <span class="hljs-built_in">string</span> }&gt;()),
+      <span class="hljs-function">(<span class="hljs-params">state, { error }</span>) =&gt;</span> ({ ...state, <span class="hljs-attr">isLoading</span>: <span class="hljs-literal">false</span>, error })
+    )
+  ),
+  <span class="hljs-comment">// Extra selectors can be added here if productAdapter doesn&#x27;t cover all needs</span>
+  <span class="hljs-comment">// extraSelectors: ({ selectProductsState, selectActiveFilters }) =&gt; ({</span>
+  <span class="hljs-comment">//   selectIsFiltered: createSelector(selectActiveFilters, filters =&gt; Object.keys(filters).length &gt; 0),</span>
+  <span class="hljs-comment">// })</span>
+});
+
+<span class="hljs-comment">// --- Exported Selectors &amp; Actions for convenience ---</span>
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> {
+  <span class="hljs-attr">name</span>: productsFeatureKey, <span class="hljs-comment">// &#x27;products&#x27;</span>
+  <span class="hljs-attr">reducer</span>: productsReducer,
+  <span class="hljs-comment">// Selectors</span>
+  selectProductsState, <span class="hljs-comment">// Selects the entire feature state</span>
+  <span class="hljs-attr">selectIsLoading</span>: selectProductsLoading,
+  <span class="hljs-attr">selectError</span>: selectProductsError,
+  <span class="hljs-attr">selectActiveFilters</span>: selectActiveProductFilters,
+  <span class="hljs-comment">// Adapter selectors are automatically exposed if state extends EntityState and adapter is provided</span>
+  <span class="hljs-comment">// or you can re-export them:</span>
+  <span class="hljs-comment">// selectAll: selectAllProducts, // if productAdapter.getSelectors() was used manually</span>
+} = productsFeature;
+
+<span class="hljs-comment">// If you need adapter selectors and they weren&#x27;t auto-exposed or you want custom names:</span>
+<span class="hljs-keyword">const</span> { selectAll, selectEntities } = productAdapter.<span class="hljs-title function_">getSelectors</span>();
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> selectAllProducts = createFeature.<span class="hljs-title function_">selector</span>(selectAll); <span class="hljs-comment">// Wrap with createFeature.selector if needed</span>
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> selectProductEntities = createFeature.<span class="hljs-title function_">selector</span>(selectEntities);
+</code></pre>
+
+	<button class="markdown-it-code-copy btn btn-ghost btn-circle btn-sm" data-clipboard-text="import { createFeature, createReducer, on, props, createAction } from &apos;@ngrx/store&apos;;
+import { EntityState, EntityAdapter, createEntityAdapter } from &apos;@ngrx/entity&apos;;
+
+// Models
+export interface Product { id: string; name: string; price: number; category: string; stock: number; }
+export interface ProductFilters { category?: string; searchTerm?: string; }
+
+// --- State & Adapter ---
+export interface ProductsState extends EntityState<Product> {
+  isLoading: boolean;
+  error: string | null;
+  activeFilters: ProductFilters;
+}
+export const productAdapter: EntityAdapter<Product> = createEntityAdapter<Product>();
+const initialProductsState: ProductsState = productAdapter.getInitialState({
+  isLoading: false,
+  error: null,
+  activeFilters: {},
+});
+
+// --- Actions (can be defined inline or separately) ---
+// If defined separately:
+// import * as ProductPageActions from &apos;./product-page.actions&apos;;
+// import * as ProductApiActions from &apos;./product-api.actions&apos;;
+
+// --- Feature Definition ---
+export const productsFeature = createFeature({
+  name: &apos;products&apos;, // This will be the feature key
+  reducer: createReducer(
+    initialProductsState,
+    on(
+      createAction(&apos;[Products Page] Set Filters&apos;, props<{ filters: ProductFilters }>()),
+      (state, { filters }) => ({ ...state, activeFilters: filters })
+    ),
+    on(
+      createAction(&apos;[Products Page] Load Products&apos;, props<{ filters: ProductFilters }>()),
+      (state, { filters }) => ({ ...state, isLoading: true, error: null, activeFilters: filters })
+    ),
+    on(
+      createAction(&apos;[Products API] Load Products Success&apos;, props<{ products: Product[] }>()),
+      (state, { products }) => productAdapter.setAll(products, { ...state, isLoading: false })
+    ),
+    on(
+      createAction(&apos;[Products API] Load Products Failure&apos;, props<{ error: string }>()),
+      (state, { error }) => ({ ...state, isLoading: false, error })
+    )
+  ),
+  // Extra selectors can be added here if productAdapter doesn&apos;t cover all needs
+  // extraSelectors: ({ selectProductsState, selectActiveFilters }) => ({
+  //   selectIsFiltered: createSelector(selectActiveFilters, filters => Object.keys(filters).length > 0),
+  // })
+});
+
+// --- Exported Selectors & Actions for convenience ---
+export const {
+  name: productsFeatureKey, // &apos;products&apos;
+  reducer: productsReducer,
+  // Selectors
+  selectProductsState, // Selects the entire feature state
+  selectIsLoading: selectProductsLoading,
+  selectError: selectProductsError,
+  selectActiveFilters: selectActiveProductFilters,
+  // Adapter selectors are automatically exposed if state extends EntityState and adapter is provided
+  // or you can re-export them:
+  // selectAll: selectAllProducts, // if productAdapter.getSelectors() was used manually
+} = productsFeature;
+
+// If you need adapter selectors and they weren&apos;t auto-exposed or you want custom names:
+const { selectAll, selectEntities } = productAdapter.getSelectors();
+export const selectAllProducts = createFeature.selector(selectAll); // Wrap with createFeature.selector if needed
+export const selectProductEntities = createFeature.selector(selectEntities);
+" style="position: absolute; top: 7.5px; right: 6px; cursor: pointer; outline: none;" title="Copy">
+		<span style="font-size: 21px; opacity: 0.4;" class="fa fa-solid fa-clone text-neutral-content"></span>
+	</button>
+</div>
+<p><strong>Product Effects (<code>products.effects.ts</code>):</strong></p>
+
+<div style="position: relative">
+	<pre><code class="hljs language-typescript"><span class="hljs-keyword">import</span> { <span class="hljs-title class_">Injectable</span> } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@angular/core&#x27;</span>;
+<span class="hljs-keyword">import</span> { <span class="hljs-title class_">Actions</span>, createEffect, ofType } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@ngrx/effects&#x27;</span>;
+<span class="hljs-keyword">import</span> { <span class="hljs-keyword">of</span>, timer, map <span class="hljs-keyword">as</span> rxMap } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;rxjs&#x27;</span>;
+<span class="hljs-keyword">import</span> { switchMap, catchError, map } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;rxjs/operators&#x27;</span>;
+<span class="hljs-keyword">import</span> { <span class="hljs-title class_">Product</span>, <span class="hljs-title class_">ProductFilters</span> } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;./products.feature&#x27;</span>; <span class="hljs-comment">// Import from feature file</span>
+
+<span class="hljs-comment">// --- Actions (Import them if defined in products.feature.ts actions property or define again) ---</span>
+<span class="hljs-keyword">const</span> loadProductsAction = <span class="hljs-title function_">createAction</span>(<span class="hljs-string">&#x27;[Products Page] Load Products&#x27;</span>, props&lt;{ <span class="hljs-attr">filters</span>: <span class="hljs-title class_">ProductFilters</span> }&gt;());
+<span class="hljs-keyword">const</span> loadProductsSuccessAction = <span class="hljs-title function_">createAction</span>(<span class="hljs-string">&#x27;[Products API] Load Products Success&#x27;</span>, props&lt;{ <span class="hljs-attr">products</span>: <span class="hljs-title class_">Product</span>[] }&gt;());
+<span class="hljs-keyword">const</span> loadProductsFailureAction = <span class="hljs-title function_">createAction</span>(<span class="hljs-string">&#x27;[Products API] Load Products Failure&#x27;</span>, props&lt;{ <span class="hljs-attr">error</span>: <span class="hljs-built_in">string</span> }&gt;());
+<span class="hljs-keyword">const</span> setFiltersAction = <span class="hljs-title function_">createAction</span>(<span class="hljs-string">&#x27;[Products Page] Set Filters&#x27;</span>, props&lt;{ <span class="hljs-attr">filters</span>: <span class="hljs-title class_">ProductFilters</span> }&gt;());
+
+
+<span class="hljs-comment">// Mock API</span>
+<span class="hljs-keyword">const</span> mockProductsApiEffect = (<span class="hljs-attr">filters</span>: <span class="hljs-title class_">ProductFilters</span>): <span class="hljs-title class_">Observable</span>&lt;<span class="hljs-title class_">Product</span>[]&gt; =&gt; {
+  <span class="hljs-keyword">let</span> <span class="hljs-attr">products</span>: <span class="hljs-title class_">Product</span>[] = [ <span class="hljs-comment">/* ... mock product data ... */</span>
+    { <span class="hljs-attr">id</span>: <span class="hljs-string">&#x27;p1&#x27;</span>, <span class="hljs-attr">name</span>: <span class="hljs-string">&#x27;NGRX Gadget&#x27;</span>, <span class="hljs-attr">price</span>: <span class="hljs-number">35.99</span>, <span class="hljs-attr">category</span>: <span class="hljs-string">&#x27;electronics&#x27;</span>, <span class="hljs-attr">stock</span>: <span class="hljs-number">10</span> },
+    { <span class="hljs-attr">id</span>: <span class="hljs-string">&#x27;p2&#x27;</span>, <span class="hljs-attr">name</span>: <span class="hljs-string">&#x27;NGRX Widget&#x27;</span>, <span class="hljs-attr">price</span>: <span class="hljs-number">55.50</span>, <span class="hljs-attr">category</span>: <span class="hljs-string">&#x27;tools&#x27;</span>, <span class="hljs-attr">stock</span>: <span class="hljs-number">5</span> },
+  ];
+  <span class="hljs-keyword">if</span> (filters?.<span class="hljs-property">category</span>) products = products.<span class="hljs-title function_">filter</span>(<span class="hljs-function"><span class="hljs-params">p</span> =&gt;</span> p.<span class="hljs-property">category</span> === filters.<span class="hljs-property">category</span>);
+  <span class="hljs-keyword">if</span> (filters?.<span class="hljs-property">searchTerm</span>) products = products.<span class="hljs-title function_">filter</span>(<span class="hljs-function"><span class="hljs-params">p</span> =&gt;</span> p.<span class="hljs-property">name</span>.<span class="hljs-title function_">toLowerCase</span>().<span class="hljs-title function_">includes</span>(filters.<span class="hljs-property">searchTerm</span>!.<span class="hljs-title function_">toLowerCase</span>()));
+  <span class="hljs-keyword">return</span> <span class="hljs-title function_">timer</span>(<span class="hljs-number">500</span>).<span class="hljs-title function_">pipe</span>(<span class="hljs-title function_">rxMap</span>(<span class="hljs-function">() =&gt;</span> products));
+};
+
+<span class="hljs-meta">@Injectable</span>()
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">ProductEffects</span> {
+  <span class="hljs-comment">// When filters are set, dispatch an action to load products with those filters</span>
+  triggerLoadOnFilterChange$ = <span class="hljs-title function_">createEffect</span>(<span class="hljs-function">() =&gt;</span>
+    <span class="hljs-variable language_">this</span>.<span class="hljs-property">actions$</span>.<span class="hljs-title function_">pipe</span>(
+      <span class="hljs-title function_">ofType</span>(setFiltersAction),
+      <span class="hljs-title function_">map</span>(<span class="hljs-function"><span class="hljs-params">action</span> =&gt;</span> <span class="hljs-title function_">loadProductsAction</span>({ <span class="hljs-attr">filters</span>: action.<span class="hljs-property">filters</span> }))
+    )
+  );
+
+  loadProducts$ = <span class="hljs-title function_">createEffect</span>(<span class="hljs-function">() =&gt;</span>
+    <span class="hljs-variable language_">this</span>.<span class="hljs-property">actions$</span>.<span class="hljs-title function_">pipe</span>(
+      <span class="hljs-title function_">ofType</span>(loadProductsAction),
+      <span class="hljs-title function_">switchMap</span>(<span class="hljs-function"><span class="hljs-params">action</span> =&gt;</span>
+        <span class="hljs-title function_">mockProductsApiEffect</span>(action.<span class="hljs-property">filters</span>).<span class="hljs-title function_">pipe</span>(
+          <span class="hljs-title function_">map</span>(<span class="hljs-function"><span class="hljs-params">products</span> =&gt;</span> <span class="hljs-title function_">loadProductsSuccessAction</span>({ products })),
+          <span class="hljs-title function_">catchError</span>(<span class="hljs-function"><span class="hljs-params">error</span> =&gt;</span> <span class="hljs-title function_">of</span>(<span class="hljs-title function_">loadProductsFailureAction</span>({ <span class="hljs-attr">error</span>: error.<span class="hljs-property">message</span> || <span class="hljs-string">&#x27;Unknown API Error&#x27;</span> })))
+        )
+      )
+    )
+  );
+
+  <span class="hljs-title function_">constructor</span>(<span class="hljs-params"><span class="hljs-keyword">private</span> actions$: Actions</span>) {}
+}
+</code></pre>
+
+	<button class="markdown-it-code-copy btn btn-ghost btn-circle btn-sm" data-clipboard-text="import { Injectable } from &apos;@angular/core&apos;;
+import { Actions, createEffect, ofType } from &apos;@ngrx/effects&apos;;
+import { of, timer, map as rxMap } from &apos;rxjs&apos;;
+import { switchMap, catchError, map } from &apos;rxjs/operators&apos;;
+import { Product, ProductFilters } from &apos;./products.feature&apos;; // Import from feature file
+
+// --- Actions (Import them if defined in products.feature.ts actions property or define again) ---
+const loadProductsAction = createAction(&apos;[Products Page] Load Products&apos;, props<{ filters: ProductFilters }>());
+const loadProductsSuccessAction = createAction(&apos;[Products API] Load Products Success&apos;, props<{ products: Product[] }>());
+const loadProductsFailureAction = createAction(&apos;[Products API] Load Products Failure&apos;, props<{ error: string }>());
+const setFiltersAction = createAction(&apos;[Products Page] Set Filters&apos;, props<{ filters: ProductFilters }>());
+
+
+// Mock API
+const mockProductsApiEffect = (filters: ProductFilters): Observable<Product[]> => {
+  let products: Product[] = [ /* ... mock product data ... */
+    { id: &apos;p1&apos;, name: &apos;NGRX Gadget&apos;, price: 35.99, category: &apos;electronics&apos;, stock: 10 },
+    { id: &apos;p2&apos;, name: &apos;NGRX Widget&apos;, price: 55.50, category: &apos;tools&apos;, stock: 5 },
+  ];
+  if (filters?.category) products = products.filter(p => p.category === filters.category);
+  if (filters?.searchTerm) products = products.filter(p => p.name.toLowerCase().includes(filters.searchTerm!.toLowerCase()));
+  return timer(500).pipe(rxMap(() => products));
+};
+
+@Injectable()
+export class ProductEffects {
+  // When filters are set, dispatch an action to load products with those filters
+  triggerLoadOnFilterChange$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(setFiltersAction),
+      map(action => loadProductsAction({ filters: action.filters }))
+    )
+  );
+
+  loadProducts$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(loadProductsAction),
+      switchMap(action =>
+        mockProductsApiEffect(action.filters).pipe(
+          map(products => loadProductsSuccessAction({ products })),
+          catchError(error => of(loadProductsFailureAction({ error: error.message || &apos;Unknown API Error&apos; })))
+        )
+      )
+    )
+  );
+
+  constructor(private actions$: Actions) {}
+}
+" style="position: absolute; top: 7.5px; right: 6px; cursor: pointer; outline: none;" title="Copy">
+		<span style="font-size: 21px; opacity: 0.4;" class="fa fa-solid fa-clone text-neutral-content"></span>
+	</button>
+</div>
+<p><strong>2. Cart Feature (<code>cart.feature.ts</code>):</strong></p>
+
+<div style="position: relative">
+	<pre><code class="hljs language-typescript"><span class="hljs-keyword">import</span> { createFeature, createReducer, on, props, createAction } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@ngrx/store&#x27;</span>;
+<span class="hljs-keyword">import</span> { <span class="hljs-title class_">Product</span> } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;../products/products.feature&#x27;</span>; <span class="hljs-comment">// Import Product model</span>
+
+<span class="hljs-comment">// --- Models ---</span>
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">interface</span> <span class="hljs-title class_">CartItem</span> { <span class="hljs-attr">productId</span>: <span class="hljs-built_in">string</span>; <span class="hljs-attr">product</span>: <span class="hljs-title class_">Product</span>; <span class="hljs-attr">quantity</span>: <span class="hljs-built_in">number</span>; }
+
+<span class="hljs-comment">// --- State ---</span>
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">interface</span> <span class="hljs-title class_">CartState</span> {
+  <span class="hljs-attr">items</span>: { [<span class="hljs-attr">productId</span>: <span class="hljs-built_in">string</span>]: <span class="hljs-title class_">CartItem</span> }; <span class="hljs-comment">// Object map for efficient lookups</span>
+}
+<span class="hljs-keyword">const</span> <span class="hljs-attr">initialCartState</span>: <span class="hljs-title class_">CartState</span> = { <span class="hljs-attr">items</span>: {} };
+
+<span class="hljs-comment">// --- Feature Definition ---</span>
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> cartFeature = <span class="hljs-title function_">createFeature</span>({
+  <span class="hljs-attr">name</span>: <span class="hljs-string">&#x27;cart&#x27;</span>,
+  <span class="hljs-attr">reducer</span>: <span class="hljs-title function_">createReducer</span>(
+    initialCartState,
+    <span class="hljs-title function_">on</span>(
+      <span class="hljs-title function_">createAction</span>(<span class="hljs-string">&#x27;[Cart] Add Item&#x27;</span>, props&lt;{ <span class="hljs-attr">product</span>: <span class="hljs-title class_">Product</span>; <span class="hljs-attr">quantity</span>: <span class="hljs-built_in">number</span> }&gt;()),
+      <span class="hljs-function">(<span class="hljs-params">state, { product, quantity }</span>) =&gt;</span> {
+        <span class="hljs-keyword">const</span> existingItem = state.<span class="hljs-property">items</span>[product.<span class="hljs-property">id</span>];
+        <span class="hljs-keyword">const</span> newQuantity = existingItem ? <span class="hljs-title class_">Math</span>.<span class="hljs-title function_">min</span>(existingItem.<span class="hljs-property">quantity</span> + quantity, product.<span class="hljs-property">stock</span>) : <span class="hljs-title class_">Math</span>.<span class="hljs-title function_">min</span>(quantity, product.<span class="hljs-property">stock</span>);
+        <span class="hljs-keyword">if</span> (newQuantity &lt;= <span class="hljs-number">0</span>) {
+          <span class="hljs-keyword">const</span> { [product.<span class="hljs-property">id</span>]: _, ...rest } = state.<span class="hljs-property">items</span>;
+          <span class="hljs-keyword">return</span> { ...state, <span class="hljs-attr">items</span>: rest };
+        }
+        <span class="hljs-keyword">return</span> {
+          ...state,
+          <span class="hljs-attr">items</span>: { ...state.<span class="hljs-property">items</span>, [product.<span class="hljs-property">id</span>]: { <span class="hljs-attr">productId</span>: product.<span class="hljs-property">id</span>, product, <span class="hljs-attr">quantity</span>: newQuantity } },
+        };
+      }
+    ),
+    <span class="hljs-title function_">on</span>(
+      <span class="hljs-title function_">createAction</span>(<span class="hljs-string">&#x27;[Cart] Remove Item&#x27;</span>, props&lt;{ <span class="hljs-attr">productId</span>: <span class="hljs-built_in">string</span> }&gt;()),
+      <span class="hljs-function">(<span class="hljs-params">state, { productId }</span>) =&gt;</span> {
+        <span class="hljs-keyword">const</span> { [productId]: _, ...rest } = state.<span class="hljs-property">items</span>;
+        <span class="hljs-keyword">return</span> { ...state, <span class="hljs-attr">items</span>: rest };
+      }
+    ),
+    <span class="hljs-title function_">on</span>(
+      <span class="hljs-title function_">createAction</span>(<span class="hljs-string">&#x27;[Cart] Update Item Quantity&#x27;</span>, props&lt;{ <span class="hljs-attr">productId</span>: <span class="hljs-built_in">string</span>; <span class="hljs-attr">quantity</span>: <span class="hljs-built_in">number</span> }&gt;()),
+      <span class="hljs-function">(<span class="hljs-params">state, { productId, quantity }</span>) =&gt;</span> {
+        <span class="hljs-keyword">const</span> item = state.<span class="hljs-property">items</span>[productId];
+        <span class="hljs-keyword">if</span> (!item) <span class="hljs-keyword">return</span> state;
+        <span class="hljs-keyword">if</span> (quantity &lt;= <span class="hljs-number">0</span>) {
+          <span class="hljs-keyword">const</span> { [productId]: _, ...rest } = state.<span class="hljs-property">items</span>;
+          <span class="hljs-keyword">return</span> { ...state, <span class="hljs-attr">items</span>: rest };
+        }
+        <span class="hljs-keyword">const</span> newQuantity = <span class="hljs-title class_">Math</span>.<span class="hljs-title function_">min</span>(quantity, item.<span class="hljs-property">product</span>.<span class="hljs-property">stock</span>);
+        <span class="hljs-keyword">return</span> { ...state, <span class="hljs-attr">items</span>: { ...state.<span class="hljs-property">items</span>, [productId]: { ...item, <span class="hljs-attr">quantity</span>: newQuantity } } };
+      }
+    ),
+    <span class="hljs-title function_">on</span>(<span class="hljs-title function_">createAction</span>(<span class="hljs-string">&#x27;[Cart] Clear Cart&#x27;</span>), <span class="hljs-function"><span class="hljs-params">state</span> =&gt;</span> ({ ...state, <span class="hljs-attr">items</span>: {} }))
+  ),
+  <span class="hljs-attr">extraSelectors</span>: <span class="hljs-function">(<span class="hljs-params">{ selectItems }</span>) =&gt;</span> ({ <span class="hljs-comment">// `selectItems` is auto-generated for `items` property</span>
+    <span class="hljs-attr">selectCartItemsArray</span>: createFeature.<span class="hljs-title function_">selector</span>(
+        <span class="hljs-function">(<span class="hljs-params">itemsMap: { [id: <span class="hljs-built_in">string</span>]: CartItem }</span>) =&gt;</span> <span class="hljs-title class_">Object</span>.<span class="hljs-title function_">values</span>(itemsMap)
+    ),
+    <span class="hljs-attr">selectCartItemCount</span>: createFeature.<span class="hljs-title function_">selector</span>(
+        <span class="hljs-function">(<span class="hljs-params">itemsArray: CartItem[]</span>) =&gt;</span> itemsArray.<span class="hljs-title function_">reduce</span>(<span class="hljs-function">(<span class="hljs-params">count, item</span>) =&gt;</span> count + item.<span class="hljs-property">quantity</span>, <span class="hljs-number">0</span>)
+    ),
+    <span class="hljs-attr">selectCartTotalPrice</span>: createFeature.<span class="hljs-title function_">selector</span>(
+        <span class="hljs-function">(<span class="hljs-params">itemsArray: CartItem[]</span>) =&gt;</span> itemsArray.<span class="hljs-title function_">reduce</span>(<span class="hljs-function">(<span class="hljs-params">total, item</span>) =&gt;</span> total + item.<span class="hljs-property">product</span>.<span class="hljs-property">price</span> * item.<span class="hljs-property">quantity</span>, <span class="hljs-number">0</span>)
+    ),
+  }),
+});
+
+<span class="hljs-comment">// --- Exported Selectors &amp; Actions ---</span>
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> {
+  <span class="hljs-attr">name</span>: cartFeatureKey,
+  <span class="hljs-attr">reducer</span>: cartReducer,
+  <span class="hljs-comment">// Auto-generated selectors for state properties</span>
+  selectCartState,
+  <span class="hljs-attr">selectItems</span>: selectCartItemsMap, <span class="hljs-comment">// Renamed for clarity</span>
+  <span class="hljs-comment">// Selectors from extraSelectors</span>
+  selectCartItemsArray,
+  selectCartItemCount,
+  selectCartTotalPrice,
+} = cartFeature;
+
+<span class="hljs-comment">// Actions can also be destructured if you define them inline in `createFeature`</span>
+<span class="hljs-comment">// For actions defined separately or inline with `createAction`, you&#x27;d import/export them.</span>
+<span class="hljs-comment">// Example if actions were part of createFeature&#x27;s `actions` property (not used here for clarity):</span>
+<span class="hljs-comment">// export const { addItem, removeItem, updateItemQuantity, clearCart } = cartFeature.actions;</span>
+</code></pre>
+
+	<button class="markdown-it-code-copy btn btn-ghost btn-circle btn-sm" data-clipboard-text="import { createFeature, createReducer, on, props, createAction } from &apos;@ngrx/store&apos;;
+import { Product } from &apos;../products/products.feature&apos;; // Import Product model
+
+// --- Models ---
+export interface CartItem { productId: string; product: Product; quantity: number; }
+
+// --- State ---
+export interface CartState {
+  items: { [productId: string]: CartItem }; // Object map for efficient lookups
+}
+const initialCartState: CartState = { items: {} };
+
+// --- Feature Definition ---
+export const cartFeature = createFeature({
+  name: &apos;cart&apos;,
+  reducer: createReducer(
+    initialCartState,
+    on(
+      createAction(&apos;[Cart] Add Item&apos;, props<{ product: Product; quantity: number }>()),
+      (state, { product, quantity }) => {
+        const existingItem = state.items[product.id];
+        const newQuantity = existingItem ? Math.min(existingItem.quantity + quantity, product.stock) : Math.min(quantity, product.stock);
+        if (newQuantity <= 0) {
+          const { [product.id]: _, ...rest } = state.items;
+          return { ...state, items: rest };
+        }
+        return {
+          ...state,
+          items: { ...state.items, [product.id]: { productId: product.id, product, quantity: newQuantity } },
+        };
+      }
+    ),
+    on(
+      createAction(&apos;[Cart] Remove Item&apos;, props<{ productId: string }>()),
+      (state, { productId }) => {
+        const { [productId]: _, ...rest } = state.items;
+        return { ...state, items: rest };
+      }
+    ),
+    on(
+      createAction(&apos;[Cart] Update Item Quantity&apos;, props<{ productId: string; quantity: number }>()),
+      (state, { productId, quantity }) => {
+        const item = state.items[productId];
+        if (!item) return state;
+        if (quantity <= 0) {
+          const { [productId]: _, ...rest } = state.items;
+          return { ...state, items: rest };
+        }
+        const newQuantity = Math.min(quantity, item.product.stock);
+        return { ...state, items: { ...state.items, [productId]: { ...item, quantity: newQuantity } } };
+      }
+    ),
+    on(createAction(&apos;[Cart] Clear Cart&apos;), state => ({ ...state, items: {} }))
+  ),
+  extraSelectors: ({ selectItems }) => ({ // `selectItems` is auto-generated for `items` property
+    selectCartItemsArray: createFeature.selector(
+        (itemsMap: { [id: string]: CartItem }) => Object.values(itemsMap)
+    ),
+    selectCartItemCount: createFeature.selector(
+        (itemsArray: CartItem[]) => itemsArray.reduce((count, item) => count + item.quantity, 0)
+    ),
+    selectCartTotalPrice: createFeature.selector(
+        (itemsArray: CartItem[]) => itemsArray.reduce((total, item) => total + item.product.price * item.quantity, 0)
+    ),
+  }),
+});
+
+// --- Exported Selectors & Actions ---
+export const {
+  name: cartFeatureKey,
+  reducer: cartReducer,
+  // Auto-generated selectors for state properties
+  selectCartState,
+  selectItems: selectCartItemsMap, // Renamed for clarity
+  // Selectors from extraSelectors
+  selectCartItemsArray,
+  selectCartItemCount,
+  selectCartTotalPrice,
+} = cartFeature;
+
+// Actions can also be destructured if you define them inline in `createFeature`
+// For actions defined separately or inline with `createAction`, you&apos;d import/export them.
+// Example if actions were part of createFeature&apos;s `actions` property (not used here for clarity):
+// export const { addItem, removeItem, updateItemQuantity, clearCart } = cartFeature.actions;
+" style="position: absolute; top: 7.5px; right: 6px; cursor: pointer; outline: none;" title="Copy">
+		<span style="font-size: 21px; opacity: 0.4;" class="fa fa-solid fa-clone text-neutral-content"></span>
+	</button>
+</div>
+<ul>
+<li><strong>Cart Effects (<code>cart.effects.ts</code> - Optional, e.g., for localStorage):</strong>
+<div style="position: relative">
+	<pre><code class="hljs language-typescript"><span class="hljs-keyword">import</span> { <span class="hljs-title class_">Injectable</span> } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@angular/core&#x27;</span>;
+<span class="hljs-keyword">import</span> { <span class="hljs-title class_">Actions</span>, createEffect, ofType } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@ngrx/effects&#x27;</span>;
+<span class="hljs-keyword">import</span> { <span class="hljs-title class_">Store</span> } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@ngrx/store&#x27;</span>;
+<span class="hljs-keyword">import</span> { tap, withLatestFrom } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;rxjs/operators&#x27;</span>;
+<span class="hljs-keyword">import</span> { cartFeature, selectCartItemsMap } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;./cart.feature&#x27;</span>; <span class="hljs-comment">// Import feature and selector</span>
+
+<span class="hljs-comment">// Assuming actions are defined as in cart.feature.ts</span>
+<span class="hljs-keyword">const</span> addItemAction = <span class="hljs-title function_">createAction</span>(<span class="hljs-string">&#x27;[Cart] Add Item&#x27;</span>, props&lt;<span class="hljs-built_in">any</span>&gt;());
+<span class="hljs-keyword">const</span> removeItemAction = <span class="hljs-title function_">createAction</span>(<span class="hljs-string">&#x27;[Cart] Remove Item&#x27;</span>, props&lt;<span class="hljs-built_in">any</span>&gt;());
+<span class="hljs-keyword">const</span> updateItemQuantityAction = <span class="hljs-title function_">createAction</span>(<span class="hljs-string">&#x27;[Cart] Update Item Quantity&#x27;</span>, props&lt;<span class="hljs-built_in">any</span>&gt;());
+<span class="hljs-keyword">const</span> clearCartAction = <span class="hljs-title function_">createAction</span>(<span class="hljs-string">&#x27;[Cart] Clear Cart&#x27;</span>);
+
+
+<span class="hljs-meta">@Injectable</span>()
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">CartEffects</span> {
+  persistCart$ = <span class="hljs-title function_">createEffect</span>(<span class="hljs-function">() =&gt;</span>
+    <span class="hljs-variable language_">this</span>.<span class="hljs-property">actions$</span>.<span class="hljs-title function_">pipe</span>(
+      <span class="hljs-title function_">ofType</span>(addItemAction, removeItemAction, updateItemQuantityAction, clearCartAction),
+      <span class="hljs-title function_">withLatestFrom</span>(<span class="hljs-variable language_">this</span>.<span class="hljs-property">store</span>.<span class="hljs-title function_">select</span>(selectCartItemsMap)), <span class="hljs-comment">// Use the selector from createFeature</span>
+      <span class="hljs-title function_">tap</span>(<span class="hljs-function">(<span class="hljs-params">[action, items]</span>) =&gt;</span> {
+        <span class="hljs-variable language_">localStorage</span>.<span class="hljs-title function_">setItem</span>(<span class="hljs-string">&#x27;ngrx-cart&#x27;</span>, <span class="hljs-title class_">JSON</span>.<span class="hljs-title function_">stringify</span>(items));
+      })
+    ),
+    { <span class="hljs-attr">dispatch</span>: <span class="hljs-literal">false</span> }
+  );
+
+  <span class="hljs-title function_">constructor</span>(<span class="hljs-params"><span class="hljs-keyword">private</span> actions$: Actions, <span class="hljs-keyword">private</span> store: Store</span>) {} <span class="hljs-comment">// No need for AppState if using feature selectors</span>
+}
+</code></pre>
+
+	<button class="markdown-it-code-copy btn btn-ghost btn-circle btn-sm" data-clipboard-text="import { Injectable } from &apos;@angular/core&apos;;
+import { Actions, createEffect, ofType } from &apos;@ngrx/effects&apos;;
+import { Store } from &apos;@ngrx/store&apos;;
+import { tap, withLatestFrom } from &apos;rxjs/operators&apos;;
+import { cartFeature, selectCartItemsMap } from &apos;./cart.feature&apos;; // Import feature and selector
+
+// Assuming actions are defined as in cart.feature.ts
+const addItemAction = createAction(&apos;[Cart] Add Item&apos;, props<any>());
+const removeItemAction = createAction(&apos;[Cart] Remove Item&apos;, props<any>());
+const updateItemQuantityAction = createAction(&apos;[Cart] Update Item Quantity&apos;, props<any>());
+const clearCartAction = createAction(&apos;[Cart] Clear Cart&apos;);
+
+
+@Injectable()
+export class CartEffects {
+  persistCart$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(addItemAction, removeItemAction, updateItemQuantityAction, clearCartAction),
+      withLatestFrom(this.store.select(selectCartItemsMap)), // Use the selector from createFeature
+      tap(([action, items]) => {
+        localStorage.setItem(&apos;ngrx-cart&apos;, JSON.stringify(items));
+      })
+    ),
+    { dispatch: false }
+  );
+
+  constructor(private actions$: Actions, private store: Store) {} // No need for AppState if using feature selectors
+}
+" style="position: absolute; top: 7.5px; right: 6px; cursor: pointer; outline: none;" title="Copy">
+		<span style="font-size: 21px; opacity: 0.4;" class="fa fa-solid fa-clone text-neutral-content"></span>
+	</button>
+</div>
+</li>
+</ul>
+<p><strong>Integrating Features in <code>app.module.ts</code> (or relevant feature module):</strong></p>
+
+<div style="position: relative">
+	<pre><code class="hljs language-typescript"><span class="hljs-keyword">import</span> { <span class="hljs-title class_">StoreModule</span> } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@ngrx/store&#x27;</span>;
+<span class="hljs-keyword">import</span> { <span class="hljs-title class_">EffectsModule</span> } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@ngrx/effects&#x27;</span>;
+<span class="hljs-keyword">import</span> { productsFeature } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;./products/products.feature&#x27;</span>;
+<span class="hljs-keyword">import</span> { <span class="hljs-title class_">ProductEffects</span> } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;./products/products.effects&#x27;</span>;
+<span class="hljs-keyword">import</span> { cartFeature } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;./cart/cart.feature&#x27;</span>;
+<span class="hljs-keyword">import</span> { <span class="hljs-title class_">CartEffects</span> } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;./cart/cart.effects&#x27;</span>; <span class="hljs-comment">// Optional</span>
+
+<span class="hljs-meta">@NgModule</span>({
+  <span class="hljs-attr">imports</span>: [
+    <span class="hljs-comment">// ... other imports</span>
+    <span class="hljs-title class_">StoreModule</span>.<span class="hljs-title function_">forRoot</span>({}), <span class="hljs-comment">// Root store</span>
+    <span class="hljs-title class_">StoreModule</span>.<span class="hljs-title function_">forFeature</span>(productsFeature), <span class="hljs-comment">// Register product feature</span>
+    <span class="hljs-title class_">StoreModule</span>.<span class="hljs-title function_">forFeature</span>(cartFeature),     <span class="hljs-comment">// Register cart feature</span>
+    <span class="hljs-title class_">EffectsModule</span>.<span class="hljs-title function_">forRoot</span>([]),               <span class="hljs-comment">// Root effects</span>
+    <span class="hljs-title class_">EffectsModule</span>.<span class="hljs-title function_">forFeature</span>([<span class="hljs-title class_">ProductEffects</span>, <span class="hljs-title class_">CartEffects</span>]), <span class="hljs-comment">// Register feature effects</span>
+  ],
+  <span class="hljs-comment">// ...</span>
+})
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">AppModule</span> { }
+</code></pre>
+
+	<button class="markdown-it-code-copy btn btn-ghost btn-circle btn-sm" data-clipboard-text="import { StoreModule } from &apos;@ngrx/store&apos;;
+import { EffectsModule } from &apos;@ngrx/effects&apos;;
+import { productsFeature } from &apos;./products/products.feature&apos;;
+import { ProductEffects } from &apos;./products/products.effects&apos;;
+import { cartFeature } from &apos;./cart/cart.feature&apos;;
+import { CartEffects } from &apos;./cart/cart.effects&apos;; // Optional
+
+@NgModule({
+  imports: [
+    // ... other imports
+    StoreModule.forRoot({}), // Root store
+    StoreModule.forFeature(productsFeature), // Register product feature
+    StoreModule.forFeature(cartFeature),     // Register cart feature
+    EffectsModule.forRoot([]),               // Root effects
+    EffectsModule.forFeature([ProductEffects, CartEffects]), // Register feature effects
+  ],
+  // ...
+})
+export class AppModule { }
+" style="position: absolute; top: 7.5px; right: 6px; cursor: pointer; outline: none;" title="Copy">
+		<span style="font-size: 21px; opacity: 0.4;" class="fa fa-solid fa-clone text-neutral-content"></span>
+	</button>
+</div>
+<p><strong>NGRX - The Verdict for E-commerce State (Modern Approach):</strong></p>
+<ul>
+<li><strong>Pros:</strong>
+<ul>
+<li><strong>Significantly Reduced Boilerplate:</strong> <code>createFeature</code> consolidates state, reducer, and selectors.</li>
+<li><strong>Predictable &amp; Traceable:</strong> Core NGRX benefits remain.</li>
+<li><strong>Enhanced Debuggability:</strong> Redux DevTools are your best friend.</li>
+<li><strong>Scalability &amp; Maintainability:</strong> Clear structure aids large projects.</li>
+<li><strong>Testability:</strong> Pure functions and isolated effects are easy to test.</li>
+</ul>
+</li>
+<li><strong>Cons:</strong>
+<ul>
+<li><strong>Learning Curve:</strong> Still requires understanding NGRX principles.</li>
+<li><strong>Ceremony for Simple State:</strong> Might still be overkill for truly trivial, local state.</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h2>Conclusion and Strategic Recommendations: Winning the State Management War with Precision</h2>
+<p>The &quot;battle&quot; between NGRX and plain RxJS for Angular state management isn't about universal superiority. It's about <strong>choosing the right weapon for the current engagement</strong>, considering complexity, scale, and long-term vision. Modern NGRX with <code>createFeature</code> significantly lowers the barrier to entry by reducing boilerplate, making it an even more compelling choice for structured state.</p>
+<p><strong>Actionable Best Practices:</strong></p>
+<ul>
+<li><strong>For Simple/Local State:</strong>
+<ul>
+<li><strong>Plain RxJS (<code>BehaviorSubject</code> in a service) often remains the pragmatic, faster choice.</strong></li>
+</ul>
+</li>
+<li><strong>For Global/Complex/Shared State (E-commerce, User Profiles, App Settings):</strong>
+<ul>
+<li><strong>Modern NGRX (leveraging <code>createFeature</code> and <code>ngrx/entity</code> where applicable) provides the optimal balance of structure, predictability, and reduced boilerplate.</strong></li>
+<li>Isolate side effects in <strong>Effects</strong>.</li>
+<li>Organize with <strong>Feature States</strong>.</li>
+</ul>
+</li>
+</ul>
+<p><strong>Final Key Takeaways:</strong></p>
+<ul>
+<li><strong>Explicit vs. Implicit:</strong> NGRX forces explicitness.</li>
+<li><strong>Tooling Power:</strong> Redux DevTools with NGRX are invaluable.</li>
+<li><strong>Scalability &amp; Structure:</strong> NGRX is built for it. <code>createFeature</code> enhances this by making the structure more concise.</li>
+</ul>
+<p>By understanding these approaches and applying them strategically, you can architect Angular applications that are robust, maintainable, and a pleasure to evolve. Choose wisely; the long-term health of your Angular application depends on it.</p>
+<p>Happy Coding!</p>
+</article><div class="my-8"></div></main><footer class="text-gray-600"><div class="max-w-6xl px-5 py-4 mx-auto flex items-center sm:flex-row flex-col"><a class="text-primary hover:underline underline-offset-2" aria-label="Email to paskfdev@gmail.com" title="Email to paskfdev@gmail.com" href="mailto:paskfdev@gmail.com">Pasquale Favella</a><p class="text-sm text-gray-500 sm:ml-4 sm:pl-4 sm:border-l-2 sm:border-gray-200 sm:py-2 sm:mt-0 mt-4">©<!-- -->2025<!-- --> • made with 💚</p><span class="inline-flex sm:ml-auto sm:mt-0 mt-4 justify-center items-center sm:justify-start gap-4"><a class="transition-all duration-300 hover:text-primary" href="https://github.com/Pasquale-Favella"><svg stroke="currentColor" fill="none" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round" height="20" width="20" xmlns="http://www.w3.org/2000/svg"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path></svg></a><a class="transition-all duration-300 hover:text-primary" href="https://it.linkedin.com/in/pasquale-favella-1a3682187"><svg stroke="currentColor" fill="none" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round" height="20" width="20" xmlns="http://www.w3.org/2000/svg"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path><rect x="2" y="9" width="4" height="12"></rect><circle cx="4" cy="4" r="2"></circle></svg></a></span></div><div class="fixed bottom-4 right-1 sm:bottom-10 sm:right-6 z-50 tooltip tooltip-left before:text-xs before:content-[attr(data-tip)]" data-tip="ask a question" type="button" aria-haspopup="dialog" aria-expanded="false" aria-controls="radix-:Rbl6:" data-state="closed"><button class="btn btn-ghost btn-circle "><svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 16 16" height="40" width="40" xmlns="http://www.w3.org/2000/svg"><path d="M16 8c0 3.866-3.582 7-8 7a9.06 9.06 0 0 1-2.347-.306c-.584.296-1.925.864-4.181 1.234-.2.032-.352-.176-.273-.362.354-.836.674-1.95.77-2.966C.744 11.37 0 9.76 0 8c0-3.866 3.582-7 8-7s8 3.134 8 7zM7.194 6.766a1.688 1.688 0 0 0-.227-.272 1.467 1.467 0 0 0-.469-.324l-.008-.004A1.785 1.785 0 0 0 5.734 6C4.776 6 4 6.746 4 7.667c0 .92.776 1.666 1.734 1.666.343 0 .662-.095.931-.26-.137.389-.39.804-.81 1.22a.405.405 0 0 0 .011.59c.173.16.447.155.614-.01 1.334-1.329 1.37-2.758.941-3.706a2.461 2.461 0 0 0-.227-.4zM11 9.073c-.136.389-.39.804-.81 1.22a.405.405 0 0 0 .012.59c.172.16.446.155.613-.01 1.334-1.329 1.37-2.758.942-3.706a2.466 2.466 0 0 0-.228-.4 1.686 1.686 0 0 0-.227-.273 1.466 1.466 0 0 0-.469-.324l-.008-.004A1.785 1.785 0 0 0 10.07 6c-.957 0-1.734.746-1.734 1.667 0 .92.777 1.666 1.734 1.666.343 0 .662-.095.931-.26z"></path></svg></button></div></footer></div><script id="__NEXT_DATA__" type="application/json" crossorigin="">{"props":{"pageProps":{"content":"State management in modern Angular applications is a critical battleground. While **RxJS** provides the reactive sinews for handling asynchronous data streams, **NGRX** stands as a heavily-armored, Redux-inspired framework for orchestrating complex, application-wide state. Both promise to tame complexity, but the choice between RxJS's raw flexibility and NGRX's opinionated architecture can profoundly impact your project's performance, maintainability, and developer experience. This guide cuts through the noise with clean, modern NGRX examples for real-world scenarios like product catalogs and shopping carts, benchmark-compares the two approaches, and delivers actionable strategies to pick the victor for *your specific use case*.\n\n## Understanding the Combatants: NGRX and Plain RxJS\n\n**What is \"Plain RxJS\" for State Management?**\nPlain RxJS involves leveraging constructs like `BehaviorSubject` or `ReplaySubject` within Angular services. Components subscribe to these `Observable` streams for state updates and invoke service methods to trigger state changes. Direct, lean, but potentially chaotic at scale.\n\n*   **Primary Use Cases (Plain RxJS):** Local component state, simple feature-specific data, rapid prototyping.\n\n**What is NGRX?**\nNGRX is a comprehensive framework implementing the Redux pattern in Angular. It enforces a unidirectional data flow and clear separation of concerns: Store, Actions, Reducers, Selectors, Effects.\n\nExplore the official [RxJS documentation](https://rxjs.dev/) and [NGRX documentation](https://ngrx.io/).\n\n## Performance Bottlenecks \u0026 Architectural Quagmires\n\n**1. The Perils of Plain RxJS in Complex Scenarios (The \"Wild West\" of State):**\n    *   Lack of Enforced Structure\n    *   Debugging Nightmares\n    *   Reinventing the Wheel\n    *   Compromised Testability\n\n**2. NGRX: The Overzealous Behemoth for Trivial Tasks:**\n    *   Significant Boilerplate Overhead (though modern NGRX, like `createFeature`, mitigates this)\n    *   Steep Initial Learning Curve\n\n## Head-to-Head: Conceptual Benchmarks \u0026 Developer Experience Impact\n\n| Feature / Metric            | Plain RxJS (e.g., BehaviorSubject) | NGRX (with Modern Best Practices) |\n| :-------------------------- | :----------------------------------- | :-------------------------------- |\n| **Initial Development Effort**| Low                                  | Medium                            |\n| **Boilerplate Code**        | Minimal                              | Reduced (with `createFeature`)    |\n| **Scalability (Complex State)** | Medium (risk of chaos)             | High                              |\n| **Predictability**          | Medium                               | High                              |\n| **Debugging / Tooling**     | Limited                              | Excellent (Redux DevTools)        |\n| **Testability**             | Good for isolated services           | Excellent                         |\n| **Performance**             | Implementation-dependent           | Good (memoized selectors)         |\n| **Enforced Structure**      | Low                                  | High                              |\n\n## Solutions and Strategic Maneuvers: Real-World Examples – Product Catalog \u0026 Shopping Cart (Modern NGRX)\n\nLet's illustrate with an e-commerce scenario, focusing on cleaner, modern NGRX using `createFeature`.\n\n**Scenario:**\n*   **Products:** Fetched asynchronously, filterable.\n*   **Shopping Cart:** Users add/remove products, update quantities, view totals.\n\n---\n\n### **Approach 1: Plain RxJS – The \"Do-It-Yourself\" E-commerce State**\n\n(These Plain RxJS examples are kept concise for direct comparison.)\n\n**1. Product Management (`product-rxjs.service.ts`):**\n```typescript\nimport { Injectable } from '@angular/core';\nimport { BehaviorSubject, Observable, of, timer, map } from 'rxjs';\nimport { tap, catchError, switchMap } from 'rxjs/operators';\n\nexport interface Product { id: string; name: string; price: number; category: string; stock: number; }\nexport interface ProductFilters { category?: string; searchTerm?: string; }\n\nconst mockProductsApi = (filters?: ProductFilters): Observable\u003cProduct[]\u003e =\u003e {\n  let products: Product[] = [ /* ... mock product data ... */\n    { id: 'p1', name: 'Awesome Gadget X', price: 29.99, category: 'electronics', stock: 10 },\n    { id: 'p2', name: 'Super Widget Pro', price: 49.50, category: 'tools', stock: 5 },\n    { id: 'p3', name: 'Mega Gizmo Plus', price: 99.00, category: 'electronics', stock: 0 },\n  ];\n  if (filters?.category) products = products.filter(p =\u003e p.category === filters.category);\n  if (filters?.searchTerm) products = products.filter(p =\u003e p.name.toLowerCase().includes(filters.searchTerm!.toLowerCase()));\n  return timer(500).pipe(map(() =\u003e products));\n};\n\n@Injectable({ providedIn: 'root' })\nexport class ProductRxjsService {\n  private productsSource = new BehaviorSubject\u003cProduct[]\u003e([]);\n  products$: Observable\u003cProduct[]\u003e = this.productsSource.asObservable();\n\n  private activeFiltersSource = new BehaviorSubject\u003cProductFilters\u003e({});\n  activeFilters$: Observable\u003cProductFilters\u003e = this.activeFiltersSource.asObservable();\n\n  private isLoadingSource = new BehaviorSubject\u003cboolean\u003e(false);\n  isLoading$: Observable\u003cboolean\u003e = this.isLoadingSource.asObservable();\n\n  private errorSource = new BehaviorSubject\u003cstring | null\u003e(null);\n  error$: Observable\u003cstring | null\u003e = this.errorSource.asObservable();\n\n  constructor() {\n    this.activeFiltersSource.pipe(\n      tap(() =\u003e this.isLoadingSource.next(true)),\n      switchMap(filters =\u003e mockProductsApi(filters).pipe(\n        tap(products =\u003e {\n          this.productsSource.next(products);\n          this.errorSource.next(null);\n        }),\n        catchError(err =\u003e {\n          this.errorSource.next('Failed to load products');\n          this.productsSource.next([]);\n          return of(null); // Or rethrow, or provide a default empty value\n        }),\n        tap(() =\u003e this.isLoadingSource.next(false)) // Ensure loading is false after success/error\n      ))\n    ).subscribe();\n  }\n\n  setFilters(filters: ProductFilters): void {\n    this.activeFiltersSource.next(filters);\n  }\n}\n```\n\n**2. Cart Management (`cart-rxjs.service.ts`):**\n```typescript\nimport { Injectable } from '@angular/core';\nimport { BehaviorSubject, Observable } from 'rxjs';\nimport { map } from 'rxjs/operators';\nimport { Product } from './product-rxjs.service';\n\nexport interface CartItem { productId: string; product: Product; quantity: number; }\nexport interface Cart { items: CartItem[]; totalItems: number; totalPrice: number; }\n\n@Injectable({ providedIn: 'root' })\nexport class CartRxjsService {\n  private cartItemsSource = new BehaviorSubject\u003cMap\u003cstring, CartItem\u003e\u003e(new Map());\n  cartItems$: Observable\u003cCartItem[]\u003e = this.cartItemsSource.pipe(map(map =\u003e Array.from(map.values())));\n\n  cartState$: Observable\u003cCart\u003e;\n\n  constructor() {\n    this.cartState$ = this.cartItems$.pipe(\n      map(items =\u003e {\n        const totalItems = items.reduce((sum, item) =\u003e sum + item.quantity, 0);\n        const totalPrice = items.reduce((sum, item) =\u003e sum + (item.product.price * item.quantity), 0);\n        return { items, totalItems, totalPrice };\n      })\n    );\n  }\n\n  addItem(product: Product, quantity: number = 1): void {\n    const currentMap = new Map(this.cartItemsSource.getValue());\n    const existingItem = currentMap.get(product.id);\n    const newQuantity = existingItem ? Math.min(existingItem.quantity + quantity, product.stock) : Math.min(quantity, product.stock);\n\n    if (newQuantity \u003e 0) {\n      currentMap.set(product.id, { productId: product.id, product, quantity: newQuantity });\n    } else if (existingItem) {\n      currentMap.delete(product.id); // Remove if quantity becomes zero or less\n    }\n    this.cartItemsSource.next(currentMap);\n  }\n\n  updateQuantity(productId: string, quantity: number): void {\n    const currentMap = new Map(this.cartItemsSource.getValue());\n    const item = currentMap.get(productId);\n    if (!item) return;\n\n    if (quantity \u003c= 0) {\n      currentMap.delete(productId);\n    } else {\n      const newQuantity = Math.min(quantity, item.product.stock);\n      currentMap.set(productId, { ...item, quantity: newQuantity });\n    }\n    this.cartItemsSource.next(currentMap);\n  }\n\n  removeItem(productId: string): void {\n    const currentMap = new Map(this.cartItemsSource.getValue());\n    currentMap.delete(productId);\n    this.cartItemsSource.next(currentMap);\n  }\n\n  clearCart(): void {\n    this.cartItemsSource.next(new Map());\n  }\n}\n```\n\n---\n\n### **Approach 2: NGRX – The Structured E-commerce State Fortress (with `createFeature`)**\n\n`createFeature` (available in NGRX 14+) significantly reduces boilerplate by co-locating actions, reducers, and selectors.\n\n**1. Product Feature (`products.feature.ts`):**\n```typescript\nimport { createFeature, createReducer, on, props, createAction } from '@ngrx/store';\nimport { EntityState, EntityAdapter, createEntityAdapter } from '@ngrx/entity';\n\n// Models\nexport interface Product { id: string; name: string; price: number; category: string; stock: number; }\nexport interface ProductFilters { category?: string; searchTerm?: string; }\n\n// --- State \u0026 Adapter ---\nexport interface ProductsState extends EntityState\u003cProduct\u003e {\n  isLoading: boolean;\n  error: string | null;\n  activeFilters: ProductFilters;\n}\nexport const productAdapter: EntityAdapter\u003cProduct\u003e = createEntityAdapter\u003cProduct\u003e();\nconst initialProductsState: ProductsState = productAdapter.getInitialState({\n  isLoading: false,\n  error: null,\n  activeFilters: {},\n});\n\n// --- Actions (can be defined inline or separately) ---\n// If defined separately:\n// import * as ProductPageActions from './product-page.actions';\n// import * as ProductApiActions from './product-api.actions';\n\n// --- Feature Definition ---\nexport const productsFeature = createFeature({\n  name: 'products', // This will be the feature key\n  reducer: createReducer(\n    initialProductsState,\n    on(\n      createAction('[Products Page] Set Filters', props\u003c{ filters: ProductFilters }\u003e()),\n      (state, { filters }) =\u003e ({ ...state, activeFilters: filters })\n    ),\n    on(\n      createAction('[Products Page] Load Products', props\u003c{ filters: ProductFilters }\u003e()),\n      (state, { filters }) =\u003e ({ ...state, isLoading: true, error: null, activeFilters: filters })\n    ),\n    on(\n      createAction('[Products API] Load Products Success', props\u003c{ products: Product[] }\u003e()),\n      (state, { products }) =\u003e productAdapter.setAll(products, { ...state, isLoading: false })\n    ),\n    on(\n      createAction('[Products API] Load Products Failure', props\u003c{ error: string }\u003e()),\n      (state, { error }) =\u003e ({ ...state, isLoading: false, error })\n    )\n  ),\n  // Extra selectors can be added here if productAdapter doesn't cover all needs\n  // extraSelectors: ({ selectProductsState, selectActiveFilters }) =\u003e ({\n  //   selectIsFiltered: createSelector(selectActiveFilters, filters =\u003e Object.keys(filters).length \u003e 0),\n  // })\n});\n\n// --- Exported Selectors \u0026 Actions for convenience ---\nexport const {\n  name: productsFeatureKey, // 'products'\n  reducer: productsReducer,\n  // Selectors\n  selectProductsState, // Selects the entire feature state\n  selectIsLoading: selectProductsLoading,\n  selectError: selectProductsError,\n  selectActiveFilters: selectActiveProductFilters,\n  // Adapter selectors are automatically exposed if state extends EntityState and adapter is provided\n  // or you can re-export them:\n  // selectAll: selectAllProducts, // if productAdapter.getSelectors() was used manually\n} = productsFeature;\n\n// If you need adapter selectors and they weren't auto-exposed or you want custom names:\nconst { selectAll, selectEntities } = productAdapter.getSelectors();\nexport const selectAllProducts = createFeature.selector(selectAll); // Wrap with createFeature.selector if needed\nexport const selectProductEntities = createFeature.selector(selectEntities);\n```\n\n**Product Effects (`products.effects.ts`):**\n```typescript\nimport { Injectable } from '@angular/core';\nimport { Actions, createEffect, ofType } from '@ngrx/effects';\nimport { of, timer, map as rxMap } from 'rxjs';\nimport { switchMap, catchError, map } from 'rxjs/operators';\nimport { Product, ProductFilters } from './products.feature'; // Import from feature file\n\n// --- Actions (Import them if defined in products.feature.ts actions property or define again) ---\nconst loadProductsAction = createAction('[Products Page] Load Products', props\u003c{ filters: ProductFilters }\u003e());\nconst loadProductsSuccessAction = createAction('[Products API] Load Products Success', props\u003c{ products: Product[] }\u003e());\nconst loadProductsFailureAction = createAction('[Products API] Load Products Failure', props\u003c{ error: string }\u003e());\nconst setFiltersAction = createAction('[Products Page] Set Filters', props\u003c{ filters: ProductFilters }\u003e());\n\n\n// Mock API\nconst mockProductsApiEffect = (filters: ProductFilters): Observable\u003cProduct[]\u003e =\u003e {\n  let products: Product[] = [ /* ... mock product data ... */\n    { id: 'p1', name: 'NGRX Gadget', price: 35.99, category: 'electronics', stock: 10 },\n    { id: 'p2', name: 'NGRX Widget', price: 55.50, category: 'tools', stock: 5 },\n  ];\n  if (filters?.category) products = products.filter(p =\u003e p.category === filters.category);\n  if (filters?.searchTerm) products = products.filter(p =\u003e p.name.toLowerCase().includes(filters.searchTerm!.toLowerCase()));\n  return timer(500).pipe(rxMap(() =\u003e products));\n};\n\n@Injectable()\nexport class ProductEffects {\n  // When filters are set, dispatch an action to load products with those filters\n  triggerLoadOnFilterChange$ = createEffect(() =\u003e\n    this.actions$.pipe(\n      ofType(setFiltersAction),\n      map(action =\u003e loadProductsAction({ filters: action.filters }))\n    )\n  );\n\n  loadProducts$ = createEffect(() =\u003e\n    this.actions$.pipe(\n      ofType(loadProductsAction),\n      switchMap(action =\u003e\n        mockProductsApiEffect(action.filters).pipe(\n          map(products =\u003e loadProductsSuccessAction({ products })),\n          catchError(error =\u003e of(loadProductsFailureAction({ error: error.message || 'Unknown API Error' })))\n        )\n      )\n    )\n  );\n\n  constructor(private actions$: Actions) {}\n}\n```\n\n**2. Cart Feature (`cart.feature.ts`):**\n```typescript\nimport { createFeature, createReducer, on, props, createAction } from '@ngrx/store';\nimport { Product } from '../products/products.feature'; // Import Product model\n\n// --- Models ---\nexport interface CartItem { productId: string; product: Product; quantity: number; }\n\n// --- State ---\nexport interface CartState {\n  items: { [productId: string]: CartItem }; // Object map for efficient lookups\n}\nconst initialCartState: CartState = { items: {} };\n\n// --- Feature Definition ---\nexport const cartFeature = createFeature({\n  name: 'cart',\n  reducer: createReducer(\n    initialCartState,\n    on(\n      createAction('[Cart] Add Item', props\u003c{ product: Product; quantity: number }\u003e()),\n      (state, { product, quantity }) =\u003e {\n        const existingItem = state.items[product.id];\n        const newQuantity = existingItem ? Math.min(existingItem.quantity + quantity, product.stock) : Math.min(quantity, product.stock);\n        if (newQuantity \u003c= 0) {\n          const { [product.id]: _, ...rest } = state.items;\n          return { ...state, items: rest };\n        }\n        return {\n          ...state,\n          items: { ...state.items, [product.id]: { productId: product.id, product, quantity: newQuantity } },\n        };\n      }\n    ),\n    on(\n      createAction('[Cart] Remove Item', props\u003c{ productId: string }\u003e()),\n      (state, { productId }) =\u003e {\n        const { [productId]: _, ...rest } = state.items;\n        return { ...state, items: rest };\n      }\n    ),\n    on(\n      createAction('[Cart] Update Item Quantity', props\u003c{ productId: string; quantity: number }\u003e()),\n      (state, { productId, quantity }) =\u003e {\n        const item = state.items[productId];\n        if (!item) return state;\n        if (quantity \u003c= 0) {\n          const { [productId]: _, ...rest } = state.items;\n          return { ...state, items: rest };\n        }\n        const newQuantity = Math.min(quantity, item.product.stock);\n        return { ...state, items: { ...state.items, [productId]: { ...item, quantity: newQuantity } } };\n      }\n    ),\n    on(createAction('[Cart] Clear Cart'), state =\u003e ({ ...state, items: {} }))\n  ),\n  extraSelectors: ({ selectItems }) =\u003e ({ // `selectItems` is auto-generated for `items` property\n    selectCartItemsArray: createFeature.selector(\n        (itemsMap: { [id: string]: CartItem }) =\u003e Object.values(itemsMap)\n    ),\n    selectCartItemCount: createFeature.selector(\n        (itemsArray: CartItem[]) =\u003e itemsArray.reduce((count, item) =\u003e count + item.quantity, 0)\n    ),\n    selectCartTotalPrice: createFeature.selector(\n        (itemsArray: CartItem[]) =\u003e itemsArray.reduce((total, item) =\u003e total + item.product.price * item.quantity, 0)\n    ),\n  }),\n});\n\n// --- Exported Selectors \u0026 Actions ---\nexport const {\n  name: cartFeatureKey,\n  reducer: cartReducer,\n  // Auto-generated selectors for state properties\n  selectCartState,\n  selectItems: selectCartItemsMap, // Renamed for clarity\n  // Selectors from extraSelectors\n  selectCartItemsArray,\n  selectCartItemCount,\n  selectCartTotalPrice,\n} = cartFeature;\n\n// Actions can also be destructured if you define them inline in `createFeature`\n// For actions defined separately or inline with `createAction`, you'd import/export them.\n// Example if actions were part of createFeature's `actions` property (not used here for clarity):\n// export const { addItem, removeItem, updateItemQuantity, clearCart } = cartFeature.actions;\n```\n*   **Cart Effects (`cart.effects.ts` - Optional, e.g., for localStorage):**\n    ```typescript\n    import { Injectable } from '@angular/core';\n    import { Actions, createEffect, ofType } from '@ngrx/effects';\n    import { Store } from '@ngrx/store';\n    import { tap, withLatestFrom } from 'rxjs/operators';\n    import { cartFeature, selectCartItemsMap } from './cart.feature'; // Import feature and selector\n\n    // Assuming actions are defined as in cart.feature.ts\n    const addItemAction = createAction('[Cart] Add Item', props\u003cany\u003e());\n    const removeItemAction = createAction('[Cart] Remove Item', props\u003cany\u003e());\n    const updateItemQuantityAction = createAction('[Cart] Update Item Quantity', props\u003cany\u003e());\n    const clearCartAction = createAction('[Cart] Clear Cart');\n\n\n    @Injectable()\n    export class CartEffects {\n      persistCart$ = createEffect(() =\u003e\n        this.actions$.pipe(\n          ofType(addItemAction, removeItemAction, updateItemQuantityAction, clearCartAction),\n          withLatestFrom(this.store.select(selectCartItemsMap)), // Use the selector from createFeature\n          tap(([action, items]) =\u003e {\n            localStorage.setItem('ngrx-cart', JSON.stringify(items));\n          })\n        ),\n        { dispatch: false }\n      );\n\n      constructor(private actions$: Actions, private store: Store) {} // No need for AppState if using feature selectors\n    }\n    ```\n\n**Integrating Features in `app.module.ts` (or relevant feature module):**\n```typescript\nimport { StoreModule } from '@ngrx/store';\nimport { EffectsModule } from '@ngrx/effects';\nimport { productsFeature } from './products/products.feature';\nimport { ProductEffects } from './products/products.effects';\nimport { cartFeature } from './cart/cart.feature';\nimport { CartEffects } from './cart/cart.effects'; // Optional\n\n@NgModule({\n  imports: [\n    // ... other imports\n    StoreModule.forRoot({}), // Root store\n    StoreModule.forFeature(productsFeature), // Register product feature\n    StoreModule.forFeature(cartFeature),     // Register cart feature\n    EffectsModule.forRoot([]),               // Root effects\n    EffectsModule.forFeature([ProductEffects, CartEffects]), // Register feature effects\n  ],\n  // ...\n})\nexport class AppModule { }\n```\n\n**NGRX - The Verdict for E-commerce State (Modern Approach):**\n*   **Pros:**\n    *   **Significantly Reduced Boilerplate:** `createFeature` consolidates state, reducer, and selectors.\n    *   **Predictable \u0026 Traceable:** Core NGRX benefits remain.\n    *   **Enhanced Debuggability:** Redux DevTools are your best friend.\n    *   **Scalability \u0026 Maintainability:** Clear structure aids large projects.\n    *   **Testability:** Pure functions and isolated effects are easy to test.\n*   **Cons:**\n    *   **Learning Curve:** Still requires understanding NGRX principles.\n    *   **Ceremony for Simple State:** Might still be overkill for truly trivial, local state.\n\n---\n\n## Conclusion and Strategic Recommendations: Winning the State Management War with Precision\n\nThe \"battle\" between NGRX and plain RxJS for Angular state management isn't about universal superiority. It's about **choosing the right weapon for the current engagement**, considering complexity, scale, and long-term vision. Modern NGRX with `createFeature` significantly lowers the barrier to entry by reducing boilerplate, making it an even more compelling choice for structured state.\n\n**Actionable Best Practices:**\n\n*   **For Simple/Local State:**\n    *   **Plain RxJS (`BehaviorSubject` in a service) often remains the pragmatic, faster choice.**\n*   **For Global/Complex/Shared State (E-commerce, User Profiles, App Settings):**\n    *   **Modern NGRX (leveraging `createFeature` and `ngrx/entity` where applicable) provides the optimal balance of structure, predictability, and reduced boilerplate.**\n    *   Isolate side effects in **Effects**.\n    *   Organize with **Feature States**.\n\n**Final Key Takeaways:**\n\n*   **Explicit vs. Implicit:** NGRX forces explicitness.\n*   **Tooling Power:** Redux DevTools with NGRX are invaluable.\n*   **Scalability \u0026 Structure:** NGRX is built for it. `createFeature` enhances this by making the structure more concise.\n\nBy understanding these approaches and applying them strategically, you can architect Angular applications that are robust, maintainable, and a pleasure to evolve. Choose wisely; the long-term health of your Angular application depends on it.\n\nHappy Coding!","slug":"5","title":"NGRX vs RXJS","meta_description":"State management in modern Angular applications is a critical battleground","tags":["Angular","Rxjs"]},"__N_SSG":true},"page":"/blog/[slug]","query":{"slug":"5"},"buildId":"RHGHCub-nt6FBtRy5YMos","isFallback":false,"gsp":true,"scriptLoader":[]}</script></body></html>
