@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useRef } from 'react';
 import {
     HiSparkles,
     HiPaperClip,
@@ -10,7 +10,6 @@ import DeSignAiSettings from './DeSignAiSettings';
 import { useDesign } from '@/hooks/use-de-sign';
 
 interface PromptModalProps {
-    isOpen: boolean;
     onClose: () => void;
     onSubmit: (prompt: string, image: { data: string; mimeType: string } | null) => void;
     isLoading: boolean;
@@ -19,7 +18,6 @@ interface PromptModalProps {
 }
 
 const PromptModal: React.FC<PromptModalProps> = ({
-    isOpen,
     onClose,
     onSubmit,
     isLoading,
@@ -30,29 +28,7 @@ const PromptModal: React.FC<PromptModalProps> = ({
     const [prompt, setPrompt] = useState('');
     const [image, setImage] = useState<{ file: File; previewUrl: string } | null>(null);
     const [isDraggingOver, setIsDraggingOver] = useState(false);
-    const textareaRef = useRef<HTMLTextAreaElement>(null);
     const fileInputRef = useRef<HTMLInputElement>(null);
-
-    useEffect(() => {
-        if (type === 'create') {
-            setPrompt('');
-        } else if (type === 'edit') {
-            setPrompt('');
-        }
-        if (!isOpen) {
-            if (image) {
-                URL.revokeObjectURL(image.previewUrl);
-                setImage(null);
-            }
-            setIsDraggingOver(false);
-        }
-    }, [type, initialPrompt, isOpen, image]);
-
-    useEffect(() => {
-        if (isOpen) {
-            setTimeout(() => textareaRef.current?.focus(), 100);
-        }
-    }, [isOpen]);
 
     const processImageFile = (file: File | null | undefined) => {
         if (file && file.type.startsWith('image/')) {
@@ -132,8 +108,6 @@ const PromptModal: React.FC<PromptModalProps> = ({
         }
     };
 
-    if (!isOpen) return null;
-
     return (
         <div className="modal modal-open z-10">
             <div
@@ -174,8 +148,8 @@ const PromptModal: React.FC<PromptModalProps> = ({
 
                     {/* Textarea */}
                     <div className="form-control">
-                        <textarea
-                            ref={textareaRef}
+                        <textarea 
+                            autoFocus
                             value={prompt}
                             onChange={(e) => setPrompt(e.target.value)}
                             onKeyDown={(e) => {

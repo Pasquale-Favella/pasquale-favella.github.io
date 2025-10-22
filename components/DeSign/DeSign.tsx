@@ -280,7 +280,6 @@ const DeSign: FC = () => {
           {/* Prompt Modal */}
           {modalState.isOpen && (
             <PromptModal
-              isOpen={modalState.isOpen}
               onClose={() => setModalState({ isOpen: false })}
               onSubmit={handleModalSubmit}
               isLoading={isLoading}
