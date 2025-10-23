@@ -50,10 +50,7 @@ const PromptModal: React.FC<PromptModalProps> = ({
     };
 
     const removeImage = () => {
-        if (image) {
-            URL.revokeObjectURL(image.previewUrl);
-            setImage(null);
-        }
+       setImage(null);
     };
 
     const handleSubmit = async (e: React.FormEvent) => {
