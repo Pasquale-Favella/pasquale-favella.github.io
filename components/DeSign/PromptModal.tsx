@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import {
     HiSparkles,
     HiPaperClip,
@@ -30,11 +30,16 @@ const PromptModal: React.FC<PromptModalProps> = ({
     const [isDraggingOver, setIsDraggingOver] = useState(false);
     const fileInputRef = useRef<HTMLInputElement>(null);
 
-    const processImageFile = (file: File | null | undefined) => {
-        if (file && file.type.startsWith('image/')) {
+    useEffect(() => {
+        return () => {
             if (image) {
                 URL.revokeObjectURL(image.previewUrl);
             }
+        }
+    },[image]);
+
+    const processImageFile = (file: File | null | undefined) => {
+        if (file && file.type.startsWith('image/')) {
             setImage({ file, previewUrl: URL.createObjectURL(file) });
         }
     };
