@@ -6,7 +6,7 @@ import SketchCard from './SketchCard';
 import FullscreenView from './FullscreenView';
 import { HiPlus } from 'react-icons/hi';
 import { useDesign } from '@/hooks/use-de-sign';
-import { ModalState, Sketch } from '@/store/sketch.atom';
+import { ModalState, Sketch } from '@/store/de-sign.atom';
 import Toolbar from './Toolbar';
 import toast from 'react-hot-toast';
 
@@ -208,7 +208,7 @@ const DeSign: FC = () => {
 
 
   return (
-    <div className="mx-auto h-[calc(90dvh)] overflow-hidden flex flex-col bg-base-300 relative">
+    <div className="mx-auto h-[calc(90dvh)] overflow-hidden flex flex-col bg-base-300 relative rounded">
       {fullscreenSketch ? (
         <FullscreenView
           sketch={fullscreenSketch}

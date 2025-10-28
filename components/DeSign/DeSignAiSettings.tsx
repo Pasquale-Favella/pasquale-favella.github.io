@@ -1,4 +1,4 @@
-import { designSketchAiProviders, providerLinks, providerModels } from "@/store/sketch.atom";
+import { designSketchAiProviders, providerLinks, providerModels } from "@/store/de-sign.atom";
 import { FC } from "react";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../Select";
 import InputWithIcon from "../InputWithIcon";

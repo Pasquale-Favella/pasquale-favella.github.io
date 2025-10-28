@@ -1,16 +1,21 @@
-import { designSketchesAtom, Sketch, CanvasTransform, designSketchAiProviderAtom, designSketchAiModelAtom, designSketchAiApiKeyAtom, DesignSketchAiProvider, providerModels } from '@/store/sketch.atom';
+import { usePGliteDeSign } from '@/providers/de-sign-pglite.provider';
+import { Sketch, CanvasTransform, designSketchAiProviderAtom, designSketchAiModelAtom, designSketchAiApiKeyAtom, DesignSketchAiProvider, providerModels, sketchesAtom, sketchActionsAtom } from '@/store/de-sign.atom';
 import { createAnthropic } from '@ai-sdk/anthropic';
 import { createGoogleGenerativeAI } from '@ai-sdk/google';
 import { createOpenAI } from '@ai-sdk/openai';
+import { useLiveQuery } from '@electric-sql/pglite-react';
 import { generateText, ModelMessage } from 'ai';
-import { useAtom } from 'jotai';
-import { useCallback, useMemo, useState } from 'react';
+import { useAtom, useAtomValue, useSetAtom } from 'jotai';
+import { useCallback, useMemo, useReducer, useState } from 'react';
 
 export const useDesign = () => {
     const [provider, setProvider] = useAtom(designSketchAiProviderAtom);
     const [model, setModel] = useAtom(designSketchAiModelAtom);
     const [apiKey, setApiKey] = useAtom(designSketchAiApiKeyAtom);
-    const [sketches, setSketches] = useAtom(designSketchesAtom);
+
+    const sketches = useAtomValue(sketchesAtom);
+    const dispatch = useSetAtom(sketchActionsAtom);
+
     const [selectedSketchId, setSelectedSketchId] = useState<string | null>(null);
     const [canvasTransform, setCanvasTransform] = useState<CanvasTransform>({
         x: 0,
@@ -127,28 +132,30 @@ export const useDesign = () => {
         return cleaned;
     };
 
-     const handleProviderChange = useCallback(
-        (newProvider: DesignSketchAiProvider) => {
-          setProvider(newProvider);
-          setModel(providerModels[newProvider][0]);
-        },
-        [setProvider, setModel]
-      );
+    const handleProviderChange = useCallback(
+       (newProvider: DesignSketchAiProvider) => {
+         setProvider(newProvider);
+         setModel(providerModels[newProvider][0]);
+       },
+       [setProvider, setModel]
+    );
 
-    const addSketch = useCallback((sketch: Sketch) => {
-        setSketches(prev => [...prev, sketch]);
-    }, [setSketches]);
+    const addSketch = async (sketch: Sketch) => {
+        await dispatch({ type: 'ADD', payload: sketch });
+    }
 
-    const updateSketch = useCallback((id: string, updates: Partial<Sketch>) => {
-        setSketches(prev => prev.map(s => s.id === id ? { ...s, ...updates } : s));
-    }, [setSketches]);
+    const updateSketch = async (id: string, updates: Partial<Sketch>) => {
+        await dispatch({ type: 'UPDATE', payload: { id, updates } });
+    }
 
-    const deleteSketch = useCallback((id: string) => {
-        setSketches(prev => prev.filter(s => s.id !== id));
+
+    const deleteSketch = async (id: string) => {
+        await dispatch({ type: 'DELETE', payload: id });
+
         if (selectedSketchId === id) {
             setSelectedSketchId(null);
         }
-    }, [setSketches, selectedSketchId]);
+    }
 
     const duplicateSketch = useCallback((id: string) => {
         const original = sketches.find(s => s.id === id);

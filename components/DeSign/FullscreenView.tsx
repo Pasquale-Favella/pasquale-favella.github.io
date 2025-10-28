@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { FiX, FiCode, FiEye, FiDownload, FiSmartphone, FiTablet, FiMonitor, FiMenu } from 'react-icons/fi';
-import { Sketch, SketchView } from '@/store/sketch.atom';
+import { Sketch, SketchView } from '@/store/de-sign.atom';
 import { useTheme } from '@/hooks/use-theme';
 import { Editor } from '@monaco-editor/react';
 import CodeEditorLoader from '../CodeEditor/CodeEditorLoader';
