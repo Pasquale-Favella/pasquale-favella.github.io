@@ -81,7 +81,7 @@ const DeSign: FC = () => {
       const newHtml = await editHtml(prompt, originalSketch.html, image);
       updateSketch(sketchId, {
         html: newHtml,
-        prompt: `${originalSketch.prompt}\n---\n${prompt}`,
+        prompt,
       });
       setModalState({ isOpen: false });
     } catch (error) {
@@ -184,12 +184,16 @@ const DeSign: FC = () => {
   // Update fullscreen sketch when it changes
   const handleUpdateFullscreenSketch = useCallback(
     (id: string, updates: Partial<Sketch>) => {
+      setFullscreenSketch((prev) => {
+        if (prev && prev.id === id) {
+          return { ...prev, ...updates };
+        }
+        return prev;
+      });
+      
       updateSketch(id, updates);
-      if (fullscreenSketch && fullscreenSketch.id === id) {
-        setFullscreenSketch((prev) => (prev ? { ...prev, ...updates } : null));
-      }
     },
-    [updateSketch, fullscreenSketch]
+    [updateSketch]
   );
 
   // Mouse up event listener

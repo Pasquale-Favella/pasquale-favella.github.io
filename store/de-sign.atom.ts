@@ -1,8 +1,9 @@
 import { atom } from "jotai"
-import { atomWithReducer, atomWithStorage, loadable } from "jotai/utils"
+import { atomWithStorage, loadable } from "jotai/utils"
 import { PGlite, PGliteInterfaceExtensions } from '@electric-sql/pglite'
 import { live } from '@electric-sql/pglite/live'
 import { vector } from '@electric-sql/pglite/vector'
+import { PromiseUtils } from "@/utils"
 
 export type DeSignDB = PGlite & PGliteInterfaceExtensions<{
   live: typeof live
@@ -45,8 +46,6 @@ const dbAtom = atom(async () => {
         ON sketch_history(created_at DESC);
     CREATE INDEX IF NOT EXISTS idx_sketches_updated_at 
         ON sketches(updated_at DESC);
-    CREATE INDEX IF NOT EXISTS idx_sketch_history_sketch_id 
-        ON sketch_history(sketch_id);
     `);
 
   return db;
@@ -72,11 +71,6 @@ export interface SketchHistory {
   sketch_id: string;
   prompt: string;
   html: string;
-  x: number;
-  y: number;
-  width: number;
-  height: number;
-  view: SketchView;
   created_at: string;
 }
 
@@ -122,15 +116,14 @@ export const designSketchAiProviderAtom = atomWithStorage<DesignSketchAiProvider
 export const designSketchAiModelAtom = atomWithStorage<string>('sketch-ai-model', providerModels.google[1]);
 export const designSketchAiApiKeyAtom = atomWithStorage<string>('sketch-ai-api-key', '');
 
+const SELECT_ALL_SKETCHES = `SELECT * FROM sketches ORDER BY updated_at DESC`;
 
-// Types for optimistic actions
 export type OptimisticSketchAction =
   | { type: 'ADD'; payload: Sketch }
   | { type: 'UPDATE'; payload: { id: string; updates: Partial<Sketch> } }
   | { type: 'DELETE'; payload: string }
   | { type: 'SYNC'; payload: Sketch[] };
 
-// Reducer for sketch state
 const sketchesReducer = (state: Sketch[], action: OptimisticSketchAction): Sketch[] => {
   switch (action.type) {
     case 'ADD':
@@ -147,38 +140,35 @@ const sketchesReducer = (state: Sketch[], action: OptimisticSketchAction): Sketc
       return state;
   }
 };
-// Base atom to store sketches in memory
-const sketchesStateAtom = atom<Sketch[]>([]);
 
-// Flag to track if we've loaded from DB
-const hasLoadedFromDbAtom = atom(false);
+// Private atom to store the current state
+const sketchesStateAtom = atom<Sketch[] | null>(null);
 
-// Main atom that auto-loads from database and handles reducer-like updates
+// Main sketches atom with optimistic updates
 export const sketchesAtom = atom(
   async (get) => {
-    const sketches = get(sketchesStateAtom);
-    const hasLoaded = get(hasLoadedFromDbAtom);
+    const state = get(sketchesStateAtom);
 
-    // If not loaded yet, try to load from database
-    if (!hasLoaded) {
-      const dbLoadable = get(deSignDbLoadableAtom);
-
-      if (dbLoadable.state === 'hasData') {
-        const db = dbLoadable.data;
-        const result = await db.query<Sketch>(
-          `SELECT * FROM sketches ORDER BY updated_at DESC`
-        );
-        return result.rows;
-      }
+    // If we have state, return it (optimistic updates)
+    if (!!state) {
+      return state;
     }
 
-    return sketches;
+    const dbLoadable = get(deSignDbLoadableAtom);
+
+    if (dbLoadable.state === 'hasData') {
+      const db = dbLoadable.data;
+      const result = await db.query<Sketch>(SELECT_ALL_SKETCHES);
+      return result.rows;
+    }
+
+    return [];
   },
   (get, set, action: OptimisticSketchAction) => {
-    const current = get(sketchesStateAtom);
-    const updated = sketchesReducer(current, action);
-    set(hasLoadedFromDbAtom, true); // Mark as loaded
-    set(sketchesStateAtom, updated);
+    get(sketchesAtom).then((current) => {
+      const updated = sketchesReducer(current, action);
+      set(sketchesStateAtom, updated);
+    });
   }
 );
 
@@ -198,14 +188,13 @@ export const sketchActionsAtom = atom(
     // Apply optimistic update immediately
     set(sketchesAtom, action);
 
-    try {
-      // Perform actual database operation
+    const actionResult = await PromiseUtils.tryOf((async () => {
       switch (action.type) {
         case 'ADD': {
           const sketch = action.payload;
           await db.query(
             `INSERT INTO sketches (id, prompt, html, x, y, width, height, view)
-                 VALUES ($1, $2, $3, $4, $5, $6, $7, $8)`,
+             VALUES ($1, $2, $3, $4, $5, $6, $7, $8)`,
             [sketch.id, sketch.prompt, sketch.html, sketch.x, sketch.y,
             sketch.width, sketch.height, sketch.view]
           );
@@ -228,19 +217,19 @@ export const sketchActionsAtom = atom(
           // Update sketch
           await db.query(
             `UPDATE sketches 
-                 SET prompt = $2, html = $3, x = $4, y = $5, 
-                     width = $6, height = $7, view = $8, updated_at = CURRENT_TIMESTAMP
-                 WHERE id = $1`,
+             SET prompt = $2, html = $3, x = $4, y = $5, 
+                 width = $6, height = $7, view = $8, updated_at = CURRENT_TIMESTAMP
+             WHERE id = $1`,
             [id, updatedSketch.prompt, updatedSketch.html, updatedSketch.x,
               updatedSketch.y, updatedSketch.width, updatedSketch.height, updatedSketch.view]
           );
 
-          if (sketchToUpdate.html !== updatedSketch.html || sketchToUpdate.prompt !== updatedSketch.prompt) {
+          if (sketchToUpdate.html !== updatedSketch.html && sketchToUpdate.prompt !== updatedSketch.prompt) {
             // Add to history
             await db.query(
               `INSERT INTO sketch_history (sketch_id, prompt, html)
-                     VALUES ($1, $2, $3)`,
-              [id, updatedSketch.prompt, updatedSketch.html]
+               VALUES ($1, $2, $3)`,
+              [id, sketchToUpdate.prompt, sketchToUpdate.html]
             );
           }
 
@@ -251,20 +240,22 @@ export const sketchActionsAtom = atom(
           break;
         }
       }
+    })());
 
-      // Refresh from database to ensure consistency
-      const result = await db.query<Sketch>(
-        `SELECT * FROM sketches ORDER BY updated_at DESC`
-      );
-      set(sketchesAtom, { type: 'SYNC', payload: result.rows });
-    } catch (error) {
-      console.error('Database operation failed:', error);
+    if (!actionResult.err) return;
 
-      // Rollback optimistic update by re-fetching from database
-      const result = await db.query<Sketch>(
-        `SELECT * FROM sketches ORDER BY updated_at DESC`
-      );
-      set(sketchesAtom, { type: 'SYNC', payload: result.rows });
+    console.error('Database operation failed:', actionResult.err);
+
+    // Rollback optimistic update by re-fetching from database
+    const rollbackAction = await PromiseUtils.tryOf(
+      db.query<Sketch>(SELECT_ALL_SKETCHES)
+    );
+
+    if(rollbackAction.err){
+      console.error('Rollback failed:', rollbackAction.err);
+      return;
     }
+
+    set(sketchesAtom, { type: 'SYNC', payload: rollbackAction.result.rows });
   }
 );

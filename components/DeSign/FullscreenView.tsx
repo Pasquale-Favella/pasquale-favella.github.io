@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { FiX, FiCode, FiEye, FiDownload, FiSmartphone, FiTablet, FiMonitor, FiMenu } from 'react-icons/fi';
-import { Sketch, SketchView } from '@/store/de-sign.atom';
+import { Sketch, SketchHistory, SketchView } from '@/store/de-sign.atom';
 import { useTheme } from '@/hooks/use-theme';
 import { Editor } from '@monaco-editor/react';
 import CodeEditorLoader from '../CodeEditor/CodeEditorLoader';
@@ -11,6 +11,7 @@ import {
     SheetTitle,
     SheetDescription,
 } from '@/components/Sheet';
+import { useLiveQuery } from '@electric-sql/pglite-react';
 
 interface FullscreenViewProps {
     sketch: Sketch;
@@ -38,9 +39,33 @@ const FullscreenView: React.FC<FullscreenViewProps> = ({ sketch, onClose, onUpda
         ${sketch.html}
       </body>
     </html>
-  `;
+    `;
 
-    const promptHistory = sketch.prompt.split('\n---\n');
+  
+    const recentHistoryQuery = useLiveQuery(`
+    WITH all_prompts AS (
+        SELECT prompt, updated_at AS timestamp
+        FROM sketches
+        WHERE id = $1
+        
+        UNION ALL
+        
+        SELECT prompt, created_at AS timestamp
+        FROM sketch_history
+        WHERE sketch_id = $2
+        ORDER BY timestamp DESC
+    )
+    SELECT prompt, timestamp
+    FROM all_prompts
+    ORDER BY timestamp ASC;
+    `, [sketch.id, sketch.id]);
+
+
+    const promptHistory = useMemo(() => {
+        const sketchHistory: SketchHistory[] = recentHistoryQuery?.rows ?? [];
+
+        return sketchHistory.map((history) => history.prompt);
+    }, [recentHistoryQuery?.rows]);
 
     const handleSave = () => {
         onUpdate(sketch.id, { html: editedHtml });
@@ -111,7 +136,7 @@ const FullscreenView: React.FC<FullscreenViewProps> = ({ sketch, onClose, onUpda
             <header className="flex-shrink-0 bg-base-200/80 backdrop-blur-sm border-b border-base-300 h-14 flex items-center justify-between px-2 sm:px-4">
                 <div className="text-xs sm:text-sm opacity-80 truncate flex-1 min-w-0 mr-2">
                     <span className="font-semibold hidden sm:inline">Fullscreen Mode:</span>
-                    <span className="ml-1">{promptHistory[promptHistory.length - 1]}</span>
+                    <span className="ml-1">{sketch.prompt}</span>
                 </div>
                 <div className="flex items-center gap-1 sm:gap-2 flex-shrink-0">
                     {/* View Toggle */}
@@ -197,10 +222,10 @@ const FullscreenView: React.FC<FullscreenViewProps> = ({ sketch, onClose, onUpda
                 <main className="flex-grow flex flex-col items-center justify-center p-2 sm:p-4 overflow-auto bg-base-300">
                     <div
                         className="bg-base-100 shadow-2xl transition-all duration-300 ease-in-out"
-                        style={{ 
-                            width: window.innerWidth < 1024 ? '100%' : deviceWidths[deviceSize], 
-                            height: '100%', 
-                            maxWidth: '100%' 
+                        style={{
+                            width: window.innerWidth < 1024 ? '100%' : deviceWidths[deviceSize],
+                            height: '100%',
+                            maxWidth: '100%'
                         }}
                     >
                         {view === 'result' ? (
