@@ -1,6 +1,6 @@
-import React, { useMemo, useState } from 'react';
-import { FiX, FiCode, FiEye, FiDownload, FiSmartphone, FiTablet, FiMonitor, FiMenu } from 'react-icons/fi';
-import { Sketch, SketchHistory, SketchView } from '@/store/de-sign.atom';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import { FiX, FiCode, FiEye, FiDownload, FiSmartphone, FiTablet, FiMonitor, FiMenu, FiArrowDown } from 'react-icons/fi';
+import { Sketch, SketchView } from '@/store/de-sign.atom';
 import { useTheme } from '@/hooks/use-theme';
 import { Editor } from '@monaco-editor/react';
 import CodeEditorLoader from '../CodeEditor/CodeEditorLoader';
@@ -12,6 +12,8 @@ import {
     SheetDescription,
 } from '@/components/Sheet';
 import { useLiveQuery } from '@electric-sql/pglite-react';
+import { StickToBottom, useStickToBottomContext } from "use-stick-to-bottom";
+import FullscreenChatInput from './FullscreenChatInput';
 
 interface FullscreenViewProps {
     sketch: Sketch;
@@ -21,6 +23,27 @@ interface FullscreenViewProps {
 
 type DeviceSize = 'mobile' | 'tablet' | 'desktop';
 
+// Scroll to bottom indicator component
+const StickToBottomIndicator = () => {
+    const { isAtBottom, scrollToBottom } = useStickToBottomContext();
+
+    const handleScrollToBottom = useCallback(() => {
+        scrollToBottom();
+    }, [scrollToBottom]);
+
+    if (isAtBottom) return null;
+
+    return (
+        <button
+            onClick={handleScrollToBottom}
+            className="sticky bottom-4 btn btn-circle btn-primary btn-sm shadow-lg"
+            aria-label="Scroll to latest"
+        >
+            <FiArrowDown className="h-4 w-4" />
+        </button>
+    );
+};
+
 const FullscreenView: React.FC<FullscreenViewProps> = ({ sketch, onClose, onUpdate }) => {
     const { isDarkMode } = useTheme();
     const [view, setView] = useState<SketchView>('result');
@@ -28,20 +51,30 @@ const FullscreenView: React.FC<FullscreenViewProps> = ({ sketch, onClose, onUpda
     const [deviceSize, setDeviceSize] = useState<DeviceSize>('desktop');
     const [hasChanges, setHasChanges] = useState(false);
     const [isSheetOpen, setIsSheetOpen] = useState(false);
+ 
 
-    const iframeSrcDoc = `
-    <!DOCTYPE html>
-    <html>
-      <head>
-        <script src="https://cdn.tailwindcss.com"></script>
-      </head>
-      <body class="h-full w-full m-0 p-0 overflow-auto">
-        ${sketch.html}
-      </body>
-    </html>
-    `;
+    // Hide body overflow when fullscreen is open
+    useEffect(() => {
+        document.body.style.overflow = 'hidden';
+        return () => {
+            document.body.style.overflow = '';
+        };
+    }, []);
 
-  
+     const iframeSrcDoc = useMemo(()=> {
+        return`
+        <!DOCTYPE html>
+        <html>
+        <head>
+            <script src="https://cdn.tailwindcss.com"></script>
+        </head>
+        <body class="h-full w-full m-0 p-0 overflow-auto">
+            ${sketch.html}
+        </body>
+        </html>
+        `;
+    }, [sketch.html]);
+
     const recentHistoryQuery = useLiveQuery(`
     WITH all_prompts AS (
         SELECT prompt, updated_at AS timestamp
@@ -60,11 +93,9 @@ const FullscreenView: React.FC<FullscreenViewProps> = ({ sketch, onClose, onUpda
     ORDER BY timestamp ASC;
     `, [sketch.id, sketch.id]);
 
-
     const promptHistory = useMemo(() => {
-        const sketchHistory: SketchHistory[] = recentHistoryQuery?.rows ?? [];
-
-        return sketchHistory.map((history) => history.prompt);
+        const sketchHistory: { prompt: string; timestamp: string }[] = recentHistoryQuery?.rows ?? [];
+        return sketchHistory;
     }, [recentHistoryQuery?.rows]);
 
     const handleSave = () => {
@@ -95,10 +126,20 @@ const FullscreenView: React.FC<FullscreenViewProps> = ({ sketch, onClose, onUpda
         desktop: '100%',
     };
 
-    // Sidebar content component (reused in both desktop and mobile)
+    const onHtmlGeneratedFromAI = (
+        htmlResult: string,
+        prompt: string
+    ) => {
+        onUpdate(sketch.id, {
+            html: htmlResult,
+            prompt,
+        });
+    }
+
+    // Sidebar content component with StickToBottom
     const SidebarContent = () => (
         <>
-            <div className="p-4 border-b border-base-300 space-y-2">
+            <div className="p-4 border-b border-base-300 space-y-2 flex-shrink-0">
                 <h3 className="font-semibold text-lg mb-2">Controls</h3>
                 {view === 'code' && (
                     <button
@@ -116,22 +157,53 @@ const FullscreenView: React.FC<FullscreenViewProps> = ({ sketch, onClose, onUpda
                     <FiDownload size={16} /> Download HTML
                 </button>
             </div>
-            <div className="flex-grow p-4 overflow-y-auto">
-                <h3 className="font-semibold text-lg mb-3">Prompt History</h3>
-                <ul className="space-y-4">
-                    {promptHistory.map((p, index) => (
-                        <li key={index} className="text-xs opacity-70 font-mono p-3 bg-base-300 rounded-lg whitespace-pre-wrap">
-                            <span className="text-primary font-bold block mb-1">Step {index + 1}:</span>
-                            {p}
-                        </li>
-                    ))}
-                </ul>
-            </div>
+
+            <StickToBottom className="flex-grow overflow-y-auto relative no-scrollbar [&>*:first-child]:no-scrollbar" resize="smooth">
+                <StickToBottom.Content>
+                    <div className="p-4 pb-16">
+                        {promptHistory.length === 0 ? (
+                            <p className="text-xs opacity-50 text-center py-8">No history yet</p>
+                        ) : (
+                            <ul className="space-y-4">
+                                {promptHistory.map((item, index) => (
+                                    <li
+                                        key={index}
+                                        className="text-xs opacity-70 font-mono p-3 bg-base-300 rounded-lg whitespace-pre-wrap hover:opacity-100 hover:bg-base-200 transition-all group"
+                                    >
+                                        <div className="flex items-center justify-between mb-2">
+                                            <span className="text-primary font-bold">Step {index + 1}</span>
+                                            <span className="text-[10px] opacity-50 group-hover:opacity-100 transition-opacity">
+                                                {new Date(item.timestamp).toLocaleString(undefined, {
+                                                    month: 'short',
+                                                    day: 'numeric',
+                                                    hour: '2-digit',
+                                                    minute: '2-digit'
+                                                })}
+                                            </span>
+                                        </div>
+                                        <p className="break-words leading-relaxed">{item.prompt}</p>
+                                    </li>
+                                ))}
+                            </ul>
+                        )}
+                    </div>
+                    <div className="sticky bottom-0 left-0 right-0 flex justify-center pb-4 pointer-events-none">
+                        <div className="pointer-events-auto">
+                            <StickToBottomIndicator />
+                        </div>
+                    </div>
+                </StickToBottom.Content>
+            </StickToBottom>
+
+            <FullscreenChatInput
+                sketch={sketch}
+                onHtmlGenerated={onHtmlGeneratedFromAI}
+            />
         </>
     );
 
     return (
-        <div className="fixed inset-0 bg-base-300 z-50 flex flex-col">
+        <div className="fixed inset-0 bg-base-300 flex flex-col z-[99]">
             {/* Header */}
             <header className="flex-shrink-0 bg-base-200/80 backdrop-blur-sm border-b border-base-300 h-14 flex items-center justify-between px-2 sm:px-4">
                 <div className="text-xs sm:text-sm opacity-80 truncate flex-1 min-w-0 mr-2">
@@ -259,7 +331,7 @@ const FullscreenView: React.FC<FullscreenViewProps> = ({ sketch, onClose, onUpda
 
             {/* Mobile Sheet Sidebar */}
             <Sheet open={isSheetOpen} onOpenChange={setIsSheetOpen}>
-                <SheetContent side="right" className="w-[85vw] sm:w-96">
+                <SheetContent side="right" className="w-[85vw] sm:w-96 z-[99]">
                     <SheetHeader>
                         <SheetTitle>Controls & History</SheetTitle>
                         <SheetDescription>

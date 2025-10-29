@@ -218,7 +218,7 @@ export const sketchActionsAtom = atom(
           await db.query(
             `UPDATE sketches 
              SET prompt = $2, html = $3, x = $4, y = $5, 
-                 width = $6, height = $7, view = $8, updated_at = CURRENT_TIMESTAMP
+                 width = $6, height = $7, view = $8, updated_at = CURRENT_TIMESTAMP + INTERVAL '1 minute'
              WHERE id = $1`,
             [id, updatedSketch.prompt, updatedSketch.html, updatedSketch.x,
               updatedSketch.y, updatedSketch.width, updatedSketch.height, updatedSketch.view]
