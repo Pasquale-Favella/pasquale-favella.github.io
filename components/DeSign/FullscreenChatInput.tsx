@@ -3,17 +3,16 @@ import { HiSparkles, HiPaperClip, HiX } from 'react-icons/hi';
 import { FiSend } from 'react-icons/fi';
 import { PromiseUtils } from '@/utils';
 import toast from 'react-hot-toast';
-import { Sketch } from '@/store/de-sign.atom';
 import { useDesign } from '@/hooks/use-de-sign';
 
 interface FullscreenChatInputProps {
-    sketch: Sketch;
+    currentSketchHtml: string;
     onHtmlGenerated: (result: string, prompt: string) => void;
     disabled?: boolean;
 }
 
 const FullscreenChatInput: React.FC<FullscreenChatInputProps> = ({
-    sketch,
+    currentSketchHtml,
     onHtmlGenerated,
     disabled = false
 }) => {
@@ -88,7 +87,7 @@ const FullscreenChatInput: React.FC<FullscreenChatInputProps> = ({
 
         setIsLoading(true);
         const { err, result } = await PromiseUtils.tryOf(
-            editHtml(prompt, sketch.html, imageData)
+            editHtml(prompt, currentSketchHtml, imageData)
         );
         setIsLoading(false)
 

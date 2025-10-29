@@ -196,7 +196,7 @@ const FullscreenView: React.FC<FullscreenViewProps> = ({ sketch, onClose, onUpda
             </StickToBottom>
 
             <FullscreenChatInput
-                sketch={sketch}
+                currentSketchHtml={sketch.html}
                 onHtmlGenerated={onHtmlGeneratedFromAI}
             />
         </>
