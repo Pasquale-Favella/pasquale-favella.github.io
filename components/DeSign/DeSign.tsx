@@ -30,7 +30,7 @@ const DeSign: FC = () => {
 
   const [modalState, setModalState] = useState<ModalState>({ isOpen: false });
   const [isLoading, setIsLoading] = useState(false);
-  const [fullscreenSketch, setFullscreenSketch] = useState<Sketch | null>(null);
+  const [fullscreenSketchId, setFullscreenSketchId] = useState<string | null>(null);
 
   const canvasRef = useRef<HTMLDivElement>(null);
   const isPanningRef = useRef(false);
@@ -171,30 +171,12 @@ const DeSign: FC = () => {
 
   // Fullscreen handlers
   const handleEnterFullscreen = (sketchId: string) => {
-    const sketch = getSketchById(sketchId);
-    if (sketch) {
-      setFullscreenSketch(sketch);
-    }
+     setFullscreenSketchId(sketchId);
   };
 
   const handleExitFullscreen = () => {
-    setFullscreenSketch(null);
+    setFullscreenSketchId(null);
   };
-
-  // Update fullscreen sketch when it changes
-  const handleUpdateFullscreenSketch = useCallback(
-    (id: string, updates: Partial<Sketch>) => {
-      setFullscreenSketch((prev) => {
-        if (prev && prev.id === id) {
-          return { ...prev, ...updates };
-        }
-        return prev;
-      });
-      
-      updateSketch(id, updates);
-    },
-    [updateSketch]
-  );
 
   // Mouse up event listener
   useEffect(() => {
@@ -213,11 +195,10 @@ const DeSign: FC = () => {
 
   return (
     <div className="mx-auto h-[calc(90dvh)] overflow-hidden flex flex-col bg-base-300 relative rounded">
-      {fullscreenSketch ? (
+      {fullscreenSketchId ? (
         <FullscreenView
-          sketch={fullscreenSketch}
+          sketchId={fullscreenSketchId}
           onClose={handleExitFullscreen}
-          onUpdate={handleUpdateFullscreenSketch}
         />
       ) : (
         <>

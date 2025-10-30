@@ -133,11 +133,11 @@ export const useDesign = () => {
     };
 
     const handleProviderChange = useCallback(
-       (newProvider: DesignSketchAiProvider) => {
-         setProvider(newProvider);
-         setModel(providerModels[newProvider][0]);
-       },
-       [setProvider, setModel]
+        (newProvider: DesignSketchAiProvider) => {
+            setProvider(newProvider);
+            setModel(providerModels[newProvider][0]);
+        },
+        [setProvider, setModel]
     );
 
     const addSketch = async (sketch: Sketch) => {
@@ -239,3 +239,33 @@ export const useDesign = () => {
         setApiKey,
     };
 };
+
+export const useDesignSketchById = (id: string) => {
+    const sketchQuery = useLiveQuery(`
+        SELECT *
+        FROM sketches
+        WHERE id = $1
+    `, [id]);
+
+    const sketch: Sketch | undefined = useMemo(() => {
+        return sketchQuery?.rows?.at(0);
+    }, [sketchQuery?.rows]);
+
+    return sketch;
+}
+
+export const useDesignAiGeneratedSketchHistoryById = (id: string) => {
+    const recentHistoryQuery = useLiveQuery(`
+            SELECT prompt, html, created_at AS timestamp
+            FROM ai_generated_sketch_history
+            WHERE sketch_id = $1
+            ORDER BY timestamp ASC;
+        `, [id]);
+
+    const promptHistory = useMemo(() => {
+        const sketchHistory: { sketchId: string; prompt: string; html:string; timestamp: string }[] = recentHistoryQuery?.rows ?? [];
+        return sketchHistory;
+    }, [recentHistoryQuery?.rows]);
+
+    return promptHistory;
+}

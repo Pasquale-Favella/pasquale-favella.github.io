@@ -1,19 +1,19 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { HiSparkles, HiPaperClip, HiX } from 'react-icons/hi';
+import { HiPaperClip, HiX } from 'react-icons/hi';
 import { FiSend } from 'react-icons/fi';
 import { PromiseUtils } from '@/utils';
 import toast from 'react-hot-toast';
 import { useDesign } from '@/hooks/use-de-sign';
 
 interface FullscreenChatInputProps {
+    sketchId: string;
     currentSketchHtml: string;
-    onHtmlGenerated: (result: string, prompt: string) => void;
     disabled?: boolean;
 }
 
 const FullscreenChatInput: React.FC<FullscreenChatInputProps> = ({
+    sketchId,
     currentSketchHtml,
-    onHtmlGenerated,
     disabled = false
 }) => {
     const [prompt, setPrompt] = useState('');
@@ -22,7 +22,7 @@ const FullscreenChatInput: React.FC<FullscreenChatInputProps> = ({
     const [isDraggingOver, setIsDraggingOver] = useState(false);
     const fileInputRef = useRef<HTMLInputElement>(null);
     const textareaRef = useRef<HTMLTextAreaElement>(null);
-    const { editHtml } = useDesign();
+    const { editHtml, updateSketch } = useDesign();
 
     // Cleanup image preview URL on unmount or image change
     useEffect(() => {
@@ -97,7 +97,11 @@ const FullscreenChatInput: React.FC<FullscreenChatInputProps> = ({
             return;
         } 
 
-        onHtmlGenerated(result, prompt);
+        updateSketch(sketchId, {
+            html: result,
+            prompt,
+        });
+
         setPrompt('');
         removeImage();
     };

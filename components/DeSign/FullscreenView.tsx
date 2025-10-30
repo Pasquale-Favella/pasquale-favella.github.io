@@ -11,17 +11,26 @@ import {
     SheetTitle,
     SheetDescription,
 } from '@/components/Sheet';
-import { useLiveQuery } from '@electric-sql/pglite-react';
 import { StickToBottom, useStickToBottomContext } from "use-stick-to-bottom";
 import FullscreenChatInput from './FullscreenChatInput';
+import { useDesign, useDesignAiGeneratedSketchHistoryById, useDesignSketchById } from '@/hooks/use-de-sign';
 
 interface FullscreenViewProps {
-    sketch: Sketch;
+    sketchId: string;
     onClose: () => void;
-    onUpdate: (id: string, updates: Partial<Sketch>) => void;
 }
 
 type DeviceSize = 'mobile' | 'tablet' | 'desktop';
+
+function useEditSketchHtml(sketchHtml?: string){
+    const [editedHtml, setEditedHtml] =  useState(sketchHtml ?? '');
+
+    useEffect(() => {
+        setEditedHtml(sketchHtml ?? '');
+    }, [sketchHtml]);
+
+    return {editedHtml, setEditedHtml};
+}
 
 // Scroll to bottom indicator component
 const StickToBottomIndicator = () => {
@@ -44,14 +53,20 @@ const StickToBottomIndicator = () => {
     );
 };
 
-const FullscreenView: React.FC<FullscreenViewProps> = ({ sketch, onClose, onUpdate }) => {
+const FullscreenView: React.FC<FullscreenViewProps> = ({ sketchId, onClose }) => {
     const { isDarkMode } = useTheme();
     const [view, setView] = useState<SketchView>('result');
-    const [editedHtml, setEditedHtml] = useState(sketch.html);
+    const sketch = useDesignSketchById(sketchId);
+    const promptHistory = useDesignAiGeneratedSketchHistoryById(sketchId);
+    const { updateSketch } = useDesign();
+    const { editedHtml, setEditedHtml } = useEditSketchHtml(sketch?.html);
     const [deviceSize, setDeviceSize] = useState<DeviceSize>('desktop');
-    const [hasChanges, setHasChanges] = useState(false);
     const [isSheetOpen, setIsSheetOpen] = useState(false);
- 
+
+    const hasHtmlChanges = useMemo(() => {
+        return editedHtml !== sketch?.html;
+    }, [editedHtml, sketch?.html]);
+
 
     // Hide body overflow when fullscreen is open
     useEffect(() => {
@@ -69,43 +84,18 @@ const FullscreenView: React.FC<FullscreenViewProps> = ({ sketch, onClose, onUpda
             <script src="https://cdn.tailwindcss.com"></script>
         </head>
         <body class="h-full w-full m-0 p-0 overflow-auto">
-            ${sketch.html}
+            ${editedHtml}
         </body>
         </html>
         `;
-    }, [sketch.html]);
+    }, [editedHtml]);
 
-    const recentHistoryQuery = useLiveQuery(`
-    WITH all_prompts AS (
-        SELECT prompt, updated_at AS timestamp
-        FROM sketches
-        WHERE id = $1
-        
-        UNION ALL
-        
-        SELECT prompt, created_at AS timestamp
-        FROM sketch_history
-        WHERE sketch_id = $2
-        ORDER BY timestamp DESC
-    )
-    SELECT prompt, timestamp
-    FROM all_prompts
-    ORDER BY timestamp ASC;
-    `, [sketch.id, sketch.id]);
-
-    const promptHistory = useMemo(() => {
-        const sketchHistory: { prompt: string; timestamp: string }[] = recentHistoryQuery?.rows ?? [];
-        return sketchHistory;
-    }, [recentHistoryQuery?.rows]);
-
-    const handleSave = () => {
-        onUpdate(sketch.id, { html: editedHtml });
-        setHasChanges(false);
+    const handleSave = async () => {
+        await updateSketch(sketchId, { html: editedHtml });
     };
 
     const handleHtmlChange = (codeValue: string | undefined) => {
         setEditedHtml(codeValue ?? '');
-        setHasChanges(true);
     };
 
     const downloadHtml = () => {
@@ -113,7 +103,7 @@ const FullscreenView: React.FC<FullscreenViewProps> = ({ sketch, onClose, onUpda
         const url = URL.createObjectURL(blob);
         const a = document.createElement('a');
         a.href = url;
-        a.download = `${sketch.prompt.split(' ').slice(0, 5).join('_') || 'sketch'}.html`;
+        a.download = `${sketch?.prompt.split(' ').slice(0, 5).join('_') || 'sketch'}.html`;
         document.body.appendChild(a);
         a.click();
         document.body.removeChild(a);
@@ -126,16 +116,6 @@ const FullscreenView: React.FC<FullscreenViewProps> = ({ sketch, onClose, onUpda
         desktop: '100%',
     };
 
-    const onHtmlGeneratedFromAI = (
-        htmlResult: string,
-        prompt: string
-    ) => {
-        onUpdate(sketch.id, {
-            html: htmlResult,
-            prompt,
-        });
-    }
-
     // Sidebar content component with StickToBottom
     const SidebarContent = () => (
         <>
@@ -144,10 +124,10 @@ const FullscreenView: React.FC<FullscreenViewProps> = ({ sketch, onClose, onUpda
                 {view === 'code' && (
                     <button
                         onClick={handleSave}
-                        disabled={!hasChanges}
+                        disabled={!hasHtmlChanges}
                         className="btn btn-primary btn-sm w-full"
                     >
-                        {hasChanges ? 'Save Changes' : 'Saved'}
+                        {hasHtmlChanges ? 'Save Changes' : 'Saved'}
                     </button>
                 )}
                 <button
@@ -196,8 +176,8 @@ const FullscreenView: React.FC<FullscreenViewProps> = ({ sketch, onClose, onUpda
             </StickToBottom>
 
             <FullscreenChatInput
-                currentSketchHtml={sketch.html}
-                onHtmlGenerated={onHtmlGeneratedFromAI}
+                sketchId={sketchId}
+                currentSketchHtml={sketch?.html ?? ''}
             />
         </>
     );
@@ -208,7 +188,7 @@ const FullscreenView: React.FC<FullscreenViewProps> = ({ sketch, onClose, onUpda
             <header className="flex-shrink-0 bg-base-200/80 backdrop-blur-sm border-b border-base-300 h-14 flex items-center justify-between px-2 sm:px-4">
                 <div className="text-xs sm:text-sm opacity-80 truncate flex-1 min-w-0 mr-2">
                     <span className="font-semibold hidden sm:inline">Fullscreen Mode:</span>
-                    <span className="ml-1">{sketch.prompt}</span>
+                    <span className="ml-1">{sketch?.prompt}</span>
                 </div>
                 <div className="flex items-center gap-1 sm:gap-2 flex-shrink-0">
                     {/* View Toggle */}

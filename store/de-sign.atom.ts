@@ -31,7 +31,7 @@ const dbAtom = atom(async () => {
         updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
     );
     -- Sketch history table
-    CREATE TABLE IF NOT EXISTS sketch_history (
+    CREATE TABLE IF NOT EXISTS ai_generated_sketch_history (
         id SERIAL PRIMARY KEY,
         sketch_id TEXT NOT NULL,
         prompt TEXT NOT NULL,
@@ -40,10 +40,10 @@ const dbAtom = atom(async () => {
         FOREIGN KEY (sketch_id) REFERENCES sketches(id) ON DELETE CASCADE
     );
     -- Create indexes
-    CREATE INDEX IF NOT EXISTS idx_sketch_history_sketch_id 
-        ON sketch_history(sketch_id);
-    CREATE INDEX IF NOT EXISTS idx_sketch_history_created_at 
-        ON sketch_history(created_at DESC);
+    CREATE INDEX IF NOT EXISTS idx_ai_generated_sketch_history_sketch_id 
+        ON ai_generated_sketch_history(sketch_id);
+    CREATE INDEX IF NOT EXISTS idx_ai_generated_sketch_history_created_at 
+        ON ai_generated_sketch_history(created_at DESC);
     CREATE INDEX IF NOT EXISTS idx_sketches_updated_at 
         ON sketches(updated_at DESC);
     `);
@@ -113,7 +113,7 @@ export const providerLinks: Record<DesignSketchAiProvider, string> = {
 };
 
 export const designSketchAiProviderAtom = atomWithStorage<DesignSketchAiProvider>('sketch-ai-provider', 'google');
-export const designSketchAiModelAtom = atomWithStorage<string>('sketch-ai-model', providerModels.google[1]);
+export const designSketchAiModelAtom = atomWithStorage<string>('sketch-ai-model', providerModels.google[0]);
 export const designSketchAiApiKeyAtom = atomWithStorage<string>('sketch-ai-api-key', '');
 
 const SELECT_ALL_SKETCHES = `SELECT * FROM sketches ORDER BY updated_at DESC`;
@@ -198,6 +198,9 @@ export const sketchActionsAtom = atom(
             [sketch.id, sketch.prompt, sketch.html, sketch.x, sketch.y,
             sketch.width, sketch.height, sketch.view]
           );
+
+          await addToAiGeneratedHistory(db, sketch.id, sketch.prompt, sketch.html);
+
           break;
         }
         case 'UPDATE': {
@@ -218,7 +221,7 @@ export const sketchActionsAtom = atom(
           await db.query(
             `UPDATE sketches 
              SET prompt = $2, html = $3, x = $4, y = $5, 
-                 width = $6, height = $7, view = $8, updated_at = CURRENT_TIMESTAMP + INTERVAL '1 minute'
+                 width = $6, height = $7, view = $8, updated_at = CURRENT_TIMESTAMP
              WHERE id = $1`,
             [id, updatedSketch.prompt, updatedSketch.html, updatedSketch.x,
               updatedSketch.y, updatedSketch.width, updatedSketch.height, updatedSketch.view]
@@ -226,11 +229,7 @@ export const sketchActionsAtom = atom(
 
           if (sketchToUpdate.html !== updatedSketch.html && sketchToUpdate.prompt !== updatedSketch.prompt) {
             // Add to history
-            await db.query(
-              `INSERT INTO sketch_history (sketch_id, prompt, html)
-               VALUES ($1, $2, $3)`,
-              [id, sketchToUpdate.prompt, sketchToUpdate.html]
-            );
+            await addToAiGeneratedHistory(db, id, updatedSketch.prompt, updatedSketch.html);
           }
 
           break;
@@ -259,3 +258,11 @@ export const sketchActionsAtom = atom(
     set(sketchesAtom, { type: 'SYNC', payload: rollbackAction.result.rows });
   }
 );
+
+async function addToAiGeneratedHistory(db: DeSignDB, id: string, prompt: string, html: string) {
+  await db.query(
+    `INSERT INTO ai_generated_sketch_history (sketch_id, prompt, html)
+               VALUES ($1, $2, $3)`,
+    [id, prompt, html]
+  );
+}
