@@ -1,7 +1,7 @@
 import { useTheme } from '@/hooks/use-theme';
-import { Sketch } from '@/store/sketch.atom';
+import { Sketch } from '@/store/de-sign.atom';
 import { Editor } from '@monaco-editor/react';
-import React, { useState, useRef, useEffect, useCallback } from 'react';
+import React, { useState, useRef, useEffect, useCallback, memo } from 'react';
 import { FiEdit, FiTrash2, FiCode, FiEye, FiCopy, FiMaximize2 } from 'react-icons/fi';
 import { PiArrowsOutSimpleBold } from 'react-icons/pi';
 import CodeEditorLoader from '../CodeEditor/CodeEditorLoader';
@@ -10,7 +10,7 @@ interface SketchCardProps {
     sketch: Sketch;
     isSelected: boolean;
     onSelect: () => void;
-    onUpdate: (id: string, updates: Partial<Sketch>) => void;
+    onUpdate: (id: string, updates: Partial<Sketch>) => Promise<void>;
     onDelete: (id: string) => void;
     onDuplicate: (id: string) => void;
     onEdit: () => void;
@@ -90,19 +90,19 @@ const SketchCard: React.FC<SketchCardProps> = ({
         });
     }, [isDragging, isResizing, canvasScale]);
 
-    const handleMouseUp = useCallback(() => {
+    const handleMouseUp = useCallback(async () => {
         if (animationFrameId.current) {
             cancelAnimationFrame(animationFrameId.current);
         }
 
         if (isDragging) {
-            onUpdate(sketch.id, {
+            await onUpdate(sketch.id, {
                 x: localPosition.x,
                 y: localPosition.y
             });
         }
         if (isResizing) {
-            onUpdate(sketch.id, {
+            await onUpdate(sketch.id, {
                 width: localSize.width,
                 height: localSize.height
             });
@@ -247,4 +247,4 @@ const SketchCard: React.FC<SketchCardProps> = ({
     );
 };
 
-export default SketchCard;
+export default memo(SketchCard);

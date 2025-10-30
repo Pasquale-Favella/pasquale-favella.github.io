@@ -208,7 +208,7 @@ const PromptModal: React.FC<PromptModalProps> = ({
                             <div className="text-xs">
                                 <p className="font-semibold mb-1">Previous Prompt:</p>
                                 <p className="opacity-80 font-mono whitespace-pre-wrap">
-                                    {initialPrompt.split('---').pop()?.trim()}
+                                    {initialPrompt?.trim()}
                                 </p>
                             </div>
                         </div>

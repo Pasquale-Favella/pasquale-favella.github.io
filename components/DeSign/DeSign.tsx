@@ -1,12 +1,10 @@
-import { FC, useState, useRef, useEffect, useCallback } from 'react';
-
-
+import { FC, useState, useRef, useEffect } from 'react';
 import PromptModal from './PromptModal';
 import SketchCard from './SketchCard';
 import FullscreenView from './FullscreenView';
 import { HiPlus } from 'react-icons/hi';
 import { useDesign } from '@/hooks/use-de-sign';
-import { ModalState, Sketch } from '@/store/sketch.atom';
+import { ModalState, Sketch } from '@/store/de-sign.atom';
 import Toolbar from './Toolbar';
 import toast from 'react-hot-toast';
 
@@ -30,7 +28,7 @@ const DeSign: FC = () => {
 
   const [modalState, setModalState] = useState<ModalState>({ isOpen: false });
   const [isLoading, setIsLoading] = useState(false);
-  const [fullscreenSketch, setFullscreenSketch] = useState<Sketch | null>(null);
+  const [fullscreenSketchId, setFullscreenSketchId] = useState<string | null>(null);
 
   const canvasRef = useRef<HTMLDivElement>(null);
   const isPanningRef = useRef(false);
@@ -81,7 +79,7 @@ const DeSign: FC = () => {
       const newHtml = await editHtml(prompt, originalSketch.html, image);
       updateSketch(sketchId, {
         html: newHtml,
-        prompt: `${originalSketch.prompt}\n---\n${prompt}`,
+        prompt,
       });
       setModalState({ isOpen: false });
     } catch (error) {
@@ -171,26 +169,12 @@ const DeSign: FC = () => {
 
   // Fullscreen handlers
   const handleEnterFullscreen = (sketchId: string) => {
-    const sketch = getSketchById(sketchId);
-    if (sketch) {
-      setFullscreenSketch(sketch);
-    }
+     setFullscreenSketchId(sketchId);
   };
 
   const handleExitFullscreen = () => {
-    setFullscreenSketch(null);
+    setFullscreenSketchId(null);
   };
-
-  // Update fullscreen sketch when it changes
-  const handleUpdateFullscreenSketch = useCallback(
-    (id: string, updates: Partial<Sketch>) => {
-      updateSketch(id, updates);
-      if (fullscreenSketch && fullscreenSketch.id === id) {
-        setFullscreenSketch((prev) => (prev ? { ...prev, ...updates } : null));
-      }
-    },
-    [updateSketch, fullscreenSketch]
-  );
 
   // Mouse up event listener
   useEffect(() => {
@@ -208,12 +192,11 @@ const DeSign: FC = () => {
 
 
   return (
-    <div className="mx-auto h-[calc(90dvh)] overflow-hidden flex flex-col bg-base-300 relative">
-      {fullscreenSketch ? (
+    <div className="mx-auto h-[calc(90dvh)] overflow-hidden flex flex-col bg-base-300 relative rounded">
+      {fullscreenSketchId ? (
         <FullscreenView
-          sketch={fullscreenSketch}
+          sketchId={fullscreenSketchId}
           onClose={handleExitFullscreen}
-          onUpdate={handleUpdateFullscreenSketch}
         />
       ) : (
         <>
