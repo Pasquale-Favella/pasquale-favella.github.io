@@ -203,10 +203,11 @@ const FullscreenView: React.FC<FullscreenViewProps> = ({ sketchId, onClose }) =>
                                     return (
                                         <li
                                             key={index}
-                                            className={`relative overflow-hidden rounded-xl transition-all duration-200 ${isCurrentVersion
+                                            className={cn("relative overflow-hidden rounded-xl transition-all duration-200",
+                                                isCurrentVersion
                                                     ? 'ring-2 ring-primary shadow-lg'
                                                     : 'hover:shadow-md cursor-pointer'
-                                                }`}
+                                            )}
                                         >
                                             <div className={`p-4 ${isCurrentVersion ? 'bg-gradient-to-br from-primary/10 to-primary/5' : 'bg-base-300 group hover:bg-base-200'}`}>
                                                 {/* Header */}
