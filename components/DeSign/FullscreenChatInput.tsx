@@ -1,20 +1,19 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, useMemo } from 'react';
 import { HiPaperClip, HiX } from 'react-icons/hi';
 import { FiSend } from 'react-icons/fi';
 import { PromiseUtils } from '@/utils';
 import toast from 'react-hot-toast';
 import { useDesign } from '@/hooks/use-de-sign';
+import { VscGear } from 'react-icons/vsc';
 
 interface FullscreenChatInputProps {
     sketchId: string;
     currentSketchHtml: string;
-    disabled?: boolean;
 }
 
 const FullscreenChatInput: React.FC<FullscreenChatInputProps> = ({
     sketchId,
-    currentSketchHtml,
-    disabled = false
+    currentSketchHtml
 }) => {
     const [prompt, setPrompt] = useState('');
     const [isLoading, setIsLoading] = useState(false);
@@ -22,7 +21,9 @@ const FullscreenChatInput: React.FC<FullscreenChatInputProps> = ({
     const [isDraggingOver, setIsDraggingOver] = useState(false);
     const fileInputRef = useRef<HTMLInputElement>(null);
     const textareaRef = useRef<HTMLTextAreaElement>(null);
-    const { editHtml, updateSketch } = useDesign();
+    const { editHtml, updateSketch, apiKey } = useDesign();
+    const disabled = useMemo(() => !apiKey, [apiKey]);
+
 
     // Cleanup image preview URL on unmount or image change
     useEffect(() => {
@@ -156,6 +157,18 @@ const FullscreenChatInput: React.FC<FullscreenChatInputProps> = ({
                             <div className="flex flex-col items-center gap-2">
                                 <HiPaperClip className="w-8 h-8 text-primary" />
                                 <p className="text-sm font-semibold text-primary">Drop image to attach</p>
+                            </div>
+                        </div>
+                    )}
+
+                    {/* Setup ai provider info */}
+                    {disabled && (
+                        <div className="mb-4 alert alert-info">
+                            <div className="text-xs">
+                                <p className="font-semibold mb-1">Configure AI</p>
+                                <p className="opacity-80 font-mono whitespace-pre-wrap flex">
+                                    Setup AI provider using settings <VscGear className='size-4' />
+                                </p>
                             </div>
                         </div>
                     )}

@@ -19,6 +19,7 @@ import toast from 'react-hot-toast';
 import CustomToast from '../Navbar/CustomToast';
 import { cn, PromiseUtils } from '@/utils';
 import { HoverCard, HoverCardContent, HoverCardTrigger } from '../HoverCard';
+import AISettingsSection from './FullscreenAiSettingSection';
 
 interface FullscreenViewProps {
     sketchId: string;
@@ -85,11 +86,11 @@ const FullscreenView: React.FC<FullscreenViewProps> = ({ sketchId, onClose }) =>
     const { editedHtml, setEditedHtml, hasHtmlChanges } = useEditSketchHtml(sketch?.html);
     const [deviceSize, setDeviceSize] = useState<DeviceSize>('desktop');
     const [isSheetOpen, setIsSheetOpen] = useState(false);
+    const [isAiSettingsCollapsed, setIsAiSettingsCollapsed] = useState(true);
 
     const iframeRef = useRef<HTMLIFrameElement>(null);
 
     const copyToClipboard = async () => {
-
         const { err } = await PromiseUtils.tryOf((async () => {
             const iframe = iframeRef.current;
             const iframeDoc = iframe?.contentDocument || iframe?.contentWindow?.document;
@@ -98,7 +99,7 @@ const FullscreenView: React.FC<FullscreenViewProps> = ({ sketchId, onClose }) =>
 
             const blob = await toBlob(body, {
                 cacheBust: true,
-                pixelRatio: 3, // High resolution
+                pixelRatio: 3,
                 backgroundColor: '#ffffff',
             });
 
@@ -107,7 +108,6 @@ const FullscreenView: React.FC<FullscreenViewProps> = ({ sketchId, onClose }) =>
             await navigator.clipboard.write([
                 new ClipboardItem({ 'image/png': blob })
             ]);
-
         })());
 
         if (err) {
@@ -119,7 +119,6 @@ const FullscreenView: React.FC<FullscreenViewProps> = ({ sketchId, onClose }) =>
         toast.success('Image copied! Paste directly into Figma (Cmd/Ctrl+V)');
     };
 
-    // Hide body overflow when fullscreen is open
     useEffect(() => {
         document.body.style.overflow = 'hidden';
         return () => {
@@ -159,11 +158,17 @@ const FullscreenView: React.FC<FullscreenViewProps> = ({ sketchId, onClose }) =>
         desktop: '100%',
     };
 
-    // Sidebar content component with StickToBottom
     const SidebarContent = () => (
         <>
+            {/* AI Settings Section */}
+            <AISettingsSection
+                isCollapsed={isAiSettingsCollapsed}
+                onToggle={() => setIsAiSettingsCollapsed(prev => !prev)}
+            />
+
+            {/* Controls Section */}
             <div className="p-4 border-b border-base-300 space-y-2 flex-shrink-0">
-                <h3 className="font-semibold text-lg mb-2">Controls</h3>
+                <h3 className="font-semibold text-sm mb-2 opacity-70">Controls</h3>
                 {view === 'code' && (
                     <button
                         onClick={handleSave}
@@ -190,16 +195,18 @@ const FullscreenView: React.FC<FullscreenViewProps> = ({ sketchId, onClose }) =>
                 )}
             </div>
 
+            {/* History Section */}
             <StickToBottom className="flex-grow overflow-y-auto relative no-scrollbar [&>*:first-child]:no-scrollbar" resize="smooth">
                 <StickToBottom.Content>
                     <div className="p-4 pb-16">
+                        <h3 className="font-semibold text-sm mb-3 opacity-70">AI Generation History</h3>
                         {promptHistory.length === 0 ? (
                             <p className="text-xs opacity-50 text-center py-8">No history yet</p>
                         ) : (
                             <ul className="space-y-3">
                                 {promptHistory.map((item, index) => {
                                     const isCurrentVersion = sketch?.html === item.html;
-                                    const iframePreviewSrcDoc =  makeIframePreview(item.html)
+                                    const iframePreviewSrcDoc = makeIframePreview(item.html);
                                     return (
                                         <li
                                             key={index}
@@ -210,7 +217,6 @@ const FullscreenView: React.FC<FullscreenViewProps> = ({ sketchId, onClose }) =>
                                             )}
                                         >
                                             <div className={`p-4 ${isCurrentVersion ? 'bg-gradient-to-br from-primary/10 to-primary/5' : 'bg-base-300 group hover:bg-base-200'}`}>
-                                                {/* Header */}
                                                 <div className="flex items-center justify-between gap-3">
                                                     <div className="flex items-center gap-2 min-w-0 flex-1">
                                                         <div className={cn(
@@ -222,7 +228,6 @@ const FullscreenView: React.FC<FullscreenViewProps> = ({ sketchId, onClose }) =>
                                                             {index + 1}
                                                         </div>
 
-                                                        {/* Active badge or Restore button */}
                                                         {isCurrentVersion ? (
                                                             <div className="flex items-center gap-1 px-2 py-0.5 rounded-full bg-primary/20 text-primary">
                                                                 <FiCheck className="size-3" />
@@ -266,7 +271,6 @@ const FullscreenView: React.FC<FullscreenViewProps> = ({ sketchId, onClose }) =>
                                                     </span>
                                                 </div>
 
-                                                {/* Prompt */}
                                                 <p className="text-xs leading-relaxed break-words whitespace-pre-wrap opacity-90 mt-3">
                                                     {item.prompt}
                                                 </p>
@@ -285,6 +289,7 @@ const FullscreenView: React.FC<FullscreenViewProps> = ({ sketchId, onClose }) =>
                 </StickToBottom.Content>
             </StickToBottom>
 
+            {/* Chat Input */}
             <FullscreenChatInput
                 sketchId={sketchId}
                 currentSketchHtml={sketch?.html ?? ''}
@@ -295,20 +300,17 @@ const FullscreenView: React.FC<FullscreenViewProps> = ({ sketchId, onClose }) =>
     return (
         <div className="fixed inset-0 bg-base-300 flex flex-col z-[99]">
             <CustomToast />
-            {/* Header */}
             <header className="flex-shrink-0 bg-base-200/80 backdrop-blur-sm border-b border-base-300 h-14 flex items-center justify-between px-2 sm:px-4">
                 <div className="text-xs sm:text-sm opacity-80 truncate flex-1 min-w-0 mr-2">
                     <span className="font-semibold hidden sm:inline">Fullscreen Mode:</span>
                     <span className="ml-1">{sketch?.prompt}</span>
                 </div>
                 <div className="flex items-center gap-1 sm:gap-2 flex-shrink-0">
-                    {/* View Toggle */}
                     <div className="join">
                         <div className="tooltip tooltip-bottom" data-tip="Result">
                             <button
                                 onClick={() => setView('result')}
                                 className={`btn btn-xs sm:btn-sm join-item ${view === 'result' ? 'btn-primary' : 'btn-ghost'}`}
-                                title="Show Result"
                             >
                                 <FiEye size={14} className="sm:w-4 sm:h-4" />
                             </button>
@@ -317,21 +319,18 @@ const FullscreenView: React.FC<FullscreenViewProps> = ({ sketchId, onClose }) =>
                             <button
                                 onClick={() => setView('code')}
                                 className={`btn btn-xs sm:btn-sm join-item ${view === 'code' ? 'btn-primary' : 'btn-ghost'}`}
-                                title="Show Code"
                             >
                                 <FiCode size={14} className="sm:w-4 sm:h-4" />
                             </button>
                         </div>
                     </div>
 
-                    {/* Device Size Toggle - Hidden on mobile */}
                     <div className="divider divider-horizontal mx-1 hidden sm:flex"></div>
                     <div className="join hidden sm:flex">
                         <div className="tooltip tooltip-bottom" data-tip="Mobile">
                             <button
                                 onClick={() => setDeviceSize('mobile')}
                                 className={`btn btn-sm btn-ghost join-item ${deviceSize === 'mobile' ? 'text-primary' : ''}`}
-                                title="Mobile View"
                             >
                                 <FiSmartphone size={16} />
                             </button>
@@ -340,7 +339,6 @@ const FullscreenView: React.FC<FullscreenViewProps> = ({ sketchId, onClose }) =>
                             <button
                                 onClick={() => setDeviceSize('tablet')}
                                 className={`btn btn-sm btn-ghost join-item ${deviceSize === 'tablet' ? 'text-primary' : ''}`}
-                                title="Tablet View"
                             >
                                 <FiTablet size={16} />
                             </button>
@@ -349,19 +347,16 @@ const FullscreenView: React.FC<FullscreenViewProps> = ({ sketchId, onClose }) =>
                             <button
                                 onClick={() => setDeviceSize('desktop')}
                                 className={`btn btn-sm btn-ghost join-item ${deviceSize === 'desktop' ? 'text-primary' : ''}`}
-                                title="Desktop View"
                             >
                                 <FiMonitor size={16} />
                             </button>
                         </div>
                     </div>
 
-                    {/* Menu button for mobile */}
                     <div className="divider divider-horizontal mx-1 lg:hidden"></div>
                     <button
                         onClick={() => setIsSheetOpen(true)}
                         className="btn btn-xs sm:btn-sm btn-ghost lg:hidden"
-                        title="Open Menu"
                     >
                         <FiMenu size={16} />
                     </button>
@@ -372,7 +367,6 @@ const FullscreenView: React.FC<FullscreenViewProps> = ({ sketchId, onClose }) =>
                         <button
                             onClick={onClose}
                             className="btn btn-xs sm:btn-sm btn-ghost btn-square text-error hover:btn-error"
-                            title="Close Fullscreen"
                         >
                             <FiX size={16} className="sm:w-[18px] sm:h-[18px]" />
                         </button>
@@ -381,7 +375,6 @@ const FullscreenView: React.FC<FullscreenViewProps> = ({ sketchId, onClose }) =>
             </header>
 
             <div className="flex-grow flex h-full overflow-hidden">
-                {/* Main Content */}
                 <main className="flex-grow flex flex-col items-center justify-center p-2 sm:p-4 overflow-auto bg-base-300">
                     <div
                         className="bg-base-100 shadow-2xl transition-all duration-300 ease-in-out"
@@ -415,22 +408,20 @@ const FullscreenView: React.FC<FullscreenViewProps> = ({ sketchId, onClose }) =>
                     </div>
                 </main>
 
-                {/* Desktop Sidebar - Hidden on mobile/tablet */}
                 <aside className="w-80 flex-shrink-0 bg-base-200 border-l border-base-300 hidden lg:flex lg:flex-col">
                     <SidebarContent />
                 </aside>
             </div>
 
-            {/* Mobile Sheet Sidebar */}
             <Sheet open={isSheetOpen} onOpenChange={setIsSheetOpen}>
-                <SheetContent side="right" className="w-[85vw] sm:w-96 z-[99]">
+                <SheetContent side="right" className="w-[85vw] sm:w-96 z-[99] gap-0">
                     <SheetHeader>
                         <SheetTitle>Controls & History</SheetTitle>
                         <SheetDescription>
                             Manage your sketch and view prompt history
                         </SheetDescription>
                     </SheetHeader>
-                    <div className="flex flex-col h-[calc(100%-5rem)] mt-4">
+                    <div className="flex flex-col h-[calc(100%-5rem)]">
                         <SidebarContent />
                     </div>
                 </SheetContent>
