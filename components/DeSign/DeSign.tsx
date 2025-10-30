@@ -1,6 +1,4 @@
-import { FC, useState, useRef, useEffect, useCallback } from 'react';
-
-
+import { FC, useState, useRef, useEffect } from 'react';
 import PromptModal from './PromptModal';
 import SketchCard from './SketchCard';
 import FullscreenView from './FullscreenView';

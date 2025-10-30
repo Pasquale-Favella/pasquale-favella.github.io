@@ -14,7 +14,7 @@ import {
 import { StickToBottom, useStickToBottomContext } from "use-stick-to-bottom";
 import FullscreenChatInput from './FullscreenChatInput';
 import { useDesign, useDesignAiGeneratedSketchHistoryById, useDesignSketchById } from '@/hooks/use-de-sign';
-import { toBlob, toPng, toSvg } from 'html-to-image';
+import { toBlob } from 'html-to-image';
 import toast from 'react-hot-toast';
 import CustomToast from '../Navbar/CustomToast';
 import { cn, PromiseUtils } from '@/utils';
