@@ -1,5 +1,5 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import { FiX, FiCode, FiEye, FiDownload, FiSmartphone, FiTablet, FiMonitor, FiMenu, FiArrowDown } from 'react-icons/fi';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { FiX, FiCode, FiEye, FiDownload, FiSmartphone, FiTablet, FiMonitor, FiMenu, FiArrowDown, FiFigma, FiCheck, FiRotateCcw } from 'react-icons/fi';
 import { Sketch, SketchView } from '@/store/de-sign.atom';
 import { useTheme } from '@/hooks/use-theme';
 import { Editor } from '@monaco-editor/react';
@@ -14,6 +14,11 @@ import {
 import { StickToBottom, useStickToBottomContext } from "use-stick-to-bottom";
 import FullscreenChatInput from './FullscreenChatInput';
 import { useDesign, useDesignAiGeneratedSketchHistoryById, useDesignSketchById } from '@/hooks/use-de-sign';
+import { toBlob, toPng, toSvg } from 'html-to-image';
+import toast from 'react-hot-toast';
+import CustomToast from '../Navbar/CustomToast';
+import { cn, PromiseUtils } from '@/utils';
+import { HoverCard, HoverCardContent, HoverCardTrigger } from '../HoverCard';
 
 interface FullscreenViewProps {
     sketchId: string;
@@ -22,14 +27,32 @@ interface FullscreenViewProps {
 
 type DeviceSize = 'mobile' | 'tablet' | 'desktop';
 
-function useEditSketchHtml(sketchHtml?: string){
-    const [editedHtml, setEditedHtml] =  useState(sketchHtml ?? '');
+const makeIframePreview = (html: string) => {
+    return `
+        <!DOCTYPE html>
+        <html>
+        <head>
+            <script src="https://cdn.tailwindcss.com"></script>
+        </head>
+        <body class="h-full w-full m-0 p-0 overflow-auto">
+            ${html}
+        </body>
+        </html>
+    `;
+}
+
+function useEditSketchHtml(sketchHtml?: string) {
+    const [editedHtml, setEditedHtml] = useState(sketchHtml ?? '');
 
     useEffect(() => {
         setEditedHtml(sketchHtml ?? '');
     }, [sketchHtml]);
 
-    return {editedHtml, setEditedHtml};
+    const hasHtmlChanges = useMemo(() => {
+        return editedHtml !== sketchHtml;
+    }, [editedHtml, sketchHtml]);
+
+    return { editedHtml, setEditedHtml, hasHtmlChanges };
 }
 
 // Scroll to bottom indicator component
@@ -59,14 +82,42 @@ const FullscreenView: React.FC<FullscreenViewProps> = ({ sketchId, onClose }) =>
     const sketch = useDesignSketchById(sketchId);
     const promptHistory = useDesignAiGeneratedSketchHistoryById(sketchId);
     const { updateSketch } = useDesign();
-    const { editedHtml, setEditedHtml } = useEditSketchHtml(sketch?.html);
+    const { editedHtml, setEditedHtml, hasHtmlChanges } = useEditSketchHtml(sketch?.html);
     const [deviceSize, setDeviceSize] = useState<DeviceSize>('desktop');
     const [isSheetOpen, setIsSheetOpen] = useState(false);
 
-    const hasHtmlChanges = useMemo(() => {
-        return editedHtml !== sketch?.html;
-    }, [editedHtml, sketch?.html]);
+    const iframeRef = useRef<HTMLIFrameElement>(null);
 
+    const copyToClipboard = async () => {
+
+        const { err } = await PromiseUtils.tryOf((async () => {
+            const iframe = iframeRef.current;
+            const iframeDoc = iframe?.contentDocument || iframe?.contentWindow?.document;
+            const body = iframeDoc?.body;
+            if (!body) throw new Error('Iframe body not found');
+
+            const blob = await toBlob(body, {
+                cacheBust: true,
+                pixelRatio: 3, // High resolution
+                backgroundColor: '#ffffff',
+            });
+
+            if (!blob) throw new Error('Blob not found');
+
+            await navigator.clipboard.write([
+                new ClipboardItem({ 'image/png': blob })
+            ]);
+
+        })());
+
+        if (err) {
+            console.error('Failed to copy:', err);
+            toast.error('Error copying to clipboard. Please check the console.');
+            return;
+        }
+
+        toast.success('Image copied! Paste directly into Figma (Cmd/Ctrl+V)');
+    };
 
     // Hide body overflow when fullscreen is open
     useEffect(() => {
@@ -76,19 +127,7 @@ const FullscreenView: React.FC<FullscreenViewProps> = ({ sketchId, onClose }) =>
         };
     }, []);
 
-     const iframeSrcDoc = useMemo(()=> {
-        return`
-        <!DOCTYPE html>
-        <html>
-        <head>
-            <script src="https://cdn.tailwindcss.com"></script>
-        </head>
-        <body class="h-full w-full m-0 p-0 overflow-auto">
-            ${editedHtml}
-        </body>
-        </html>
-        `;
-    }, [editedHtml]);
+    const iframeSrcDoc = useMemo(() => makeIframePreview(editedHtml), [editedHtml]);
 
     const handleSave = async () => {
         await updateSketch(sketchId, { html: editedHtml });
@@ -96,6 +135,10 @@ const FullscreenView: React.FC<FullscreenViewProps> = ({ sketchId, onClose }) =>
 
     const handleHtmlChange = (codeValue: string | undefined) => {
         setEditedHtml(codeValue ?? '');
+    };
+
+    const rollBackToTargetAiGeneration = async (html: string) => {
+        await updateSketch(sketchId, { html });
     };
 
     const downloadHtml = () => {
@@ -136,6 +179,15 @@ const FullscreenView: React.FC<FullscreenViewProps> = ({ sketchId, onClose }) =>
                 >
                     <FiDownload size={16} /> Download HTML
                 </button>
+
+                {view === 'result' && (
+                    <button
+                        onClick={copyToClipboard}
+                        className="btn btn-primary btn-sm w-full gap-2"
+                    >
+                        <FiFigma size={16} /> Copy to FIGMA
+                    </button>
+                )}
             </div>
 
             <StickToBottom className="flex-grow overflow-y-auto relative no-scrollbar [&>*:first-child]:no-scrollbar" resize="smooth">
@@ -144,26 +196,83 @@ const FullscreenView: React.FC<FullscreenViewProps> = ({ sketchId, onClose }) =>
                         {promptHistory.length === 0 ? (
                             <p className="text-xs opacity-50 text-center py-8">No history yet</p>
                         ) : (
-                            <ul className="space-y-4">
-                                {promptHistory.map((item, index) => (
-                                    <li
-                                        key={index}
-                                        className="text-xs opacity-70 font-mono p-3 bg-base-300 rounded-lg whitespace-pre-wrap hover:opacity-100 hover:bg-base-200 transition-all group"
-                                    >
-                                        <div className="flex items-center justify-between mb-2">
-                                            <span className="text-primary font-bold">Step {index + 1}</span>
-                                            <span className="text-[10px] opacity-50 group-hover:opacity-100 transition-opacity">
-                                                {new Date(item.timestamp).toLocaleString(undefined, {
-                                                    month: 'short',
-                                                    day: 'numeric',
-                                                    hour: '2-digit',
-                                                    minute: '2-digit'
-                                                })}
-                                            </span>
-                                        </div>
-                                        <p className="break-words leading-relaxed">{item.prompt}</p>
-                                    </li>
-                                ))}
+                            <ul className="space-y-3">
+                                {promptHistory.map((item, index) => {
+                                    const isCurrentVersion = sketch?.html === item.html;
+                                    const iframePreviewSrcDoc =  makeIframePreview(item.html)
+                                    return (
+                                        <li
+                                            key={index}
+                                            className={`relative overflow-hidden rounded-xl transition-all duration-200 ${isCurrentVersion
+                                                    ? 'ring-2 ring-primary shadow-lg'
+                                                    : 'hover:shadow-md cursor-pointer'
+                                                }`}
+                                        >
+                                            <div className={`p-4 ${isCurrentVersion ? 'bg-gradient-to-br from-primary/10 to-primary/5' : 'bg-base-300 group hover:bg-base-200'}`}>
+                                                {/* Header */}
+                                                <div className="flex items-center justify-between gap-3">
+                                                    <div className="flex items-center gap-2 min-w-0 flex-1">
+                                                        <div className={cn(
+                                                            "flex-shrink-0 w-6 h-6 rounded-full flex items-center justify-center text-[10px] font-bold",
+                                                            isCurrentVersion
+                                                                ? 'bg-primary text-primary-content'
+                                                                : 'bg-base-100 text-base-content opacity-60'
+                                                        )}>
+                                                            {index + 1}
+                                                        </div>
+
+                                                        {/* Active badge or Restore button */}
+                                                        {isCurrentVersion ? (
+                                                            <div className="flex items-center gap-1 px-2 py-0.5 rounded-full bg-primary/20 text-primary">
+                                                                <FiCheck className="size-3" />
+                                                                <span className="text-[10px] font-semibold">Active</span>
+                                                            </div>
+                                                        ) : (
+                                                            <HoverCard openDelay={200} closeDelay={100}>
+                                                                <HoverCardTrigger asChild>
+                                                                    <button
+                                                                        onClick={() => rollBackToTargetAiGeneration(item.html)}
+                                                                        className="btn btn-xs btn-ghost gap-1 px-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200"
+                                                                    >
+                                                                        <FiRotateCcw className="size-3" />
+                                                                        <span className="text-[10px]">Restore</span>
+                                                                    </button>
+                                                                </HoverCardTrigger>
+                                                                <HoverCardContent side="right" align="start" className="w-80 p-3 z-[9999]">
+                                                                    <h3 className="text-xs font-semibold mb-2">Preview - Version {index + 1}</h3>
+                                                                    <div className="w-full h-48 bg-base-300 rounded-lg overflow-hidden border border-base-300">
+                                                                        <iframe
+                                                                            srcDoc={iframePreviewSrcDoc}
+                                                                            title={`Preview ${index}`}
+                                                                            sandbox="allow-scripts allow-same-origin"
+                                                                            className="w-full h-full border-0"
+                                                                            style={{
+                                                                                width: '200%',
+                                                                                height: '200%',
+                                                                                transform: 'scale(0.5)',
+                                                                                transformOrigin: 'top left'
+                                                                            }}
+                                                                        />
+                                                                    </div>
+                                                                    <p className="text-[10px] opacity-60 mt-2">{item.timestamp}</p>
+                                                                </HoverCardContent>
+                                                            </HoverCard>
+                                                        )}
+                                                    </div>
+
+                                                    <span className="text-[10px] opacity-50 whitespace-nowrap flex-shrink-0">
+                                                        {item.timestamp}
+                                                    </span>
+                                                </div>
+
+                                                {/* Prompt */}
+                                                <p className="text-xs leading-relaxed break-words whitespace-pre-wrap opacity-90 mt-3">
+                                                    {item.prompt}
+                                                </p>
+                                            </div>
+                                        </li>
+                                    );
+                                })}
                             </ul>
                         )}
                     </div>
@@ -184,6 +293,7 @@ const FullscreenView: React.FC<FullscreenViewProps> = ({ sketchId, onClose }) =>
 
     return (
         <div className="fixed inset-0 bg-base-300 flex flex-col z-[99]">
+            <CustomToast />
             {/* Header */}
             <header className="flex-shrink-0 bg-base-200/80 backdrop-blur-sm border-b border-base-300 h-14 flex items-center justify-between px-2 sm:px-4">
                 <div className="text-xs sm:text-sm opacity-80 truncate flex-1 min-w-0 mr-2">
@@ -282,6 +392,7 @@ const FullscreenView: React.FC<FullscreenViewProps> = ({ sketchId, onClose }) =>
                     >
                         {view === 'result' ? (
                             <iframe
+                                ref={iframeRef}
                                 srcDoc={iframeSrcDoc}
                                 title="Sketch Result"
                                 sandbox="allow-scripts allow-same-origin"

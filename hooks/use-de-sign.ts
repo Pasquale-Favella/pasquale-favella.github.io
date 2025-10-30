@@ -263,8 +263,15 @@ export const useDesignAiGeneratedSketchHistoryById = (id: string) => {
         `, [id]);
 
     const promptHistory = useMemo(() => {
-        const sketchHistory: { sketchId: string; prompt: string; html:string; timestamp: string }[] = recentHistoryQuery?.rows ?? [];
-        return sketchHistory;
+        const sketchHistory: { sketchId: string; prompt: string; html: string; timestamp: string }[] = recentHistoryQuery?.rows ?? [];
+        return sketchHistory.map(s => ({
+            ...s, timestamp: new Date(s.timestamp).toLocaleString(undefined, {
+                month: 'short',
+                day: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit'
+            })
+        }));
     }, [recentHistoryQuery?.rows]);
 
     return promptHistory;

@@ -1,5 +1,5 @@
 import dynamic from 'next/dynamic'
-import { MdOutlineNotInterested } from 'react-icons/md';
+import { MdOutlineNotInterested, MdOutlineVerified } from 'react-icons/md';
 
 const Toaster = dynamic(() => import("react-hot-toast").then((c) => c.Toaster), { ssr: false });
 
@@ -9,8 +9,13 @@ const CustomToast = ()=>{
         <Toaster 
             toastOptions={{
                 className : '!bg-base-200 !prose',
+                success : {
+                    icon : <MdOutlineVerified className='size-10'/>,
+                    className: '!bg-success text-base-content'
+                },
                 error : {
-                   icon : <MdOutlineNotInterested className='text-error' size={20}/>
+                   icon : <MdOutlineNotInterested className='size-10' />,
+                   className: '!bg-error'
                 }
             }}
         />
