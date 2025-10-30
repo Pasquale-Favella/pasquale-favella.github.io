@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { FiX, FiCode, FiEye, FiDownload, FiSmartphone, FiTablet, FiMonitor, FiMenu, FiArrowDown, FiFigma, FiCheck, FiRotateCcw } from 'react-icons/fi';
-import { Sketch, SketchView } from '@/store/de-sign.atom';
+import { SketchView } from '@/store/de-sign.atom';
 import { useTheme } from '@/hooks/use-theme';
 import { Editor } from '@monaco-editor/react';
 import CodeEditorLoader from '../CodeEditor/CodeEditorLoader';
