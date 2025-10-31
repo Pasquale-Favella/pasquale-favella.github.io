@@ -140,26 +140,6 @@ const DeSign: FC = () => {
     }
   };
 
-  // Canvas zooming
-  const handleZoom = (e: React.WheelEvent<HTMLDivElement>) => {
-    const scaleAmount = -e.deltaY * 0.001;
-    const newScale = Math.min(
-      Math.max(0.1, canvasTransform.scale + scaleAmount),
-      3
-    );
-
-    const rect = canvasRef.current!.getBoundingClientRect();
-    const mouseX = e.clientX - rect.left;
-    const mouseY = e.clientY - rect.top;
-
-    const newX =
-      mouseX - (mouseX - canvasTransform.x) * (newScale / canvasTransform.scale);
-    const newY =
-      mouseY - (mouseY - canvasTransform.y) * (newScale / canvasTransform.scale);
-
-    setCanvasTransform({ x: newX, y: newY, scale: newScale });
-  };
-
   // Fit to screen handler
   const handleFitToScreen = () => {
     const containerWidth = canvasRef.current?.clientWidth || window.innerWidth;
@@ -182,6 +162,35 @@ const DeSign: FC = () => {
     window.addEventListener('mouseup', handleMouseUp);
     return () => window.removeEventListener('mouseup', handleMouseUp);
   }, []);
+
+  // Wheel event listener
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+
+    const handleWheelEvent = (e: WheelEvent) => {
+      e.preventDefault();
+      const scaleAmount = -e.deltaY * 0.001;
+      const newScale = Math.min(
+        Math.max(0.1, canvasTransform.scale + scaleAmount),
+        3
+      );
+
+      const rect = canvas.getBoundingClientRect();
+      const mouseX = e.clientX - rect.left;
+      const mouseY = e.clientY - rect.top;
+
+      const newX =
+        mouseX - (mouseX - canvasTransform.x) * (newScale / canvasTransform.scale);
+      const newY =
+        mouseY - (mouseY - canvasTransform.y) * (newScale / canvasTransform.scale);
+
+      setCanvasTransform({ x: newX, y: newY, scale: newScale });
+    };
+
+    canvas.addEventListener('wheel', handleWheelEvent, { passive: false });
+    return () => canvas.removeEventListener('wheel', handleWheelEvent);
+  }, [canvasTransform]);
 
   // Fit on mount
   useEffect(() => {
@@ -211,7 +220,6 @@ const DeSign: FC = () => {
             className="flex-grow w-full h-full relative overflow-hidden cursor-grab canvas-bg"
             onMouseDown={handlePanStart}
             onMouseMove={handlePanMove}
-            onWheel={handleZoom}
             style={{
               backgroundImage:
                 'radial-gradient(circle at 1px 1px, oklch(var(--bc) / 0.2) 1px, transparent 0)',
