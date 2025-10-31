@@ -5,6 +5,7 @@ import { VscGear } from 'react-icons/vsc';
 import toast from 'react-hot-toast';
 import { PromiseUtils } from '@/utils';
 import { useDesign } from '@/hooks/use-de-sign';
+import { DesignAiGenerationPayload } from '@/store/de-sign.atom';
 
 interface FullscreenChatInputProps {
     sketchId: string;
@@ -69,7 +70,7 @@ const FullscreenChatInput: React.FC<FullscreenChatInputProps> = ({
         if (!prompt.trim() && !image) return;
         if (disabled || isLoading) return;
 
-        let imageData: { data: string; mimeType: string } | null = null;
+        let imageData: DesignAiGenerationPayload['image'] = null;
         if (image) {
             imageData = await new Promise((resolve, reject) => {
                 const reader = new FileReader();
@@ -88,7 +89,7 @@ const FullscreenChatInput: React.FC<FullscreenChatInputProps> = ({
 
         setIsLoading(true);
         const { err, result } = await PromiseUtils.tryOf(
-            editHtml(prompt, currentSketchHtml, imageData)
+            editHtml({ prompt, originalHtml: currentSketchHtml, image: imageData })
         );
         setIsLoading(false)
 

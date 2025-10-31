@@ -8,10 +8,11 @@ import { VscGear } from 'react-icons/vsc';
 import { useDesign } from '@/hooks/use-de-sign';
 import { Popover, PopoverContent, PopoverTrigger } from '../Popover';
 import DeSignAiSettings from './DeSignAiSettings';
+import { DesignAiGenerationPayload } from '@/store/de-sign.atom';
 
 interface PromptModalProps {
     onClose: () => void;
-    onSubmit: (prompt: string, image: { data: string; mimeType: string } | null) => void;
+    onSubmit: (prompt: string, image: DesignAiGenerationPayload['image']) => void;
     isLoading: boolean;
     type: 'create' | 'edit';
     initialPrompt?: string;
@@ -57,7 +58,7 @@ const PromptModal: React.FC<PromptModalProps> = ({
         e.preventDefault();
         if (!prompt.trim() && !image) return;
 
-        let imageData: { data: string; mimeType: string } | null = null;
+        let imageData: DesignAiGenerationPayload['image'] = null;
         if (image) {
             imageData = await new Promise((resolve, reject) => {
                 const reader = new FileReader();

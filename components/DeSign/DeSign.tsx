@@ -4,7 +4,7 @@ import SketchCard from './SketchCard';
 import FullscreenView from './FullscreenView';
 import { HiPlus } from 'react-icons/hi';
 import { useDesign } from '@/hooks/use-de-sign';
-import { ModalState, Sketch } from '@/store/de-sign.atom';
+import { DesignAiGenerationPayload, ModalState, Sketch } from '@/store/de-sign.atom';
 import Toolbar from './Toolbar';
 import toast from 'react-hot-toast';
 
@@ -37,11 +37,11 @@ const DeSign: FC = () => {
   // Handle sketch creation
   const handleCreateSketch = async (
     prompt: string,
-    image: { data: string; mimeType: string } | null
+    image: DesignAiGenerationPayload['image']
   ) => {
     setIsLoading(true);
     try {
-      const html = await generateHtml(prompt, image);
+      const html = await generateHtml({prompt, image});
       const newSketch: Sketch = {
         id: `sketch_${Date.now()}`,
         prompt,
@@ -66,7 +66,7 @@ const DeSign: FC = () => {
   const handleEditSketch = async (
     prompt: string,
     sketchId: string,
-    image: { data: string; mimeType: string } | null
+    image: DesignAiGenerationPayload['image']
   ) => {
     setIsLoading(true);
     const originalSketch = getSketchById(sketchId);
@@ -76,7 +76,7 @@ const DeSign: FC = () => {
     }
 
     try {
-      const newHtml = await editHtml(prompt, originalSketch.html, image);
+      const newHtml = await editHtml({ prompt, originalHtml: originalSketch.html, image });
       updateSketch(sketchId, {
         html: newHtml,
         prompt,
@@ -93,7 +93,7 @@ const DeSign: FC = () => {
   // Handle modal submission
   const handleModalSubmit = (
     prompt: string,
-    image: { data: string; mimeType: string } | null
+    image: DesignAiGenerationPayload['image']
   ) => {
     if (modalState.type === 'create') {
       handleCreateSketch(prompt, image);

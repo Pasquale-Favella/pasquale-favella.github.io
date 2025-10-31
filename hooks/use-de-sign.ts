@@ -1,17 +1,15 @@
-import { usePGliteDeSign } from '@/providers/de-sign-pglite.provider';
-import { Sketch, CanvasTransform, designSketchAiProviderAtom, designSketchAiModelAtom, designSketchAiApiKeyAtom, DesignSketchAiProvider, providerModels, sketchesAtom, sketchActionsAtom } from '@/store/de-sign.atom';
-import { createAnthropic } from '@ai-sdk/anthropic';
-import { createGoogleGenerativeAI } from '@ai-sdk/google';
-import { createOpenAI } from '@ai-sdk/openai';
+import { Sketch, CanvasTransform, designSketchAiProviderAtom, designSketchAiModelAtom, designSketchAiApiKeyAtom, DesignSketchAiProvider, providerModels, sketchesAtom, sketchActionsAtom, aiProviderAtom, generateHtmlAtom, editHtmlAtom } from '@/store/de-sign.atom';
 import { useLiveQuery } from '@electric-sql/pglite-react';
-import { generateText, ModelMessage } from 'ai';
 import { useAtom, useAtomValue, useSetAtom } from 'jotai';
-import { useCallback, useMemo, useReducer, useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 
 export const useDesign = () => {
     const [provider, setProvider] = useAtom(designSketchAiProviderAtom);
     const [model, setModel] = useAtom(designSketchAiModelAtom);
     const [apiKey, setApiKey] = useAtom(designSketchAiApiKeyAtom);
+
+    const generateHtml = useSetAtom(generateHtmlAtom);
+    const editHtml = useSetAtom(editHtmlAtom);
 
     const sketches = useAtomValue(sketchesAtom);
     const dispatch = useSetAtom(sketchActionsAtom);
@@ -22,115 +20,6 @@ export const useDesign = () => {
         y: 0,
         scale: 1
     });
-
-    const aiProvider = useMemo(() => {
-        if (!apiKey) return null;
-        switch (provider) {
-            case 'openai':
-                return createOpenAI({ apiKey });
-            case 'anthropic':
-                return createAnthropic({ apiKey });
-            case 'google':
-                return createGoogleGenerativeAI({ apiKey });
-            default:
-                return null;
-        }
-    }, [provider, apiKey]);
-
-    const generateHtml = useCallback(
-        async (prompt: string, image: { data: string; mimeType: string } | null = null) => {
-            if (!aiProvider) throw new Error('AI provider not configured');
-
-            const imageInstruction = image ? " The user has provided an image for reference." : "";
-            const fullPrompt = `You are an expert web designer. Create a single, self-contained HTML component for the following request: "${prompt}".${imageInstruction}`
-
-            const userMessage: ModelMessage = {
-                role: 'user',
-                content: [
-                    {
-                        type: 'text',
-                        text: fullPrompt,
-                    },
-                ],
-            };
-
-            if (image && Array.isArray(userMessage.content)) {
-                userMessage.content.push({
-                    type: 'image',
-                    image: image.data,
-                });
-            }
-
-            const { text } = await generateText({
-                model: aiProvider(model),
-                messages: [userMessage],
-                system: `
-                1. Use Tailwind CSS classes for styling. Assume Tailwind is loaded from a CDN.
-                2. Do NOT include \`<html>\`, \`<head>\`, or \`<body>\` tags.
-                3. The root element should be a \`<div>\` that is designed to fill its container (e.g., using \`w-full\`, \`h-full\`).
-                4. Ensure the design is modern, visually appealing, and responsive.
-                5. ONLY output the HTML code. No explanations, no markdown formatting, just the raw HTML.
-                `,
-            });
-
-            return cleanHtmlResponse(text);
-        },
-        [aiProvider, model]
-    );
-
-    const editHtml = useCallback(
-        async (prompt: string, originalHtml: string, image: { data: string; mimeType: string } | null = null) => {
-            if (!aiProvider) throw new Error('AI provider not configured');
-
-            const imageInstruction = image ? " The user has provided an image for reference." : "";
-            const fullPrompt = `
-            You are an expert web designer. A user wants to modify an existing HTML component.
-            
-            User's request: "${prompt}"${imageInstruction}
-            
-            Original HTML:
-            \`\`\`html
-            ${originalHtml}
-            \`\`\``
-
-            const userMessage: ModelMessage = {
-                role: 'user',
-                content: [
-                    {
-                        type: 'text',
-                        text: fullPrompt,
-                    },
-                ],
-            };
-
-            if (image && Array.isArray(userMessage.content)) {
-                userMessage.content.push({
-                    type: 'image',
-                    image: image.data,
-                });
-            }
-
-            const { text } = await generateText({
-                model: aiProvider(model),
-                messages: [userMessage],
-                system: `
-                1. Provide the new, complete HTML content that incorporates the user's change.
-                2. Continue using Tailwind CSS classes for styling.
-                3. Do NOT include \`<html>\`, \`<head>\`, or \`<body>\` tags.
-                4. The root element should remain a container-filling \`<div>\`.
-                5. ONLY output the new HTML code. No explanations, no markdown formatting, just the raw HTML.
-                `,
-            });
-
-            return cleanHtmlResponse(text);
-        },
-        [aiProvider, model]
-    );
-
-    const cleanHtmlResponse = (html: string): string => {
-        const cleaned = html.trim().replace(/^```html|```$/g, '').trim();
-        return cleaned;
-    };
 
     const handleProviderChange = useCallback(
         (newProvider: DesignSketchAiProvider) => {

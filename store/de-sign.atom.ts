@@ -4,6 +4,48 @@ import { PGlite, PGliteInterfaceExtensions } from '@electric-sql/pglite'
 import { live } from '@electric-sql/pglite/live'
 import { vector } from '@electric-sql/pglite/vector'
 import { PromiseUtils } from "@/utils"
+import { createOpenAI } from "@ai-sdk/openai"
+import { createAnthropic } from "@ai-sdk/anthropic"
+import { createGoogleGenerativeAI } from "@ai-sdk/google"
+import { generateText, ModelMessage } from "ai"
+
+export type DesignAiGenerationPayload =  { prompt: string; image: { data: string; mimeType: string } | null };
+export type DesignAiEditPayload =  DesignAiGenerationPayload & { originalHtml: string; };
+
+export type SketchView = 'result' | 'code';
+export interface Sketch {
+  id: string;
+  prompt: string;
+  html: string;
+  x: number;
+  y: number;
+  width: number;
+  height: number;
+  view: SketchView;
+}
+
+export interface SketchHistory {
+  id: number;
+  sketch_id: string;
+  prompt: string;
+  html: string;
+  created_at: string;
+}
+
+export interface ModalState {
+  isOpen: boolean;
+  type?: 'create' | 'edit';
+  sketchId?: string | null;
+}
+
+export interface CanvasTransform {
+  x: number;
+  y: number;
+  scale: number;
+}
+
+export const designSketchAiProviders = ['openai', 'anthropic', 'google'] as const;
+export type DesignSketchAiProvider = (typeof designSketchAiProviders)[number];
 
 export type DeSignDB = PGlite & PGliteInterfaceExtensions<{
   live: typeof live
@@ -52,42 +94,6 @@ const dbAtom = atom(async () => {
 });
 
 export const deSignDbLoadableAtom = loadable(dbAtom);
-
-export type SketchView = 'result' | 'code';
-
-export interface Sketch {
-  id: string;
-  prompt: string;
-  html: string;
-  x: number;
-  y: number;
-  width: number;
-  height: number;
-  view: SketchView;
-}
-
-export interface SketchHistory {
-  id: number;
-  sketch_id: string;
-  prompt: string;
-  html: string;
-  created_at: string;
-}
-
-export interface ModalState {
-  isOpen: boolean;
-  type?: 'create' | 'edit';
-  sketchId?: string | null;
-}
-
-export interface CanvasTransform {
-  x: number;
-  y: number;
-  scale: number;
-}
-
-export const designSketchAiProviders = ['openai', 'anthropic', 'google'] as const;
-export type DesignSketchAiProvider = (typeof designSketchAiProviders)[number];
 
 export const providerModels: Record<DesignSketchAiProvider, string[]> = {
   openai: ['gpt-3.5-turbo', 'gpt-4', 'gpt-4o', 'gpt-4-turbo', 'gpt-4o-mini'],
@@ -266,3 +272,125 @@ async function addToAiGeneratedHistory(db: DeSignDB, id: string, prompt: string,
     [id, prompt, html]
   );
 }
+
+export const aiProviderAtom = atom((get) => {
+  const provider = get(designSketchAiProviderAtom);
+  const apiKey = get(designSketchAiApiKeyAtom);
+
+  if (!apiKey) return null;
+
+  switch (provider) {
+    case 'openai':
+      return createOpenAI({ apiKey });
+    case 'anthropic':
+      return createAnthropic({ apiKey });
+    case 'google':
+      return createGoogleGenerativeAI({ apiKey });
+    default:
+      return null;
+  }
+});
+
+const cleanHtmlResponse = (html: string): string => {
+  const cleaned = html.trim().replace(/^```html|```$/g, '').trim();
+  return cleaned;
+};
+
+// AI Generation atoms
+export const generateHtmlAtom = atom(
+  null,
+  async (get, _set, params: DesignAiGenerationPayload) => {
+    const aiProvider = get(aiProviderAtom);
+    const model = get(designSketchAiModelAtom);
+
+    if (!aiProvider) throw new Error('AI provider not configured');
+
+    const { prompt, image = null } = params;
+    const imageInstruction = image ? " The user has provided an image for reference." : "";
+    const fullPrompt = `You are an expert web designer. Create a single, self-contained HTML component for the following request: "${prompt}".${imageInstruction}`;
+
+    const userMessage: ModelMessage = {
+      role: 'user',
+      content: [
+        {
+          type: 'text',
+          text: fullPrompt,
+        },
+      ],
+    };
+
+    if (image && Array.isArray(userMessage.content)) {
+      userMessage.content.push({
+        type: 'image',
+        image: image.data,
+      });
+    }
+
+    const { text } = await generateText({
+      model: aiProvider(model),
+      messages: [userMessage],
+      system: `
+      1. Use Tailwind CSS classes for styling. Assume Tailwind is loaded from a CDN.
+      2. Do NOT include \`<html>\`, \`<head>\`, or \`<body>\` tags.
+      3. The root element should be a \`<div>\` that is designed to fill its container (e.g., using \`w-full\`, \`h-full\`).
+      4. Ensure the design is modern, visually appealing, and responsive.
+      5. ONLY output the HTML code. No explanations, no markdown formatting, just the raw HTML.
+      `,
+    });
+
+    return cleanHtmlResponse(text);
+  }
+);
+
+export const editHtmlAtom = atom(
+  null,
+  async (get, _set, params: DesignAiEditPayload) => {
+    const aiProvider = get(aiProviderAtom);
+    const model = get(designSketchAiModelAtom);
+
+    if (!aiProvider) throw new Error('AI provider not configured');
+
+    const { prompt, originalHtml, image = null } = params;
+    const imageInstruction = image ? " The user has provided an image for reference." : "";
+    const fullPrompt = `
+    You are an expert web designer. A user wants to modify an existing HTML component.
+    
+    User's request: "${prompt}"${imageInstruction}
+    
+    Original HTML:
+    \`\`\`html
+    ${originalHtml}
+    \`\`\``
+
+    const userMessage: ModelMessage = {
+      role: 'user',
+      content: [
+        {
+          type: 'text',
+          text: fullPrompt,
+        },
+      ],
+    };
+
+    if (image && Array.isArray(userMessage.content)) {
+      userMessage.content.push({
+        type: 'image',
+        image: image.data,
+      });
+    }
+
+    const { text } = await generateText({
+      model: aiProvider(model),
+      messages: [userMessage],
+      system: `
+      1. Provide the new, complete HTML content that incorporates the user's change.
+      2. Continue using Tailwind CSS classes for styling.
+      3. Do NOT include \`<html>\`, \`<head>\`, or \`<body>\` tags.
+      4. The root element should remain a container-filling \`<div>\`.
+      5. ONLY output the new HTML code. No explanations, no markdown formatting, just the raw HTML.
+      `,
+    });
+
+    return cleanHtmlResponse(text);
+  }
+);
