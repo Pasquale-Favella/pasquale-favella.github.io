@@ -1,10 +1,10 @@
 import React, { useState, useRef, useEffect, useMemo } from 'react';
 import { HiPaperClip, HiX } from 'react-icons/hi';
 import { FiSend } from 'react-icons/fi';
-import { PromiseUtils } from '@/utils';
-import toast from 'react-hot-toast';
-import { useDesign } from '@/hooks/use-de-sign';
 import { VscGear } from 'react-icons/vsc';
+import toast from 'react-hot-toast';
+import { PromiseUtils } from '@/utils';
+import { useDesign } from '@/hooks/use-de-sign';
 
 interface FullscreenChatInputProps {
     sketchId: string;

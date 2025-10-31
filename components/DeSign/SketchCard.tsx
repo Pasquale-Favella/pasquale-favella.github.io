@@ -1,9 +1,9 @@
-import { useTheme } from '@/hooks/use-theme';
-import { Sketch } from '@/store/de-sign.atom';
-import { Editor } from '@monaco-editor/react';
 import React, { useState, useRef, useEffect, useCallback, memo } from 'react';
 import { FiEdit, FiTrash2, FiCode, FiEye, FiCopy, FiMaximize2 } from 'react-icons/fi';
 import { PiArrowsOutSimpleBold } from 'react-icons/pi';
+import { useTheme } from '@/hooks/use-theme';
+import { Sketch } from '@/store/de-sign.atom';
+import { Editor } from '@monaco-editor/react';
 import CodeEditorLoader from '../CodeEditor/CodeEditorLoader';
 
 interface SketchCardProps {

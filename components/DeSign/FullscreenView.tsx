@@ -1,9 +1,9 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { FiX, FiCode, FiEye, FiSmartphone, FiTablet, FiMonitor, FiMenu } from 'react-icons/fi';
+import { Editor } from '@monaco-editor/react';
 import { SketchView } from '@/store/de-sign.atom';
 import { useTheme } from '@/hooks/use-theme';
-import { Editor } from '@monaco-editor/react';
-import CodeEditorLoader from '../CodeEditor/CodeEditorLoader';
+import { useDesignSketchById } from '@/hooks/use-de-sign';
 import {
     Sheet,
     SheetContent,
@@ -11,8 +11,8 @@ import {
     SheetTitle,
     SheetDescription,
 } from '@/components/Sheet';
-import { useDesignSketchById } from '@/hooks/use-de-sign';
 import CustomToast from '../Navbar/CustomToast';
+import CodeEditorLoader from '../CodeEditor/CodeEditorLoader';
 import FullscreenSidebarContent from './FullscreenSidebarContent';
 
 interface FullscreenViewProps {
@@ -191,7 +191,7 @@ const FullscreenView: React.FC<FullscreenViewProps> = ({ sketchId, onClose }) =>
                 </main>
 
                 <aside className="w-80 flex-shrink-0 bg-base-200 border-l border-base-300 hidden lg:flex lg:flex-col">
-                    <FullscreenSidebarContent sketchId={sketchId} view={view} iframe={iframeRef.current} editedHtml={editedHtml} hasHtmlChanges={hasHtmlChanges} />
+                    <FullscreenSidebarContent sketchId={sketchId} view={view} iframeRef={iframeRef} editedHtml={editedHtml} hasHtmlChanges={hasHtmlChanges} />
                 </aside>
             </div>
 
@@ -204,7 +204,7 @@ const FullscreenView: React.FC<FullscreenViewProps> = ({ sketchId, onClose }) =>
                         </SheetDescription>
                     </SheetHeader>
                     <div className="flex flex-col h-[calc(100%-5rem)]">
-                        <FullscreenSidebarContent sketchId={sketchId} view={view} iframe={iframeRef.current} editedHtml={editedHtml} hasHtmlChanges={hasHtmlChanges} />
+                        <FullscreenSidebarContent sketchId={sketchId} view={view} iframeRef={iframeRef} editedHtml={editedHtml} hasHtmlChanges={hasHtmlChanges} />
                     </div>
                 </SheetContent>
             </Sheet>

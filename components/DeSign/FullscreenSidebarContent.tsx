@@ -1,16 +1,16 @@
-import { FC, useCallback, useState } from "react";
-import FullscreenChatInput from "./FullscreenChatInput";
+import { FC, RefObject, useCallback } from "react";
+import { FiArrowDown, FiCheck, FiDownload, FiRotateCcw } from "react-icons/fi";
+import { FaImages } from "react-icons/fa";
+import { toBlob } from 'html-to-image';
+import toast from "react-hot-toast";
+import { StickToBottom, useStickToBottomContext } from "use-stick-to-bottom";
 import { SketchView } from "@/store/de-sign.atom";
 import { useDesign, useDesignAiGeneratedSketchHistoryById, useDesignSketchById } from "@/hooks/use-de-sign";
 import { cn, PromiseUtils } from "@/utils";
-import toast from "react-hot-toast";
-import AISettingsSection from "./FullscreenAiSettingSection";
-import { FiArrowDown, FiCheck, FiDownload, FiRotateCcw } from "react-icons/fi";
-import { StickToBottom, useStickToBottomContext } from "use-stick-to-bottom";
+import FullscreenChatInput from "./FullscreenChatInput";
+import FullscreenAiSettingsSection from "./FullscreenAiSettingSection";
 import { makeIframePreview } from "./FullscreenView";
-import { toBlob } from 'html-to-image';
 import { HoverCard, HoverCardContent, HoverCardTrigger } from '../HoverCard';
-import { FaImages } from "react-icons/fa";
 
 const StickToBottomIndicator = () => {
     const { isAtBottom, scrollToBottom } = useStickToBottomContext();
@@ -35,18 +35,16 @@ const StickToBottomIndicator = () => {
 const FullscreenSidebarContent: FC<{ 
     sketchId: string; 
     view: SketchView; 
-    iframe: HTMLIFrameElement | null, 
+    iframeRef: RefObject<HTMLIFrameElement>, 
     editedHtml: string, 
     hasHtmlChanges: boolean 
 }> = ({
-    iframe,
+    iframeRef,
     sketchId,
     view,
     editedHtml,
     hasHtmlChanges,
 }) => {
-
-    const [isAiSettingsCollapsed, setIsAiSettingsCollapsed] = useState(true);
     const promptHistory = useDesignAiGeneratedSketchHistoryById(sketchId);
     const { updateSketch } = useDesign();
     const sketch = useDesignSketchById(sketchId);
@@ -74,7 +72,7 @@ const FullscreenSidebarContent: FC<{
 
     const copyToClipboard = async () => {
         const { err } = await PromiseUtils.tryOf((async () => {
-
+            const iframe = iframeRef.current;
             const iframeDoc = iframe?.contentDocument || iframe?.contentWindow?.document;
             const body = iframeDoc?.body;
             if (!body) throw new Error('Iframe body not found');
@@ -104,10 +102,7 @@ const FullscreenSidebarContent: FC<{
     return (
         <>
             {/* AI Settings Section */}
-            <AISettingsSection
-                isCollapsed={isAiSettingsCollapsed}
-                onToggle={() => setIsAiSettingsCollapsed(prev => !prev)}
-            />
+            <FullscreenAiSettingsSection />
 
             {/* Controls Section */}
             <div className="p-4 border-b border-base-300 space-y-2 flex-shrink-0">

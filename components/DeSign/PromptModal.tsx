@@ -4,10 +4,10 @@ import {
     HiPaperClip,
     HiX
 } from 'react-icons/hi';
-import { Popover, PopoverContent, PopoverTrigger } from '../Popover';
 import { VscGear } from 'react-icons/vsc';
-import DeSignAiSettings from './DeSignAiSettings';
 import { useDesign } from '@/hooks/use-de-sign';
+import { Popover, PopoverContent, PopoverTrigger } from '../Popover';
+import DeSignAiSettings from './DeSignAiSettings';
 
 interface PromptModalProps {
     onClose: () => void;

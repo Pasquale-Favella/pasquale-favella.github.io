@@ -1,9 +1,9 @@
-import { designSketchAiProviders, providerLinks, providerModels } from "@/store/de-sign.atom";
 import { FC } from "react";
+import { VscKey } from "react-icons/vsc";
+import { designSketchAiProviders, providerLinks, providerModels } from "@/store/de-sign.atom";
+import { useDesign } from "@/hooks/use-de-sign";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../Select";
 import InputWithIcon from "../InputWithIcon";
-import { VscKey } from "react-icons/vsc";
-import { useDesign } from "@/hooks/use-de-sign";
 
 const DeSignAiSettings: FC = () => {
     const {
@@ -23,7 +23,7 @@ const DeSignAiSettings: FC = () => {
                     <SelectTrigger>
                         <SelectValue placeholder="Select a provider" />
                     </SelectTrigger>
-                    <SelectContent>
+                    <SelectContent className="z-[9999]">
                         {designSketchAiProviders.map((p) => (
                             <SelectItem key={p} value={p}>
                                 {p}
@@ -38,7 +38,7 @@ const DeSignAiSettings: FC = () => {
                     <SelectTrigger>
                         <SelectValue placeholder="Select a model" />
                     </SelectTrigger>
-                    <SelectContent>
+                    <SelectContent className="z-[9999]">
                         {providerModels[provider].map((m) => (
                             <SelectItem key={m} value={m}>
                                 {m}
@@ -55,6 +55,7 @@ const DeSignAiSettings: FC = () => {
                     value={apiKey}
                     onChange={(e) => setApiKey(e.target.value)}
                     placeholder="Enter your API key"
+                    className="input-sm bg-transparent"
                 />
                 <a
                     href={providerLinks[provider]}
