@@ -6,4 +6,4 @@ This project is a beautiful portfolio and blog that uses the GitHub API as a CMS
 
 **Personalization:** You can personalize this project by modifying the `@/config/owner.ts` file. By configuring the owner, your public GitHub projects will be automatically showcased in the portfolio.
 
-**Writing Articles:** Articles can be written as **closed** GitHub issues with the label **documentation**. Any other labels added to the issue will automatically become tags for the articles.
+**Writing Articles:** Articles can be written as **closed** GitHub issues with the label **documentation**. Any other labels added to the issues will automatically become tags for the articles.
