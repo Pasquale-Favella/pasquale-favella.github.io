@@ -1,11 +1,9 @@
 import { useEffect } from "react";
 
-const useScrollTop = (condition: boolean) => {
+const useScrollTop = (trackTrigger: boolean | number | string) => {
   useEffect(() => {
-    if (condition) {
-      window.scrollTo({ top: 0, behavior: "smooth" });
-    }
-  }, [condition]);
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }, [trackTrigger]);
 };
 
 export { useScrollTop };

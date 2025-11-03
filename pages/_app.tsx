@@ -11,6 +11,7 @@ import { ThemeProvider } from 'next-themes';
 import { Provider as JotaiProvider} from 'jotai';
 import Layout from '@/components/Layout';
 import DefaultSeo from '@/components/Seo/DefaultSeo';
+import { NuqsAdapter } from 'nuqs/adapters/next/pages'
 
 NProgress.configure({showSpinner : false})
 
@@ -20,13 +21,15 @@ Router.events.on('routeChangeError',()=>NProgress.done())
 
 export default function App({ Component, pageProps }: AppProps) {
   return (
-    <JotaiProvider>
-      <ThemeProvider>
-        <Layout>
-          <DefaultSeo />
-          <Component {...pageProps} />
-        </Layout>
-      </ThemeProvider>
-    </JotaiProvider>
+    <NuqsAdapter>
+      <JotaiProvider>
+        <ThemeProvider>
+          <Layout>
+            <DefaultSeo />
+            <Component {...pageProps} />
+          </Layout>
+        </ThemeProvider>
+      </JotaiProvider>
+    </NuqsAdapter>
   )
 }

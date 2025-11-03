@@ -76,6 +76,7 @@
     "next-seo": "6.5.0",
     "next-themes": "0.3.0",
     "nprogress": "0.2.0",
+    "nuqs": "^2.7.2",
     "pdfjs-dist": "^5.4.149",
     "react": "^18",
     "react-dom": "^18",
@@ -99,20 +100,20 @@
     "@tailwindcss/typography": "0.5.12",
     "@types/editorjs__header": "2.6.3",
     "@types/markdown-it": "13.0.7",
-    "@types/nprogress": "0.2.3",
     "@types/node": "^20",
+    "@types/nprogress": "0.2.3",
     "@types/react": "^18",
     "@types/react-dom": "^18",
     "@typescript-eslint/parser": "7.5.0",
     "autoprefixer": "10.4.19",
     "daisyui": "4.9.0",
+    "eslint": "8.57.0",
+    "eslint-config-next": "14.2.33",
     "jotai-optics": "0.3.2",
     "jotai-utils": "^0.0.0",
     "next-sitemap": "4.2.3",
     "postcss": "8.4.38",
     "tailwindcss": "3.4.3",
-    "tailwindcss-animate": "^1.0.7",
-    "eslint": "8.57.0",
-    "eslint-config-next": "14.2.33"
+    "tailwindcss-animate": "^1.0.7"
   }
 }
