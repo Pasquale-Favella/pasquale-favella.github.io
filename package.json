@@ -56,7 +56,6 @@
     "@tiptap/pm": "^2.23.0",
     "@tiptap/react": "^2.23.0",
     "@tiptap/starter-kit": "^2.23.0",
-    "@types/dompurify": "^3.0.5",
     "ai": "^5.0.30",
     "axios": "1.6.8",
     "class-variance-authority": "^0.7.1",
@@ -98,6 +97,7 @@
   "devDependencies": {
     "@tailwindcss/aspect-ratio": "0.4.2",
     "@tailwindcss/typography": "0.5.12",
+    "@types/dompurify": "^3.0.5",
     "@types/editorjs__header": "2.6.3",
     "@types/markdown-it": "13.0.7",
     "@types/node": "^20",

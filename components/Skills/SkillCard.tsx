@@ -3,11 +3,19 @@ import { CONSTANTS } from "@/config";
 
 type SkillCardProps = typeof CONSTANTS.SKILLS[number];
 
-const SkillCard : FC<SkillCardProps> = (skill)=> {
+const SkillCard: FC<SkillCardProps> = (skill) => {
     return (
-        <div className="flex items-center justify-center space-x-2 rounded-md bg-base-300 px-3 py-4 text-sm transition duration-300 hover:bg-primary hover:text-base-300 md:text-sm" >
-            <skill.Icon size={30}/>
-            <p>{skill.name}</p>
+        <div className="group flex items-center justify-center space-x-3 px-3 py-4 rounded-md bg-base-300 transition-all duration-300 hover:scale-105">
+            {/* Icon */}
+            <skill.Icon
+                size={32}
+                className="transition-all duration-300 group-hover:scale-110 group-hover:text-primary"
+            />
+
+            {/* Text */}
+            <p className="font-medium text-sm md:text-base transition-colors duration-300 group-hover:text-primary">
+                {skill.name}
+            </p>
         </div>
     )
 }

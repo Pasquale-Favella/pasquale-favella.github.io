@@ -1,7 +1,7 @@
 import { FaAngular, FaReact } from 'react-icons/fa';
 import { FiGithub , FiLinkedin} from 'react-icons/fi';
 import { SiExpress, SiMongodb, SiNextdotjs, SiSpringboot, SiTailwindcss } from 'react-icons/si';
-import { AiOutlineConsoleSql } from 'react-icons/ai';
+import { BiLogoPostgresql } from 'react-icons/bi';
 import GitOwner from './owner';
 
 export default {
@@ -48,8 +48,8 @@ export default {
             name: 'Spring Boot',
         },
         {
-            Icon : AiOutlineConsoleSql,
-            name: 'SQL',
+            Icon : BiLogoPostgresql,
+            name: 'PostgreSQL',
         },
         {
             Icon : SiMongodb,
