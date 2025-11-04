@@ -1,28 +1,29 @@
-import { memo, FC } from 'react';
+import { memo } from 'react';
 import useEditor from '@/hooks/use-editor';
 
-type PreviewFrameProps = {}
-
-const PreviewFrame: FC<PreviewFrameProps> = () => {
+const PreviewFrame = memo(() => {
     const { srcDoc } = useEditor();
 
-    return (
-        <div className="mockup-browser rounded-md border border-base-300">
-            <div className="mockup-browser-toolbar">
-                <div className="input border border-base-300">{window.location.origin}</div>
-            </div>
-            <div className="h-[calc(85vh-100px)]">
-                <iframe
-                    srcDoc={srcDoc}
-                    title="output"
-                    sandbox="allow-scripts"
-                    frameBorder="0"
-                    width="100%"
-                    height="100%"
-                />
-            </div>
+  return (
+    <div className="h-full bg-base-100 overflow-auto">
+      <div className="mockup-browser border-base-300 border rounded-none h-full">
+        <div className="mockup-browser-toolbar">
+          <div className="input border-base-300 border">
+            {window.location.origin}
+          </div>
         </div>
-    );
-}
+        <div className="border-base-300 border-t bg-white h-[calc(100%-3rem)]">
+          <iframe
+            srcDoc={srcDoc}
+            title="output"
+            sandbox="allow-scripts"
+            frameBorder="0"
+            className="w-full h-full"
+          />
+        </div>
+      </div>
+    </div>
+  );
+});
 
-export default memo(PreviewFrame);
+export default PreviewFrame;

@@ -1,20 +1,25 @@
-import { currentEditingAtom, previewEditorAtom, selectedEditorAtom, srcDocFrameAtom } from "@/store/editor.atom";
-import { useAtom, useAtomValue } from "jotai";
+import { currentEditingAtom, editorStateAtom, previewEditorAtom, selectedEditorAtom, sidebarCollapsedAtom, srcDocFrameAtom } from "@/store/editor.atom";
+import { useAtom, useAtomValue, useSetAtom } from "jotai";
 
 export default function useEditor() {
-
-    const [tabSelected , setTabSelected] = useAtom(selectedEditorAtom);
-    const [preview , setPreview] = useAtom(previewEditorAtom);
-    const [code , setCode] = useAtom(currentEditingAtom);
+    const [tabSelected, setTabSelected] = useAtom(selectedEditorAtom);
+    const [isPreview, setIsPreview] = useAtom(previewEditorAtom);
+    const [isCollapsed, setIsCollapsed] = useAtom(sidebarCollapsedAtom);
+    const editorState = useAtomValue(editorStateAtom);
+    const code = useAtomValue(currentEditingAtom);
+    const setCode = useSetAtom(currentEditingAtom);
     const srcDoc = useAtomValue(srcDocFrameAtom);
 
     return {
-        tabSelected , 
-        setTabSelected ,
-        code , 
-        setCode ,
-        preview , 
-        setPreview ,
+        tabSelected,
+        setTabSelected,
+        isPreview,
+        setIsPreview,
+        isCollapsed,
+        setIsCollapsed,
+        editorState,
+        code,
+        setCode,
         srcDoc
     }
 }

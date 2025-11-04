@@ -1,44 +1,27 @@
-import Editor from '@monaco-editor/react';
-import { useTheme } from '@/hooks/use-theme';
+import React from 'react';
 import useEditor from '@/hooks/use-editor';
-import useIsMobile from '@/hooks/use-isMobile';
-import EditorTabs from './EditorTabs';
 import PreviewFrame from './PreviewFrame';
-import CodeEditorLoader from './CodeEditorLoader';
+import CodeEditorTopBar from './CodeEditorTopBar';
+import CodeEditorFileExplorer from './CodeEditorFIleExplorer';
+import CodeEditorView from './CodeEditorView';
+
 
 const CodeEditor = () => {
-
-  const { isDarkMode } = useTheme();
-  const isMobile = useIsMobile();
-  const { code, setCode, preview } = useEditor()
-
-  const handleChange = (codeValue: string | undefined) => {
-    setCode(codeValue ?? '');
-  }
+  const {isPreview} = useEditor();
 
   return (
-    <>
-      <EditorTabs />
-
-      {preview
-        ? <PreviewFrame />
-        : <Editor
-          className='h-[calc(85vh-70px)]'
-          theme={isDarkMode ? 'vs-dark' : 'light'}
-          path={code.name}
-          language={code.language}
-          value={code.value}
-          onChange={codeValue => handleChange(codeValue)}
-          loading={<CodeEditorLoader />}
-          options={
-            {
-              minimap: { enabled: !isMobile }
-            }
-          }
-        />
-      }
-    </>
+    <div className="h-[calc(90dvh)] flex flex-col bg-base-100">
+      <CodeEditorTopBar />
+      
+      <div className="flex-1 flex overflow-hidden">
+        {!isPreview && <CodeEditorFileExplorer />}
+        
+        <div className="flex-1 overflow-hidden border-base-300 border">
+          {isPreview ? <PreviewFrame /> : <CodeEditorView />}
+        </div>
+      </div>
+    </div>
   );
-}
+};
 
-export default CodeEditor
+export default CodeEditor;
