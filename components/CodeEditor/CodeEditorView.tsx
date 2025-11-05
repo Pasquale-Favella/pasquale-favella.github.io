@@ -5,7 +5,7 @@ import { useTheme } from "@/hooks/use-theme";
 import { Editor } from "@monaco-editor/react";
 import CodeEditorLoader from "./CodeEditorLoader";
 
-const CodeEditorView = memo(() => {
+const CodeEditorView = () => {
 
   const { isDarkMode } = useTheme();
   const { code, setCode } = useEditor();
@@ -32,6 +32,6 @@ const CodeEditorView = memo(() => {
       </div>
     </div>
   );
-});
+};
 
-export default CodeEditorView;
+export default memo(CodeEditorView);

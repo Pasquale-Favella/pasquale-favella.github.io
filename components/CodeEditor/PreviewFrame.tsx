@@ -1,7 +1,7 @@
 import { memo } from 'react';
 import useEditor from '@/hooks/use-editor';
 
-const PreviewFrame = memo(() => {
+const PreviewFrame = () => {
     const { srcDoc } = useEditor();
 
   return (
@@ -24,6 +24,6 @@ const PreviewFrame = memo(() => {
       </div>
     </div>
   );
-});
+};
 
-export default PreviewFrame;
+export default memo(PreviewFrame);

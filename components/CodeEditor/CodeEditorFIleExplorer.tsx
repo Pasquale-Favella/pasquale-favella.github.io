@@ -7,7 +7,7 @@ import { SiJavascript } from "react-icons/si";
 import { VscFiles } from "react-icons/vsc";
 import { HiChevronLeft, HiChevronRight } from "react-icons/hi";
 
-const CodeEditorFileExplorer = memo(() => {
+const CodeEditorFileExplorer = () => {
    const { tabSelected, setTabSelected, isPreview, setIsPreview, isCollapsed, setIsCollapsed, editorState } = useEditor();
 
   const files: Array<{ key: EditorStateKey; icon: any; color: string; data: CodeState }> = [
@@ -67,6 +67,6 @@ const CodeEditorFileExplorer = memo(() => {
       </div>
     </div>
   );
-});
+};
 
-export default CodeEditorFileExplorer;
+export default memo(CodeEditorFileExplorer);

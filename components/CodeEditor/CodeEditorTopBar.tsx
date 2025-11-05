@@ -3,7 +3,7 @@ import { FiCode } from "react-icons/fi";
 import { VscPreview } from "react-icons/vsc";
 import useEditor from "@/hooks/use-editor";
 
-const CodeEditorTopBar = memo(() => {
+const CodeEditorTopBar = () => {
   const { isPreview, setIsPreview, code } = useEditor();
 
   return (
@@ -32,6 +32,6 @@ const CodeEditorTopBar = memo(() => {
       </div>
     </div>
   );
-});
+};
 
-export default CodeEditorTopBar;
+export default memo(CodeEditorTopBar);
