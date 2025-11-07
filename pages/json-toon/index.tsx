@@ -9,7 +9,7 @@ const EditorPage: React.FC<Props> = () => {
     <>
       <NextSeo
         title='JSON vs TOON Comparator'
-        description='JSON vs TOON Comparator'
+        description='JSON vs TOON Comparator, a lightweight tool to compare JSON efficiency in AI prompts. Discover which format minimizes tokens, reduces cost, and improves LLM performance.'
       />
 
       <JsonToonComparator />
