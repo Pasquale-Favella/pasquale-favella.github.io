@@ -10,6 +10,7 @@ import { LuPalette } from "react-icons/lu";
 import { BsGrid3X3Gap } from 'react-icons/bs';
 import { MdOutlineDesignServices, MdOutlineImageSearch } from 'react-icons/md';
 import { SiMoleculer } from 'react-icons/si';
+import { GrCompare } from "react-icons/gr";
 
 import {
   Action,
@@ -144,6 +145,14 @@ const KBar = (props: KBarProps) => {
       section: 'Apps',
       perform: () => router.push('/de-sign'),
       icon: <MdOutlineDesignServices />,
+    },
+    {
+      id: 'json-toon',
+      name: 'JSON vs TOON Comparator',
+      keywords: 'json vs toon comparator',
+      section: 'Apps',
+      perform: () => router.push('/json-toon'),
+      icon: <GrCompare />,
     },
     {
       id: 'github',

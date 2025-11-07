@@ -13,6 +13,7 @@ const nextConfig = {
       "onnxruntime-node$": false, 
 
     }
+    config.experiments.asyncWebAssembly = true
     return config;
   },
 }
