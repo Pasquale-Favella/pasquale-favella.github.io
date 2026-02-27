@@ -1,6 +1,6 @@
 import { useCallback, useMemo, useState } from "react";
 import { ModelConfig, MODELS } from "../util/models-config";
-import { doesBrowserSupportTransformersJS, transformersJS, TransformersUIMessage } from "@built-in-ai/transformers-js";
+import { doesBrowserSupportTransformersJS, transformersJS, TransformersUIMessage } from "@browser-ai/transformers-js";
 import { TransformersChatTransport } from "../util/transformers-chat-transport";
 import toast from "react-hot-toast";
 import { useChat } from "@ai-sdk/react";

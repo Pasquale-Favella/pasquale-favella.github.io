@@ -1,6 +1,6 @@
 import { FC, useCallback, useMemo, useState } from 'react';
 import { toast } from 'react-hot-toast';
-import { LanguageModelV2Middleware } from '@ai-sdk/provider';
+import { LanguageModelV3Middleware } from '@ai-sdk/provider';
 import { streamText, ModelMessage, wrapLanguageModel } from 'ai';
 import { createOpenAI } from '@ai-sdk/openai';
 import { createAnthropic } from '@ai-sdk/anthropic';
@@ -125,7 +125,7 @@ const MailEditor: FC = () => {
           });
         }
 
-        const htmlSanitizerMiddleware: LanguageModelV2Middleware = {
+        const htmlSanitizerMiddleware: LanguageModelV3Middleware = {
           wrapStream: async ({ doStream }) => {
             const { stream, ...rest } = await doStream();
             const transformedStream = stream.pipeThrough(
@@ -143,6 +143,7 @@ const MailEditor: FC = () => {
               stream: transformedStream,
             }
           },
+          specificationVersion: "v3"
         };
 
         const modelWithSanitizer = wrapLanguageModel({

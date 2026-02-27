@@ -1,6 +1,6 @@
 import { DB } from "@/providers/pglite.provider";
 import { embed, embedMany } from "ai";
-import { transformersJS } from "@built-in-ai/transformers-js";
+import { transformersJS } from "@browser-ai/transformers-js";
 import { RecursiveCharacterTextSplitter } from "@langchain/textsplitters";
 
 export interface ProcessedDocument {
@@ -51,7 +51,7 @@ export class DocumentProcessor {
         lengthFunction: (text: string) => text.length
     });
 
-    private embeddingModel = transformersJS.textEmbedding("Supabase/gte-small", {
+    private embeddingModel = transformersJS.embeddingModel("Supabase/gte-small", {
         device: "webgpu", // Use WebGPU for acceleration
         dtype: "q8", // Quantization level
         normalize: true, // Normalize embeddings (default: true)

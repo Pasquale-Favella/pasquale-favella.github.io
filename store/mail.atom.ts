@@ -13,6 +13,8 @@ export const providerModels: Record<MailProvider, string[]> = {
     'claude-4-sonnet-20250514',
   ],
   google: [
+    'models/gemini-3-flash-preview',
+    'models/gemini-3-pro-preview',
     'models/gemini-2.5-pro',
     'models/gemini-2.5-flash',
     'models/gemini-2.0-flash',
@@ -28,7 +30,7 @@ export const providerLinks: Record<MailProvider, string> = {
 };
 
 export const mailProviderAtom = atomWithStorage<MailProvider>('mail-provider', 'google');
-export const mailModelAtom = atomWithStorage<string>('mail-model', providerModels.google[1]);
+export const mailModelAtom = atomWithStorage<string>('mail-model', providerModels.google[0]);
 export const mailApiKeyAtom = atomWithStorage<string>('mail-api-key', '');
 
 const initialContent = `<!DOCTYPE html>
