@@ -4,7 +4,7 @@ import { FiGithub, FiLinkedin } from 'react-icons/fi';
 import { RiArticleFill } from 'react-icons/ri';
 import { DiGitPullRequest } from 'react-icons/di';
 import { TfiThought } from 'react-icons/tfi';
-import { GoCodescan } from 'react-icons/go';
+import { GoCodescan, GoCopilot } from 'react-icons/go';
 import { TbDatabaseStar, TbMailBolt, TbTransform } from "react-icons/tb";
 import { LuPalette } from "react-icons/lu";
 import { BsGrid3X3Gap } from 'react-icons/bs';
@@ -153,6 +153,14 @@ const KBar = (props: KBarProps) => {
       section: 'Apps',
       perform: () => router.push('/json-toon'),
       icon: <GrCompare />,
+    },
+    {
+      id: 'munaciello',
+      name: 'Munaciello Copilot Agent',
+      keywords: 'munaciello copilot agent',
+      section: 'Apps',
+      perform: () => router.push('/munaciello'),
+      icon: <GoCopilot />,
     },
     {
       id: 'github',
