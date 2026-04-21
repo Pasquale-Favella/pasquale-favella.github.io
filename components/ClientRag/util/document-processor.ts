@@ -361,7 +361,7 @@ export class DocumentProcessor {
     async searchSimilarDocuments(
         query: string,
         limit: number = 5,
-        threshold: number = 0.7
+        threshold: number = 0.8
     ): Promise<SearchResult[]> {
         try {
             const queryEmbedding = await this.embedText(query);
@@ -388,7 +388,7 @@ export class DocumentProcessor {
                 content: row.content,
                 metadata: typeof row.metadata === 'string' ? JSON.parse(row.metadata) : row.metadata,
                 similarity: row.similarity,
-                created_at: row.created_at
+                created_at: new Date(row.created_at).toISOString()
             }));
         } catch (error) {
             console.error("Error searching documents:", error);

@@ -147,14 +147,6 @@ const KBar = (props: KBarProps) => {
       icon: <MdOutlineDesignServices />,
     },
     {
-      id: 'json-toon',
-      name: 'JSON vs TOON Comparator',
-      keywords: 'json vs toon comparator',
-      section: 'Apps',
-      perform: () => router.push('/json-toon'),
-      icon: <GrCompare />,
-    },
-    {
       id: 'munaciello',
       name: 'Munaciello Copilot Agent',
       keywords: 'munaciello copilot agent',

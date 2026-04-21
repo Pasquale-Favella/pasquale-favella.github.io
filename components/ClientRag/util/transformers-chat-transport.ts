@@ -7,13 +7,47 @@ import {
   createUIMessageStream,
   wrapLanguageModel,
   extractReasoningMiddleware,
+  tool,
   stepCountIs,
 } from "ai";
 import {
   TransformersJSLanguageModel,
   TransformersUIMessage,
 } from "@browser-ai/transformers-js";
+import { z } from "zod";
 import { DocumentProcessor } from "./document-processor";
+
+/**
+ * System prompt that guides the LLM on when and how to use the searchDocuments tool
+ */
+const SYSTEM_PROMPT = `You are a helpful assistant with access to a document retrieval system. You have the ability to search through uploaded documents to find relevant information and provide accurate, well-informed answers.
+
+When the user asks questions that require looking up information from documents, use the searchDocuments tool to retrieve relevant content. The tool will return documents with their titles, snippets, and relevance scores.
+
+Use the searchDocuments tool when:
+- The user asks specific questions that require factual information from documents
+- The user mentions documents or specific topics they want you to search for
+- You're uncertain about details and need to verify them in the knowledge base
+- The user asks "what documents" or "find information about" something
+
+Present the search results to the user along with your answers, citing the relevant documents when applicable. Always prioritize accuracy by using the search tool rather than relying on general knowledge when documents are available.`;
+
+/**
+ * Create the searchDocuments tool for LLM-driven document retrieval
+ */
+const createTools = (documentProcessor: DocumentProcessor) => ({
+  searchDocuments: tool({
+    description: "Search the knowledge base for relevant documents based on a query. Use this when you need to find information from uploaded documents to answer user questions.",
+    inputSchema: z.object({
+      query: z.string().describe(
+        "The search query to find relevant documents in the knowledge base"
+      ),
+    }),
+    needsApproval: false,
+    execute: async ({ query }) =>
+      await documentProcessor.searchSimilarDocuments(query),
+  }),
+});
 
 /**
  * Client-side chat transport AI SDK implementation that handles AI model communication
@@ -25,11 +59,11 @@ export class TransformersChatTransport
   implements ChatTransport<TransformersUIMessage>
 {
   private readonly model: TransformersJSLanguageModel;
-  private readonly documentProcessor: DocumentProcessor;
+  private tools: ReturnType<typeof createTools>;
 
   constructor(model: TransformersJSLanguageModel, documentProcessor: DocumentProcessor) {
     this.model = model;
-    this.documentProcessor = documentProcessor;
+    this.tools = createTools(documentProcessor);
   }
 
   async sendMessages(
@@ -42,45 +76,9 @@ export class TransformersChatTransport
       messageId: string | undefined;
     } & ChatRequestOptions,
   ): Promise<ReadableStream<UIMessageChunk>> {
-    const {  messages, abortSignal } = options as any;
-
-    const latestMessage = messages.at(-1)?.parts.find((p: any) => p.type === 'text')?.text;
-    const relevantDocs = await this.documentProcessor.searchSimilarDocuments(latestMessage ?? '');
-    const hasRelevantDocs = relevantDocs.length > 0;
-    const knowledgeBase = relevantDocs
-      .map(doc => `Context: ${doc.content}`)
-      .join('\n\n');
+    const { messages, abortSignal } = options;
     const prompt = await convertToModelMessages(messages);
     const model = this.model;
-
-    const system = `You are a helpful assistant. Check your knowledge base before answering any questions.
-    ${hasRelevantDocs ? `Only respond to questions based on the following knowledge base: ${knowledgeBase}` :``}
-    if no relevant information is found, respond, "Sorry, I don't know."`;
-
-    // Check if model is already available to skip progress tracking
-    const availability = await model.availability();
-    if (availability === "available") {
-      const result = streamText({
-        model: wrapLanguageModel({
-          model,
-          middleware: extractReasoningMiddleware({
-            tagName: "think",
-          }),
-        }),
-        messages: prompt,
-        system,
-        abortSignal: abortSignal,
-      });
-      return result.toUIMessageStream({
-        messageMetadata: ({ part }) => {
-          if (part.type === 'finish') {
-            return {
-              relevantDocs
-            };
-          }
-        },
-      });
-    }
 
     return createUIMessageStream<TransformersUIMessage>({
       execute: async ({ writer }) => {
@@ -132,6 +130,8 @@ export class TransformersChatTransport
               tagName: "think",
             }),
           }),
+          system: SYSTEM_PROMPT,
+          tools: this.tools,
           stopWhen: stepCountIs(5),
           messages: prompt,
           abortSignal,
@@ -147,15 +147,8 @@ export class TransformersChatTransport
           },
         });
 
-        writer.merge(result.toUIMessageStream({ 
-          sendStart: false ,
-           messageMetadata: ({part}) => {
-              if (part.type === 'finish') {
-                return {
-                  relevantDocs
-                } as any as undefined;
-              }
-            },
+        writer.merge(result.toUIMessageStream({
+          sendStart: false,
         }));
       },
     });

@@ -13,12 +13,12 @@ import { Response } from "./ai/response";
 import { Button } from "../Button";
 import { Reasoning, ReasoningContent, ReasoningTrigger } from "./ai/reasoning";
 import { PromptInput, PromptInputModelSelect, PromptInputModelSelectContent, PromptInputModelSelectItem, PromptInputModelSelectTrigger, PromptInputModelSelectValue, PromptInputSubmit, PromptInputTextarea, PromptInputToolbar, PromptInputTools } from "./ai/prompt-input";
+import { SearchResultsTool } from "./ai/search-results-tool";
 import ErrorCard from "../ErrorCard";
 import { useClientRag } from "./hooks/use-client-rag";
 import { Dialog, DialogClose, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "../Dialog";
 import FileUploader from "../FileUploader";
 import toast from "react-hot-toast";
-import { RagSources } from "./ai/rag-sources";
 
 function ClientRag() {
   const [input, setInput] = useState("");
@@ -228,8 +228,12 @@ function ClientRag() {
                     <Response key={partIndex} responseText={part.text} />
                   ))}
 
-                {/* Handle sources */}
-                {m?.metadata &&  <RagSources metadata={m.metadata} />}
+                {/* Handle tool parts - search results */}
+                {m.parts
+                  .filter((part) => part.type === "tool-searchDocuments")
+                  .map((part: any, partIndex) => (
+                    <SearchResultsTool key={partIndex} part={part} />
+                  ))}
 
                 {/* Action buttons for assistant messages */}
                 {(m.role === "assistant" || m.role === "system") &&

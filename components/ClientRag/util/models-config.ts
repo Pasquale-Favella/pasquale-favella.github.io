@@ -7,6 +7,31 @@ export interface ModelConfig extends Omit<WorkerLoadOptions, "modelId"> {
 
 export const MODELS: ModelConfig[] = [
   {
+    id: "onnx-community/granite-4.0-350m-ONNX-web",
+    name: "Granite 4.0 350M (Tool calling)",
+    device: "webgpu",
+    dtype: "fp16",
+  },
+  {
+    id: "onnx-community/gemma-4-E2B-it-ONNX",
+    name: "Gemma4 E2B",
+    device: "webgpu",
+    dtype: "q4",
+    isVisionModel: true,
+  },
+  {
+    id: "onnx-community/LFM2-1.2B-Tool-ONNX",
+    name: "LFM2 1.2B-Tool",
+    device: "webgpu",
+    dtype: "fp16",
+  },
+  {
+    id: "onnx-community/gemma-3-270m-it-ONNX",
+    name: "Gemma3 270M",
+    device: "webgpu",
+    dtype: "fp32",
+  },
+  {
     id: "onnx-community/Qwen3-0.6B-ONNX",
     name: "Qwen3 0.6B",
     device: "webgpu",
