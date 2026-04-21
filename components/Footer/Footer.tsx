@@ -1,7 +1,18 @@
 import { CONSTANTS } from "@/config";
 import GitOwner from "@/config/owner";
 import Link from "next/link";
-import Chatbot from "../Chatbot";
+
+import dynamic from "next/dynamic";
+const Chatbot = dynamic(() => import('@/components/Chatbot'), {
+    ssr: false,
+    loading: () => {
+        return (
+            <div className="fixed bottom-4 right-1 sm:bottom-10 sm:right-6 z-50">
+                <span className="loading loading-ring loading-lg"></span>
+            </div>
+        );
+    },
+});
 
 const Footer = ()=>{
 

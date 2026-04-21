@@ -1,6 +1,5 @@
 'use client';
 
-import { SearchResult } from "../util/document-processor";
 import { Sources, SourcesTrigger, SourcesContent, Source } from "./sources";
 import {
   Tooltip,
@@ -9,6 +8,7 @@ import {
   TooltipTrigger,
 } from "@/components/Tooltip";
 import { Loader } from "./loader";
+import { SearchResult } from "../ClientRag/util/document-processor";
 
 interface ToolUIPart {
   type: string;

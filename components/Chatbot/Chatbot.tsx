@@ -1,57 +1,38 @@
-import { FC, FormEvent, useState } from "react";
+import { FormEvent } from "react";
 import { BsFillChatQuoteFill } from "react-icons/bs";
 import { IoSendSharp } from "react-icons/io5";
 import { RiRobot2Line, RiUser3Fill } from "react-icons/ri";
 import { TbWriting } from "react-icons/tb";
-import { ChatMessage } from "@/types";
 import { cn } from "@/utils";
-import { useChatScroll } from "@/hooks/use-chatScroll";
-import { useChatbot } from "@/hooks/use-chatBot";
-import { Popover, PopoverContent, PopoverTrigger } from "../Popover"
+import { useChatbot } from "@/components/Chatbot/hooks/use-chatBot";
+import { Popover, PopoverContent, PopoverTrigger } from "../Popover";
+import { Response } from "@/components/ai/response";
+import { Loader } from "@/components/ai/loader";
+import { Progress } from "../progress";
+import { Conversation, ConversationContent, ConversationScrollButton } from "@/components/ai/conversation";
 
-const ChatMessageRow : FC<ChatMessage & {isBotLoading ?: boolean}>= (props)=> {
+const Chatbot = () => {
 
-    const isBotMessage = props.from === 'bot';
-
-    const Icon = isBotMessage ?  RiRobot2Line : RiUser3Fill;
-
-    return (
-        <div className={cn("chat", isBotMessage ? 'chat-start' : 'chat-end')}>
-            <div className="chat-image avatar">
-                <Icon size={30} />
-            </div>
-            <div className="chat-bubble">
-                {props?.isBotLoading ? <TbWriting size={20} className="animate-bounce"/> : <>{props.body}</>}
-            </div>
-        </div>
-    );
-}
-
-const Chatbot = ()=> {
-
-    const [messages , setMessages] = useState<ChatMessage[]>([{
-        from : 'bot',
-        body : 'Ask me something!'
-    }]);
-
-    const {isBotLoadingResponse, sendMessage} = useChatbot((botResponse => {
-        setMessages(prevMessages => [...prevMessages , {from : 'bot', body : botResponse}]);
-    }));
-
-    const messagesContainer = useChatScroll([messages , isBotLoadingResponse]);
+    const {
+        messages,
+        status,
+        isBotLoadingResponse,
+        sendMessage,
+        supportsTransformerJs,
+    } = useChatbot();
 
     const onSubmitMessage = (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
 
         const message = new FormData(e.currentTarget).get('message') as string;
-
-        setMessages(prevMessages => [...prevMessages , {from : 'user', body : message}]);
+        if (!message.trim()) return;
 
         e.currentTarget.reset();
-
         sendMessage(message);
     }
-    
+
+    if (!supportsTransformerJs) return null;
+
     return (
         <Popover>
             <PopoverTrigger asChild className="fixed bottom-4 right-1 sm:bottom-10 sm:right-6 z-50">
@@ -72,17 +53,86 @@ const Chatbot = ()=> {
                         </p>
                     </div>
 
-                    <div ref={messagesContainer} className="h-[200px] overflow-y-auto scrollbar">
-                        {messages.map((message,i)=> <ChatMessageRow key={i} from={message.from} body={message.body} />)}
-                        {isBotLoadingResponse 
-                            ? <ChatMessageRow from={'bot'} body={''} isBotLoading />
-                            : null
-                        }
-                    </div>
+                    <Conversation className="h-[200px] no-scrollbar">
+                        <ConversationContent>
+                        {messages.length === 0 && (
+                            <div className={cn("chat chat-start")}>
+                                <div className="chat-image avatar">
+                                    <RiRobot2Line size={30} />
+                                </div>
+                                <div className="chat-bubble text-neutral-content">Ask me something!</div>
+                            </div>
+                        )}
+                        {messages.map((message) => {
+                            const isAssistant = message.role === "assistant" || message.role === "system";
+                            const Icon = isAssistant ? RiRobot2Line : RiUser3Fill;
+
+                            return (
+                                <div key={message.id} className={cn("chat", isAssistant ? 'chat-start' : 'chat-end')}>
+                                    <div className="chat-image avatar">
+                                        <Icon size={30} />
+                                    </div>
+                                    <div className="chat-bubble">
+                                        {/* Download progress */}
+                                        {message.parts
+                                            .filter((part) => part.type === "data-modelDownloadProgress")
+                                            .map((part: any, i) => {
+                                                if (!part.data.message || status === "ready") return null;
+                                                return (
+                                                    <div key={i}>
+                                                        <div className="flex items-center gap-1 mb-1">
+                                                            <Loader className="size-3" />
+                                                            <span className="text-xs">{part.data.message}</span>
+                                                        </div>
+                                                        {part.data.status === "downloading" && part.data.progress !== undefined && (
+                                                            <Progress value={part.data.progress} />
+                                                        )}
+                                                    </div>
+                                                );
+                                            })}
+                                        {/* Text content */}
+                                        {message.parts
+                                            .filter((part) => part.type === "text")
+                                            .map((part: any, i) => (
+                                                <Response key={i} responseText={part.text} className="text-sm text-neutral-content" />
+                                            ))}
+                                        {/* User content fallback */}
+                                        {message.role === "user" && message.parts.filter(p => p.type === "text").length === 0 && (
+                                            <>{(message as any).content}</>
+                                        )}
+                                    </div>
+                                </div>
+                            );
+                        })}
+                        {status === "submitted" && (
+                            <div className={cn("chat chat-start")}>
+                                <div className="chat-image avatar">
+                                    <RiRobot2Line size={30} />
+                                </div>
+                                <div className="chat-bubble">
+                                    <TbWriting size={20} className="animate-bounce"/>
+                                </div>
+                            </div>
+                        )}
+                        </ConversationContent>
+                        <ConversationScrollButton className="btn-sm animate-bounce" />
+                    </Conversation>
 
                     <form className="flex items-center justify-center w-full space-x-2" onSubmit={onSubmitMessage}>
-                        <input type="text" name="message" placeholder="Type your question" required autoComplete="off" className="input input-bordered w-full max-w-xs" />
-                        <button className="btn btn-neutral btn-square" type="submit">
+                        <input
+                            type="text"
+                            name="message"
+                            placeholder="Type your question"
+                            required
+                            autoComplete="off"
+                            className="input input-bordered w-full max-w-xs"
+                            disabled={status !== "ready"}
+                        />
+                        <button
+                            className="btn btn-neutral btn-square"
+                            type="submit"
+                            disabled={status !== "ready"}
+                        >
                             <IoSendSharp />
                         </button>
                     </form>
