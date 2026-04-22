@@ -1,3 +1,6 @@
+import { differenceInYears } from 'date-fns';
+
+
 const GitOwner = {
     name : 'Pasquale',
     surname : 'Favella',
@@ -9,7 +12,13 @@ const GitOwner = {
     dob : '28/06/1991',
     this_repo_url : 'https://github.com/Pasquale-Favella/pasquale-favella.github.io',
     nextle_gist_id : '03f427bcea63b130413cdc618a13821d',
-    contact_mail : 'paskfdev@gmail.com'
+    contact_mail : 'paskfdev@gmail.com',
+    get_years_of_experience : ()=> {
+        const startDate = new Date(2019, 8, 16);
+        const now = new Date();
+
+        return differenceInYears(now, startDate);
+    },
 } as const
 
 export default GitOwner

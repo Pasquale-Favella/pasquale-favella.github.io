@@ -60,7 +60,7 @@ const Chatbot = () => {
                                 <div className="chat-image avatar">
                                     <RiRobot2Line size={30} />
                                 </div>
-                                <div className="chat-bubble text-neutral-content">Ask me something!</div>
+                                <div className="chat-bubble bg-base-300 text-base-content">Ask me something!</div>
                             </div>
                         )}
                         {messages.map((message) => {
@@ -72,7 +72,7 @@ const Chatbot = () => {
                                     <div className="chat-image avatar">
                                         <Icon size={30} />
                                     </div>
-                                    <div className="chat-bubble">
+                                    <div className="chat-bubble bg-base-300 text-base-content">
                                         {/* Download progress */}
                                         {message.parts
                                             .filter((part) => part.type === "data-modelDownloadProgress")
@@ -94,7 +94,7 @@ const Chatbot = () => {
                                         {message.parts
                                             .filter((part) => part.type === "text")
                                             .map((part: any, i) => (
-                                                <Response key={i} responseText={part.text} className="text-sm text-neutral-content" />
+                                                <Response key={i} responseText={part.text} className="text-sm " />
                                             ))}
                                         {/* User content fallback */}
                                         {message.role === "user" && message.parts.filter(p => p.type === "text").length === 0 && (
@@ -109,7 +109,7 @@ const Chatbot = () => {
                                 <div className="chat-image avatar">
                                     <RiRobot2Line size={30} />
                                 </div>
-                                <div className="chat-bubble">
+                                <div className="chat-bubble bg-base-300 text-base-content">
                                     <TbWriting size={20} className="animate-bounce"/>
                                 </div>
                             </div>
@@ -126,12 +126,12 @@ const Chatbot = () => {
                             required
                             autoComplete="off"
                             className="input input-bordered w-full max-w-xs"
-                            disabled={status !== "ready"}
+                            disabled={isBotLoadingResponse}
                         />
                         <button
                             className="btn btn-neutral btn-square"
                             type="submit"
-                            disabled={status !== "ready"}
+                            disabled={isBotLoadingResponse}
                         >
                             <IoSendSharp />
                         </button>

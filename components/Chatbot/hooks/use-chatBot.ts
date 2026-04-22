@@ -3,8 +3,9 @@ import { useChat } from "@ai-sdk/react";
 import { doesBrowserSupportTransformersJS, transformersJS, TransformersUIMessage } from "@browser-ai/transformers-js";
 import { ChatbotTransport } from "@/components/Chatbot/util/chatbot-transport";
 import toast from "react-hot-toast";
+import GitOwner from "@/config";
 
-const GRANITE_MODEL_ID = "onnx-community/granite-4.0-350m-ONNX-web";
+const MODEL_ID = "onnx-community/granite-4.0-350m-ONNX-web";
 
 const SYSTEM_PROMPT = `
 You are Pakybot, the AI assistant on Pasquale Favella’s portfolio.
@@ -56,7 +57,7 @@ He often takes ownership beyond his role and turns unclear situations into struc
 
 EXPERIENCE:
 
-- 10+ years in software development
+- ${GitOwner.get_years_of_experience()}+ years in software development
 - Domains: banking, energy, maritime logistics, public administration
 - Built:
   - microservices architectures
@@ -120,6 +121,13 @@ He experiments with:
 
 ---
 
+CONTACT INFOS:
+- GitHub: ${GitOwner.git_url}
+- LinkedIn: ${GitOwner.linkedin_url}
+- Email: ${GitOwner.contact_mail}
+
+---
+
 HOW TO ANSWER:
 
 - If asked “why hire Pasquale”:
@@ -157,7 +165,7 @@ export function useChatbot() {
     const chatTransport = useMemo(() => {
         if (!supportsTransformerJs) return null;
 
-        const model = transformersJS(GRANITE_MODEL_ID, {
+        const model = transformersJS(MODEL_ID, {
             device: "webgpu",
             dtype: "fp16",
             worker: new Worker(new URL("@/components/Chatbot/util/worker.ts", import.meta.url), {
