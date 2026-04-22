@@ -24,6 +24,6 @@ __turbopack_load_page_chunks__("/de-sign", [
   "static/chunks/0ltc57~nnjtm3.js",
   "static/chunks/17tq1unn1yec_.js",
   "static/chunks/11tjhg1cz5lf_.js",
-  "static/chunks/16a_ta89m7-qp.js",
-  "static/chunks/turbopack-0ijm~tmka6i0..js"
+  "static/chunks/0suzz~g3e3swt.js",
+  "static/chunks/turbopack-02uqtrbeo9j_m.js"
 ])

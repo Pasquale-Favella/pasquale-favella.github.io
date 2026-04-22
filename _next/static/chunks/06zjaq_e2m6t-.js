@@ -5,6 +5,6 @@ __turbopack_load_page_chunks__("/client-rag", [
   "static/chunks/0x2gaxso9rf_4.js",
   "static/chunks/0vkzu0-ugp216.js",
   "static/chunks/0exv.88-9~uur.js",
-  "static/chunks/0z39kxht_z8hp.js",
-  "static/chunks/turbopack-0zo~cyx6xdpxx.js"
+  "static/chunks/0iet-n59qsvux.js",
+  "static/chunks/turbopack-0acax14bo0j3~.js"
 ])

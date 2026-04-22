@@ -8,11 +8,11 @@ __turbopack_load_page_chunks__("/ocr", [
   "static/chunks/06w9clugfdvi-.js",
   "static/chunks/0exv.88-9~uur.js",
   "static/chunks/0ltc57~nnjtm3.js",
-  "static/chunks/16a_ta89m7-qp.js",
+  "static/chunks/0suzz~g3e3swt.js",
   "static/chunks/17tq1unn1yec_.js",
   "static/chunks/14i0owlw_eo-p.js",
   "static/chunks/0-6yhccmn5_qf.js",
   "static/chunks/0x2gaxso9rf_4.js",
   "static/chunks/0_bpq2ygtph_8.js",
-  "static/chunks/turbopack-11lx5g_jxgxvn.js"
+  "static/chunks/turbopack-0fvyip8bj7z-p.js"
 ])

@@ -12,19 +12,19 @@ self.__BUILD_MANIFEST = {
     "static/chunks/0_9oy~p68udqm.js"
   ],
   "/blog/[slug]": [
-    "static/chunks/0c1gsxjwazl52.js"
+    "static/chunks/03rmsqumls6y1.js"
   ],
   "/client-rag": [
-    "static/chunks/03_12wb2-tz4d.js"
+    "static/chunks/06zjaq_e2m6t-.js"
   ],
   "/composite-calculator": [
     "static/chunks/12ibd5z3dd_iz.js"
   ],
   "/converter": [
-    "static/chunks/0m5v_~c7ln6zw.js"
+    "static/chunks/0msk20ufcwwvx.js"
   ],
   "/de-sign": [
-    "static/chunks/0_b7ycxwv1gl_.js"
+    "static/chunks/0oz07kkzqnqxj.js"
   ],
   "/diffeditor": [
     "static/chunks/0qemcooye7vuz.js"
@@ -36,7 +36,7 @@ self.__BUILD_MANIFEST = {
     "static/chunks/048hlz2pu0phf.js"
   ],
   "/flow": [
-    "static/chunks/16hr0vhy1wk9c.js"
+    "static/chunks/12egi3jpy~ht9.js"
   ],
   "/mail-editor": [
     "static/chunks/07t_b.lmmvlx6.js"
@@ -48,7 +48,7 @@ self.__BUILD_MANIFEST = {
     "static/chunks/02xz6i8z8a4_z.js"
   ],
   "/ocr": [
-    "static/chunks/0d33b2ax-398-.js"
+    "static/chunks/09nus6wr1j_hi.js"
   ],
   "/projects": [
     "static/chunks/0.krq5lnyeo17.js"

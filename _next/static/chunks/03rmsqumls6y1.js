@@ -13,9 +13,9 @@ __turbopack_load_page_chunks__("/blog/[slug]", [
   "static/chunks/0ltc57~nnjtm3.js",
   "static/chunks/16qo-rec6opwe.js",
   "static/chunks/10r6qz7idr-ac.js",
-  "static/chunks/16a_ta89m7-qp.js",
+  "static/chunks/0suzz~g3e3swt.js",
   "static/chunks/0-6yhccmn5_qf.js",
   "static/chunks/0x2gaxso9rf_4.js",
   "static/chunks/17tq1unn1yec_.js",
-  "static/chunks/turbopack-118a74_ib_iv9.js"
+  "static/chunks/turbopack-0qc9_00jptpt_.js"
 ])
