@@ -8,16 +8,16 @@ __turbopack_load_page_chunks__("/de-sign", [
   "static/chunks/0m~fshrur9hhe.js",
   "static/chunks/12-laj1ll1f7x.js",
   "static/chunks/17322a~.01xhq.js",
+  "static/chunks/0z5snyspwqg95.js",
   "static/chunks/0exv.88-9~uur.js",
-  "static/chunks/02rsfnd~uzle4.js",
-  "static/chunks/0z92sj_1q5re7.js",
-  "static/chunks/0a5a_k41_ajb3.js",
+  "static/chunks/0xqs0k4suvvwi.js",
+  "static/chunks/0wa_eudj-1l7r.js",
   "static/chunks/0a21.fc5wfebk.js",
   "static/chunks/0x2gaxso9rf_4.js",
   "static/chunks/0iopsnztpytxg.js",
   "static/chunks/0i8_tahwdvf82.js",
   "static/chunks/12lk.2rth7-53.js",
-  "static/chunks/0dhe~dkjhti.o.js",
+  "static/chunks/11~7qhi12be_m.js",
   "static/chunks/0-6yhccmn5_qf.js",
   "static/chunks/0vkzu0-ugp216.js",
   "static/chunks/0jr_n105t8f71.js",
@@ -25,5 +25,5 @@ __turbopack_load_page_chunks__("/de-sign", [
   "static/chunks/17tq1unn1yec_.js",
   "static/chunks/11tjhg1cz5lf_.js",
   "static/chunks/0suzz~g3e3swt.js",
-  "static/chunks/turbopack-02uqtrbeo9j_m.js"
+  "static/chunks/turbopack-170_dfbo9eirm.js"
 ])

@@ -1,5 +1,5 @@
 __turbopack_load_page_chunks__("/mail-editor", [
-  "static/chunks/0g4dl0nfkx9n2.js",
+  "static/chunks/0.~19ntyoi~66.js",
   "static/chunks/06w9clugfdvi-.js",
   "static/chunks/0bl19~~0earr~.js",
   "static/chunks/0dx34wi18d-1l.js",
@@ -8,19 +8,19 @@ __turbopack_load_page_chunks__("/mail-editor", [
   "static/chunks/0m~fshrur9hhe.js",
   "static/chunks/0exv.88-9~uur.js",
   "static/chunks/17322a~.01xhq.js",
-  "static/chunks/0uw~ov22uo1v0.js",
+  "static/chunks/0xqs0k4suvvwi.js",
   "static/chunks/0sshmzdgv01dy.js",
   "static/chunks/104aivw9jw--b.js",
   "static/chunks/12lk.2rth7-53.js",
-  "static/chunks/02rsfnd~uzle4.js",
-  "static/chunks/0dhe~dkjhti.o.js",
+  "static/chunks/0z5snyspwqg95.js",
+  "static/chunks/11~7qhi12be_m.js",
   "static/chunks/0ltc57~nnjtm3.js",
   "static/chunks/11tjhg1cz5lf_.js",
   "static/chunks/17tq1unn1yec_.js",
   "static/chunks/0-6yhccmn5_qf.js",
   "static/chunks/0pn~t.lgq4faf.js",
-  "static/chunks/0z92sj_1q5re7.js",
+  "static/chunks/0uw~ov22uo1v0.js",
   "static/chunks/0a21.fc5wfebk.js",
   "static/chunks/0_bpq2ygtph_8.js",
-  "static/chunks/turbopack-05.rwvc2~.mwf.js"
+  "static/chunks/turbopack-00m38nu40khmq.js"
 ])

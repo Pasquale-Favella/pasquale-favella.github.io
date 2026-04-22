@@ -15,16 +15,16 @@ self.__BUILD_MANIFEST = {
     "static/chunks/03rmsqumls6y1.js"
   ],
   "/client-rag": [
-    "static/chunks/06zjaq_e2m6t-.js"
+    "static/chunks/00lr467alq_mn.js"
   ],
   "/composite-calculator": [
-    "static/chunks/12ibd5z3dd_iz.js"
+    "static/chunks/0e-y-l33g~ywe.js"
   ],
   "/converter": [
-    "static/chunks/0msk20ufcwwvx.js"
+    "static/chunks/0c0xszq062gbj.js"
   ],
   "/de-sign": [
-    "static/chunks/0oz07kkzqnqxj.js"
+    "static/chunks/0p2d_m4n3lqw8.js"
   ],
   "/diffeditor": [
     "static/chunks/0qemcooye7vuz.js"
@@ -39,7 +39,7 @@ self.__BUILD_MANIFEST = {
     "static/chunks/12egi3jpy~ht9.js"
   ],
   "/mail-editor": [
-    "static/chunks/07t_b.lmmvlx6.js"
+    "static/chunks/15rl53~5u5obu.js"
   ],
   "/munaciello": [
     "static/chunks/0b.e1u~001eio.js"
