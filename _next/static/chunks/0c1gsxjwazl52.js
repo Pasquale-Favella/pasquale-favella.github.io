@@ -1,21 +1,21 @@
 __turbopack_load_page_chunks__("/blog/[slug]", [
   "static/chunks/06w9clugfdvi-.js",
-  "static/chunks/0hni1qfi09nky.js",
+  "static/chunks/13fzxuxfa3u70.js",
   "static/chunks/0exv.88-9~uur.js",
   "static/chunks/0m~fshrur9hhe.js",
-  "static/chunks/03ytzex5qfc9a.js",
+  "static/chunks/17~.u7-1umdtg.js",
   "static/chunks/12-laj1ll1f7x.js",
-  "static/chunks/0x2gaxso9rf_4.js",
+  "static/chunks/0jr_n105t8f71.js",
   "static/chunks/0uw~ov22uo1v0.js",
   "static/chunks/0_bpq2ygtph_8.js",
   "static/chunks/0iopsnztpytxg.js",
   "static/chunks/12lk.2rth7-53.js",
   "static/chunks/0ltc57~nnjtm3.js",
   "static/chunks/16qo-rec6opwe.js",
+  "static/chunks/10r6qz7idr-ac.js",
   "static/chunks/16a_ta89m7-qp.js",
   "static/chunks/0-6yhccmn5_qf.js",
-  "static/chunks/10r6qz7idr-ac.js",
-  "static/chunks/0jr_n105t8f71.js",
+  "static/chunks/0x2gaxso9rf_4.js",
   "static/chunks/17tq1unn1yec_.js",
-  "static/chunks/turbopack-0r5_4zxca_~.n.js"
+  "static/chunks/turbopack-118a74_ib_iv9.js"
 ])

@@ -1,6 +1,6 @@
 self.__BUILD_MANIFEST = {
   "/": [
-    "static/chunks/0d8u2x4p-aq5o.js"
+    "static/chunks/0ro9..n8mt25e.js"
   ],
   "/404": [
     "static/chunks/0rt463lv_plgc.js"
@@ -9,10 +9,10 @@ self.__BUILD_MANIFEST = {
     "static/chunks/115i~0pbpn8sl.js"
   ],
   "/blog": [
-    "static/chunks/01l~lghm3x4_d.js"
+    "static/chunks/0_9oy~p68udqm.js"
   ],
   "/blog/[slug]": [
-    "static/chunks/0x1gcp6zgs65u.js"
+    "static/chunks/0c1gsxjwazl52.js"
   ],
   "/client-rag": [
     "static/chunks/03_12wb2-tz4d.js"
@@ -45,7 +45,7 @@ self.__BUILD_MANIFEST = {
     "static/chunks/0b.e1u~001eio.js"
   ],
   "/nextle": [
-    "static/chunks/05s10f6jhurxl.js"
+    "static/chunks/02xz6i8z8a4_z.js"
   ],
   "/ocr": [
     "static/chunks/0d33b2ax-398-.js"
