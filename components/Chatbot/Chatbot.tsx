@@ -3,6 +3,7 @@ import { BsFillChatQuoteFill } from "react-icons/bs";
 import { IoSendSharp } from "react-icons/io5";
 import { RiRobot2Line, RiUser3Fill } from "react-icons/ri";
 import { TbWriting } from "react-icons/tb";
+import { MdRefresh } from "react-icons/md";
 import { cn } from "@/utils";
 import { useChatbot } from "@/components/Chatbot/hooks/use-chatBot";
 import { Popover, PopoverContent, PopoverTrigger } from "../Popover";
@@ -19,7 +20,11 @@ const Chatbot = () => {
         isBotLoadingResponse,
         sendMessage,
         supportsTransformerJs,
+        error,
+        regenerate,
     } = useChatbot();
+
+    const isInputDisabled = isBotLoadingResponse || !!error;
 
     const onSubmitMessage = (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
@@ -114,6 +119,24 @@ const Chatbot = () => {
                                 </div>
                             </div>
                         )}
+                        {error && (
+                            <div className={cn("chat chat-start")}>
+                                <div className="chat-image avatar">
+                                    <RiRobot2Line size={30} />
+                                </div>
+                                <div className="chat-bubble chat-bubble-error">
+                                    <p className="text-sm">Something went wrong.</p>
+                                    <button
+                                        type="button"
+                                        className="btn btn-ghost btn-xs mt-1 gap-1"
+                                        onClick={() => regenerate()}
+                                    >
+                                        <MdRefresh size={14} />
+                                        Retry
+                                    </button>
+                                </div>
+                            </div>
+                        )}
                         </ConversationContent>
                         <ConversationScrollButton className="btn-sm animate-bounce" />
                     </Conversation>
@@ -126,12 +149,12 @@ const Chatbot = () => {
                             required
                             autoComplete="off"
                             className="input input-bordered w-full max-w-xs"
-                            disabled={isBotLoadingResponse}
+                            disabled={isInputDisabled}
                         />
                         <button
                             className="btn btn-neutral btn-square"
                             type="submit"
-                            disabled={isBotLoadingResponse}
+                            disabled={isInputDisabled}
                         >
                             <IoSendSharp />
                         </button>

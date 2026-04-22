@@ -178,7 +178,7 @@ export function useChatbot() {
         });
     }, [supportsTransformerJs]);
 
-    const { error, status, messages, setMessages, sendMessage: chatSendMessage, stop } = useChat<TransformersUIMessage>({
+    const { error, status, messages, setMessages, sendMessage: chatSendMessage, stop, regenerate } = useChat<TransformersUIMessage>({
         transport: chatTransport!,
         onError(error) {
             toast.error(error.message);
@@ -202,5 +202,6 @@ export function useChatbot() {
         isBotLoadingResponse,
         sendMessage,
         stop,
+        regenerate,
     };
 }
