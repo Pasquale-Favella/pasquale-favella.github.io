@@ -1,9 +1,11 @@
-import { FormEvent } from "react";
 import { BsFillChatQuoteFill } from "react-icons/bs";
 import { IoSendSharp } from "react-icons/io5";
 import { RiRobot2Line, RiUser3Fill } from "react-icons/ri";
 import { TbWriting } from "react-icons/tb";
 import { MdRefresh } from "react-icons/md";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
 import { cn } from "@/utils";
 import { useChatbot } from "@/components/Chatbot/hooks/use-chatBot";
 import { Popover, PopoverContent, PopoverTrigger } from "../Popover";
@@ -11,6 +13,12 @@ import { Response } from "@/components/ai/response";
 import { Loader } from "@/components/ai/loader";
 import { Progress } from "../progress";
 import { Conversation, ConversationContent, ConversationScrollButton } from "@/components/ai/conversation";
+
+const chatMessageSchema = z.object({
+    message: z.string().trim().min(1),
+});
+
+type ChatMessageForm = z.infer<typeof chatMessageSchema>;
 
 const Chatbot = () => {
 
@@ -24,17 +32,17 @@ const Chatbot = () => {
         regenerate,
     } = useChatbot();
 
+    const { register, handleSubmit, reset, formState: { isValid } } = useForm<ChatMessageForm>({
+        resolver: zodResolver(chatMessageSchema),
+        defaultValues: { message: "" },
+    });
+
     const isInputDisabled = isBotLoadingResponse || !!error;
 
-    const onSubmitMessage = (e: FormEvent<HTMLFormElement>) => {
-        e.preventDefault();
-
-        const message = new FormData(e.currentTarget).get('message') as string;
-        if (!message.trim()) return;
-
-        e.currentTarget.reset();
+    const onSubmitMessage = handleSubmit(({ message }) => {
+        reset();
         sendMessage(message);
-    }
+    });
 
     if (!supportsTransformerJs) return null;
 
@@ -144,17 +152,16 @@ const Chatbot = () => {
                     <form className="flex items-center justify-center w-full space-x-2" onSubmit={onSubmitMessage}>
                         <input
                             type="text"
-                            name="message"
                             placeholder="Type your question"
-                            required
                             autoComplete="off"
                             className="input input-bordered w-full max-w-xs"
                             disabled={isInputDisabled}
+                            {...register("message")}
                         />
                         <button
                             className="btn btn-neutral btn-square"
                             type="submit"
-                            disabled={isInputDisabled}
+                            disabled={isInputDisabled || !isValid}
                         >
                             <IoSendSharp />
                         </button>

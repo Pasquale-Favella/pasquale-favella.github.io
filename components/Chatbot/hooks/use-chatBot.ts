@@ -2,7 +2,6 @@ import { useMemo } from "react";
 import { useChat } from "@ai-sdk/react";
 import { doesBrowserSupportTransformersJS, transformersJS, TransformersUIMessage } from "@browser-ai/transformers-js";
 import { ChatbotTransport } from "@/components/Chatbot/util/chatbot-transport";
-import toast from "react-hot-toast";
 import GitOwner from "@/config";
 
 const MODEL_ID = "onnx-community/granite-4.0-350m-ONNX-web";
@@ -181,7 +180,7 @@ export function useChatbot() {
     const { error, status, messages, setMessages, sendMessage: chatSendMessage, stop, regenerate } = useChat<TransformersUIMessage>({
         transport: chatTransport!,
         onError(error) {
-            toast.error(error.message);
+            console.error(error.message);
         },
         experimental_throttle: 50,
         id: "chatbot-pakybot",
