@@ -1,0 +1,580 @@
+<!DOCTYPE html><html lang="en"><head><meta charSet="utf-8" data-next-head=""/><meta name="viewport" content="width=device-width" data-next-head=""/><meta property="og:url" content="https://pasquale-favella.github.io/" data-next-head=""/><meta property="og:image" content="https://pasquale-favella.github.io/og-image.png" data-next-head=""/><meta property="og:locale" content="en_US" data-next-head=""/><meta property="og:site_name" content="Pasquale Favella blogfolio" data-next-head=""/><meta name="google-site-verification" content="BF08ecEW9P2w_w4mwWTU2LxdORMDiIO3XUeZLW7UC4o" data-next-head=""/><link rel="icon" href="https://pasquale-favella.github.io/favicon.ico" data-next-head=""/><title data-next-head="">Pasquale Favella | Building a Fully Client-Side AI Chatbot with WebGPU, Transformers.js, and the Vercel AI SDK</title><meta name="robots" content="index,follow" data-next-head=""/><meta name="description" content="# Building a Fully Client-Side AI Chatbot with WebGPU, Transformers" data-next-head=""/><meta property="og:title" content="Pasquale Favella | Building a Fully Client-Side AI Chatbot with WebGPU, Transformers.js, and the Vercel AI SDK" data-next-head=""/><meta property="og:description" content="# Building a Fully Client-Side AI Chatbot with WebGPU, Transformers" data-next-head=""/><meta property="og:type" content="article" data-next-head=""/><meta property="article:tag" content="React" data-next-head=""/><meta property="article:tag" content="AI" data-next-head=""/><link data-next-font="" rel="preconnect" href="/" crossorigin="anonymous"/><link rel="preload" href="/_next/static/chunks/0z6o3azaiq503.css" as="style"/><link rel="stylesheet" href="/_next/static/chunks/0z6o3azaiq503.css" data-n-g=""/><link rel="preload" href="/_next/static/chunks/0q3bnjf.nowp7.css" as="style"/><link rel="stylesheet" href="/_next/static/chunks/0q3bnjf.nowp7.css" data-n-g=""/><noscript data-n-css=""></noscript><script src="/_next/static/chunks/06w9clugfdvi-.js" defer=""></script><script src="/_next/static/chunks/0_bpq2ygtph_8.js" defer=""></script><script src="/_next/static/chunks/0uw~ov22uo1v0.js" defer=""></script><script src="/_next/static/chunks/0kaexm0sizpqt.js" defer=""></script><script src="/_next/static/chunks/12-laj1ll1f7x.js" defer=""></script><script src="/_next/static/chunks/0cqxuck-mgq8u.js" defer=""></script><script src="/_next/static/chunks/09r-npe.02oo1.js" defer=""></script><script src="/_next/static/chunks/0exv.88-9~uur.js" defer=""></script><script src="/_next/static/chunks/0anwkrgy7qewe.js" defer=""></script><script src="/_next/static/chunks/104aivw9jw--b.js" defer=""></script><script src="/_next/static/chunks/12lk.2rth7-53.js" defer=""></script><script src="/_next/static/chunks/16qo-rec6opwe.js" defer=""></script><script src="/_next/static/chunks/16a_ta89m7-qp.js" defer=""></script><script src="/_next/static/chunks/14i0owlw_eo-p.js" defer=""></script><script src="/_next/static/chunks/0jr_n105t8f71.js" defer=""></script><script src="/_next/static/chunks/17tq1unn1yec_.js" defer=""></script><script src="/_next/static/chunks/0x2gaxso9rf_4.js" defer=""></script><script src="/_next/static/chunks/turbopack-0lem2pilyhlmp.js" defer=""></script><script src="/_next/static/chunks/13fzxuxfa3u70.js" defer=""></script><script src="/_next/static/chunks/0m~fshrur9hhe.js" defer=""></script><script src="/_next/static/chunks/17~.u7-1umdtg.js" defer=""></script><script src="/_next/static/chunks/0iopsnztpytxg.js" defer=""></script><script src="/_next/static/chunks/0ltc57~nnjtm3.js" defer=""></script><script src="/_next/static/chunks/10r6qz7idr-ac.js" defer=""></script><script src="/_next/static/chunks/0-6yhccmn5_qf.js" defer=""></script><script src="/_next/static/chunks/turbopack-118a74_ib_iv9.js" defer=""></script><script src="/_next/static/8zgO71oigg50iA_uWZ1lk/_buildManifest.js" defer=""></script><script src="/_next/static/8zgO71oigg50iA_uWZ1lk/_ssgManifest.js" defer=""></script><script src="/_next/static/8zgO71oigg50iA_uWZ1lk/_clientMiddlewareManifest.js" defer=""></script></head><body><div id="__next"><script>!function(){try{var d=document.documentElement,n='data-theme',s='setAttribute';var e=localStorage.getItem('theme');if('system'===e||(!e&&true)){var t='(prefers-color-scheme: dark)',m=window.matchMedia(t);if(m.media!==t||m.matches){d.style.colorScheme = 'dark';d[s](n,'dark')}else{d.style.colorScheme = 'light';d[s](n,'light')}}else if(e){d[s](n,e|| '')}if(e==='light'||e==='dark')d.style.colorScheme=e}catch(e){}}()</script><header class="fixed top-0 left-0 right-0 z-40 shadow-sm backdrop-blur-[10px] bg-base-100/80 saturate-100"><div class="mx-auto flex h-[60px] max-w-6xl items-center justify-between px-8"><div><a aria-label="Pasquale&#x27;s website" href="/"><div class="flex items-center justify-between text-xl font-semibold">~ P: /blog<div class="Typewriter" data-testid="typewriter-wrapper"></div></div></a></div><div class="flex items-center gap-2"><div class="tooltip tooltip-bottom before:text-xs before:content-[attr(data-tip)]" data-tip="commands"><button class="btn btn-ghost btn-circle btn-sm"><svg stroke="currentColor" fill="none" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round" height="20" width="20" xmlns="http://www.w3.org/2000/svg"><path d="M18 3a3 3 0 0 0-3 3v12a3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3H6a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3V6a3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3h12a3 3 0 0 0 3-3 3 3 0 0 0-3-3z"></path></svg></button></div><div class="tooltip tooltip-bottom before:text-xs before:content-[attr(data-tip)]" data-tip="change theme"><label class="swap swap-rotate btn btn-ghost btn-circle btn-sm"><input id="theme-toggle" type="checkbox"/><svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 512 512" class="swap-on" height="20" width="20" xmlns="http://www.w3.org/2000/svg"><path d="M256 160c-52.9 0-96 43.1-96 96s43.1 96 96 96 96-43.1 96-96-43.1-96-96-96zm246.4 80.5l-94.7-47.3 33.5-100.4c4.5-13.6-8.4-26.5-21.9-21.9l-100.4 33.5-47.4-94.8c-6.4-12.8-24.6-12.8-31 0l-47.3 94.7L92.7 70.8c-13.6-4.5-26.5 8.4-21.9 21.9l33.5 100.4-94.7 47.4c-12.8 6.4-12.8 24.6 0 31l94.7 47.3-33.5 100.5c-4.5 13.6 8.4 26.5 21.9 21.9l100.4-33.5 47.3 94.7c6.4 12.8 24.6 12.8 31 0l47.3-94.7 100.4 33.5c13.6 4.5 26.5-8.4 21.9-21.9l-33.5-100.4 94.7-47.3c13-6.5 13-24.7.2-31.1zm-155.9 106c-49.9 49.9-131.1 49.9-181 0-49.9-49.9-49.9-131.1 0-181 49.9-49.9 131.1-49.9 181 0 49.9 49.9 49.9 131.1 0 181z"></path></svg><svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 24 24" class="swap-off" height="20" width="20" xmlns="http://www.w3.org/2000/svg"><path d="M10 6C10 10.4183 13.5817 14 18 14C19.4386 14 20.7885 13.6203 21.9549 12.9556C21.4738 18.0302 17.2005 22 12 22C6.47715 22 2 17.5228 2 12C2 6.79948 5.9698 2.52616 11.0444 2.04507C10.3797 3.21152 10 4.56142 10 6ZM4 12C4 16.4183 7.58172 20 12 20C14.9654 20 17.5757 18.3788 18.9571 15.9546C18.6407 15.9848 18.3214 16 18 16C12.4772 16 8 11.5228 8 6C8 5.67863 8.01524 5.35933 8.04536 5.04293C5.62119 6.42426 4 9.03458 4 12ZM18.1642 2.29104L19 2.5V3.5L18.1642 3.70896C17.4476 3.8881 16.8881 4.4476 16.709 5.16417L16.5 6H15.5L15.291 5.16417C15.1119 4.4476 14.5524 3.8881 13.8358 3.70896L13 3.5V2.5L13.8358 2.29104C14.5524 2.1119 15.1119 1.5524 15.291 0.835829L15.5 0H16.5L16.709 0.835829C16.8881 1.5524 17.4476 2.1119 18.1642 2.29104ZM23.1642 7.29104L24 7.5V8.5L23.1642 8.70896C22.4476 8.8881 21.8881 9.4476 21.709 10.1642L21.5 11H20.5L20.291 10.1642C20.1119 9.4476 19.5524 8.8881 18.8358 8.70896L18 8.5V7.5L18.8358 7.29104C19.5524 7.1119 20.1119 6.5524 20.291 5.83583L20.5 5H21.5L21.709 5.83583C21.8881 6.5524 22.4476 7.1119 23.1642 7.29104Z"></path></svg></label></div></div></div></header><main class="relative mx-auto min-h-layout max-w-6xl px-8 pt-20 mb-2"><a class="group fixed top-24 hidden items-center justify-center text-sm font-medium xl:inline-flex" href="/blog"><svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 24 24" class="h-4 w-4 transition duration-200 group-hover:translate-x-1" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><path fill="none" d="M0 0h24v24H0V0z"></path><path d="M15.41 16.59 10.83 12l4.58-4.59L14 6l-6 6 6 6 1.41-1.41z"></path></svg><span>See all Posts</span></a><div class="prose md:prose-lg lg:prose-xl mx-auto  mb-3 lg:mb-5"><h1 class="text-4xl font-extrabold leading-tight md:text-5xl !mb-4">Building a Fully Client-Side AI Chatbot with WebGPU, Transformers.js, and the Vercel AI SDK</h1><div class="flex gap-2"><a class="badge badge-lg border-base-content hover:border-accent-content hover:opacity-80 no-underline py-4" href="/blog?tag=React"><svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 20 20" aria-hidden="true" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M9.243 3.03a1 1 0 01.727 1.213L9.53 6h2.94l.56-2.243a1 1 0 111.94.486L14.53 6H17a1 1 0 110 2h-2.97l-1 4H15a1 1 0 110 2h-2.47l-.56 2.242a1 1 0 11-1.94-.485L10.47 14H7.53l-.56 2.242a1 1 0 11-1.94-.485L5.47 14H3a1 1 0 110-2h2.97l1-4H5a1 1 0 110-2h2.47l.56-2.243a1 1 0 011.213-.727zM9.03 8l-1 4h2.938l1-4H9.031z" clip-rule="evenodd"></path></svg>React</a><a class="badge badge-lg border-base-content hover:border-accent-content hover:opacity-80 no-underline py-4" href="/blog?tag=AI"><svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 20 20" aria-hidden="true" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M9.243 3.03a1 1 0 01.727 1.213L9.53 6h2.94l.56-2.243a1 1 0 111.94.486L14.53 6H17a1 1 0 110 2h-2.97l-1 4H15a1 1 0 110 2h-2.47l-.56 2.242a1 1 0 11-1.94-.485L10.47 14H7.53l-.56 2.242a1 1 0 11-1.94-.485L5.47 14H3a1 1 0 110-2h2.97l1-4H5a1 1 0 110-2h2.47l.56-2.243a1 1 0 011.213-.727zM9.03 8l-1 4h2.938l1-4H9.031z" clip-rule="evenodd"></path></svg>AI</a></div></div><article class="prose md:prose-lg lg:prose-xl mx-auto"><h1>Building a Fully Client-Side AI Chatbot with WebGPU, Transformers.js, and the Vercel AI SDK</h1>
+<p>How I built a conversational AI assistant that runs entirely in the browser, with no server, no API keys, and no backend, using IBM Granite, Transformers.js, and the Vercel AI SDK.</p>
+<p>Most portfolio chatbots either hit an external LLM API (OpenAI, Anthropic, etc.) requiring API keys, billing, and a backend, or they're just glorified FAQ accordions with no real intelligence.</p>
+<p>I wanted something different: <strong>a real conversational model running entirely in the browser</strong>. No server calls, no API keys, no cold starts. The model loads once, gets cached by the browser, and every subsequent visit is instant.</p>
+<h3>The Value Proposition</h3>
+<table>
+<thead>
+<tr>
+<th>Concern</th>
+<th>Server-Side AI</th>
+<th>Client-Side AI</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Infrastructure</strong></td>
+<td>API keys, servers, billing</td>
+<td>Zero, static hosting only</td>
+</tr>
+<tr>
+<td><strong>Privacy</strong></td>
+<td>Data leaves the device</td>
+<td>Conversations stay local</td>
+</tr>
+<tr>
+<td><strong>Latency</strong></td>
+<td>Network round-trips</td>
+<td>Direct GPU inference</td>
+</tr>
+<tr>
+<td><strong>Offline</strong></td>
+<td>Requires connectivity</td>
+<td>Works after first download</td>
+</tr>
+<tr>
+<td><strong>Cost</strong></td>
+<td>Per-token pricing</td>
+<td>Free after initial load</td>
+</tr>
+</tbody>
+</table>
+<p>This approach works well for portfolio sites, documentation assistants, and any context where the knowledge base is bounded and the interaction is conversational.</p>
+<h2>Architecture Overview</h2>
+<p>The entire pipeline runs client-side. There are six main pieces, and each one has a specific job:</p>
+<p><strong><code>Chatbot</code> (React Component)</strong> is the top-level UI. It renders a floating popover anchored to the bottom-right of every page with a chat bubble trigger, a message list, and an input form. It handles form submission, maps over messages to render the right content for each part type (download progress, text, reasoning), and shows a bouncing writing indicator while the model is thinking. It doesn't know anything about AI. It just consumes the API that <code>useChatbot</code> exposes.</p>
+<p><strong><code>useChatbot</code> (React Hook)</strong> is the bridge between the UI and the AI engine. It checks browser support at runtime via <code>doesBrowserSupportTransformersJS()</code>, creates the model and transport once using <code>useMemo</code>, and wires everything into the AI SDK's <code>useChat</code> hook. It exposes a clean surface: <code>messages</code>, <code>status</code>, <code>sendMessage</code>, <code>stop</code>, and a boolean <code>isBotLoadingResponse</code> so the UI can disable the input during generation. If the browser doesn't support WebGPU, the hook returns <code>supportsTransformerJs: false</code> and the component renders nothing.</p>
+<p><strong><code>ChatbotTransport</code> (Custom Transport)</strong> is where the real work happens. The Vercel AI SDK expects a <code>ChatTransport</code> implementation that knows how to send messages to a model and stream responses back. This class fulfills that contract for a browser-side model. It converts UI messages into model-compatible format, checks if the model needs downloading (and streams progress as custom message parts if so), runs <code>streamText</code> with reasoning middleware to separate <code>&lt;think&gt;</code> tags from visible output, and merges the result into a <code>UIMessageStream</code>. The transport also injects the system prompt, which is a long, detailed description of the portfolio owner that turns a generic 350M model into a personalized assistant.</p>
+<p><strong><code>worker.ts</code> (Web Worker)</strong> keeps inference off the main thread. It's only three lines: it imports <code>TransformersJSWorkerHandler</code>, creates an instance, and wires it to <code>self.onmessage</code>. All the heavy lifting (ONNX Runtime initialization, WebGPU session management, tokenization, streaming generation) is handled internally by the handler. The main thread never blocks.</p>
+<p><strong><code>Response</code> (Markdown Renderer)</strong> takes the raw text from the model and renders it as HTML using <code>markdown-it</code> with syntax highlighting (<code>markdown-it-highlightjs</code>) and copy-to-clipboard buttons (<code>markdown-it-code-copy</code>). It's wrapped in <code>React.memo</code> with a custom comparator that only triggers re-renders when <code>responseText</code> changes, which matters a lot during streaming when the parent re-renders on every token batch.</p>
+<p><strong><code>Conversation</code> (Scroll Container)</strong> wraps the <code>use-stick-to-bottom</code> library to handle streaming-aware scroll behavior. It auto-sticks to the bottom while tokens arrive, smoothly scrolls new messages into view, and shows a floating arrow button when the user scrolls up to read earlier messages. This replaces the naive <code>scrollTop = scrollHeight</code> approach that causes janky jumps during streaming.</p>
+<h3>How They Connect</h3>
+<ol>
+<li><strong>User types a question</strong> and submits the React form inside <code>Chatbot</code></li>
+<li><strong><code>useChatbot</code></strong> forwards it to the AI SDK's <code>useChat</code>, which calls <code>ChatbotTransport.sendMessages()</code></li>
+<li><strong><code>ChatbotTransport</code></strong> converts the messages, checks model availability, and starts <code>streamText</code> with the system prompt</li>
+<li><strong>The Web Worker</strong> runs Granite inference on the GPU and streams tokens back</li>
+<li><strong>Tokens flow</strong> through the <code>UIMessageStream</code> back into <code>useChat</code>, which updates React state</li>
+<li><strong><code>Chatbot</code> re-renders</strong> with new message parts, delegating to <code>Response</code> for markdown and <code>Conversation</code> for scroll behavior</li>
+</ol>
+<p>The important thing here is that this architecture reuses the same <code>useChat</code> hook and <code>ChatTransport</code> interface that server-backed AI applications use. If you ever want to swap to a server-side model, you only need to change the transport layer. The UI code stays the same.</p>
+<h2>The AI Engine: Granite on WebGPU</h2>
+<p>The chatbot uses <a href="https://huggingface.co/onnx-community/granite-4.0-350m-ONNX-web">IBM Granite 4.0 350M</a>, a compact instruction-tuned model optimized for browser inference. Model selection matters a lot here: too large and visitors wait forever, too small and the responses become incoherent.</p>
+
+<div style="position: relative">
+	<pre><code class="hljs language-typescript"><span class="hljs-keyword">const</span> <span class="hljs-variable constant_">MODEL_ID</span> = <span class="hljs-string">&quot;onnx-community/granite-4.0-350m-ONNX-web&quot;</span>;
+
+<span class="hljs-keyword">const</span> model = <span class="hljs-title function_">transformersJS</span>(<span class="hljs-variable constant_">MODEL_ID</span>, {
+    <span class="hljs-attr">device</span>: <span class="hljs-string">&quot;webgpu&quot;</span>,   <span class="hljs-comment">// GPU-accelerated inference</span>
+    <span class="hljs-attr">dtype</span>: <span class="hljs-string">&quot;fp16&quot;</span>,      <span class="hljs-comment">// Half-precision for speed/memory balance</span>
+    <span class="hljs-attr">worker</span>: <span class="hljs-keyword">new</span> <span class="hljs-title class_">Worker</span>(
+        <span class="hljs-keyword">new</span> <span class="hljs-title function_">URL</span>(<span class="hljs-string">&quot;@/components/Chatbot/util/worker.ts&quot;</span>, <span class="hljs-keyword">import</span>.<span class="hljs-property">meta</span>.<span class="hljs-property">url</span>),
+        { <span class="hljs-attr">type</span>: <span class="hljs-string">&quot;module&quot;</span> }
+    ),
+});
+</code></pre>
+
+	<button class="markdown-it-code-copy btn btn-ghost btn-circle btn-sm" data-clipboard-text="const MODEL_ID = &quot;onnx-community/granite-4.0-350m-ONNX-web&quot;;
+
+const model = transformersJS(MODEL_ID, {
+    device: &quot;webgpu&quot;,   // GPU-accelerated inference
+    dtype: &quot;fp16&quot;,      // Half-precision for speed/memory balance
+    worker: new Worker(
+        new URL(&quot;@/components/Chatbot/util/worker.ts&quot;, import.meta.url),
+        { type: &quot;module&quot; }
+    ),
+});
+" style="position: absolute; top: 7.5px; right: 6px; cursor: pointer; outline: none;" title="Copy">
+		<span style="font-size: 21px; opacity: 0.4;" class="fa fa-solid fa-clone text-neutral-content"></span>
+	</button>
+</div>
+<h3>Why Granite 350M?</h3>
+<ul>
+<li><strong>350M parameters</strong>: small enough to download quickly and run on consumer GPUs</li>
+<li><strong>ONNX-Web optimized</strong>: pre-converted for browser runtimes via the <code>onnx-community</code> pipeline</li>
+<li><strong>Instruction-tuned</strong>: follows system prompts well despite its compact size</li>
+<li><strong>WebGPU acceleration</strong>: uses the visitor's GPU for fast token generation</li>
+<li><strong>FP16 precision</strong>: halves memory usage vs FP32 with minimal quality loss</li>
+</ul>
+<p>The model is loaded through <a href="https://github.com/nicepkg/browser-ai"><code>@browser-ai/transformers-js</code></a>, which wraps Hugging Face's Transformers.js with a higher-level API compatible with the Vercel AI SDK.</p>
+<h3>First Visit vs Return Visit</h3>
+<p>On the <strong>first visit</strong>, the model downloads (~350MB for a 350M param model in FP16). The chatbot displays an inline progress bar during this process (more on that in the transport section). On <strong>subsequent visits</strong>, the browser's Cache Storage serves the model instantly with no network request at all. This caching behavior is automatic and requires zero configuration.</p>
+<h2>Custom Chat Transport: The Heart of the System</h2>
+<p>The Vercel AI SDK (<code>ai</code> package) is designed for server-side LLMs. To use it client-side, you need a custom <code>ChatTransport</code>, which is the interface that tells the SDK <em>how</em> to send messages to the model and <em>how</em> to stream responses back. This is where the real architectural work happens.</p>
+
+<div style="position: relative">
+	<pre><code class="hljs language-typescript"><span class="hljs-keyword">export</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">ChatbotTransport</span> <span class="hljs-keyword">implements</span> <span class="hljs-title class_">ChatTransport</span>&lt;<span class="hljs-title class_">TransformersUIMessage</span>&gt; {
+    <span class="hljs-keyword">private</span> <span class="hljs-keyword">readonly</span> <span class="hljs-attr">model</span>: <span class="hljs-title class_">TransformersJSLanguageModel</span>;
+    <span class="hljs-keyword">private</span> <span class="hljs-keyword">readonly</span> <span class="hljs-attr">systemPrompt</span>: <span class="hljs-built_in">string</span>;
+
+    <span class="hljs-title function_">constructor</span>(<span class="hljs-params">model: TransformersJSLanguageModel, options: ChatbotTransportOptions</span>) {
+        <span class="hljs-variable language_">this</span>.<span class="hljs-property">model</span> = model;
+        <span class="hljs-variable language_">this</span>.<span class="hljs-property">systemPrompt</span> = options.<span class="hljs-property">systemPrompt</span>;
+    }
+
+    <span class="hljs-keyword">async</span> <span class="hljs-title function_">sendMessages</span>(options): <span class="hljs-title class_">Promise</span>&lt;<span class="hljs-title class_">ReadableStream</span>&lt;<span class="hljs-title class_">UIMessageChunk</span>&gt;&gt; {
+        <span class="hljs-keyword">const</span> { messages, abortSignal } = options;
+        <span class="hljs-keyword">const</span> prompt = <span class="hljs-keyword">await</span> <span class="hljs-title function_">convertToModelMessages</span>(messages);
+
+        <span class="hljs-keyword">return</span> createUIMessageStream&lt;<span class="hljs-title class_">TransformersUIMessage</span>&gt;({
+            <span class="hljs-attr">execute</span>: <span class="hljs-keyword">async</span> ({ writer }) =&gt; {
+                <span class="hljs-comment">// 1. Check model availability</span>
+                <span class="hljs-comment">// 2. Show download progress if needed</span>
+                <span class="hljs-comment">// 3. Run streaming inference with reasoning middleware</span>
+                <span class="hljs-comment">// 4. Pipe tokens to the UI message stream</span>
+            },
+        });
+    }
+}
+</code></pre>
+
+	<button class="markdown-it-code-copy btn btn-ghost btn-circle btn-sm" data-clipboard-text="export class ChatbotTransport implements ChatTransport<TransformersUIMessage> {
+    private readonly model: TransformersJSLanguageModel;
+    private readonly systemPrompt: string;
+
+    constructor(model: TransformersJSLanguageModel, options: ChatbotTransportOptions) {
+        this.model = model;
+        this.systemPrompt = options.systemPrompt;
+    }
+
+    async sendMessages(options): Promise<ReadableStream<UIMessageChunk>> {
+        const { messages, abortSignal } = options;
+        const prompt = await convertToModelMessages(messages);
+
+        return createUIMessageStream<TransformersUIMessage>({
+            execute: async ({ writer }) => {
+                // 1. Check model availability
+                // 2. Show download progress if needed
+                // 3. Run streaming inference with reasoning middleware
+                // 4. Pipe tokens to the UI message stream
+            },
+        });
+    }
+}
+" style="position: absolute; top: 7.5px; right: 6px; cursor: pointer; outline: none;" title="Copy">
+		<span style="font-size: 21px; opacity: 0.4;" class="fa fa-solid fa-clone text-neutral-content"></span>
+	</button>
+</div>
+<h3>Download Progress as Message Parts</h3>
+<p>Instead of a separate loading overlay, download progress is written as custom <code>data-modelDownloadProgress</code> message parts. The progress bar lives <em>inside the chat conversation</em>, which keeps the user oriented within the chat context:</p>
+
+<div style="position: relative">
+	<pre><code class="hljs language-typescript"><span class="hljs-keyword">const</span> availability = <span class="hljs-keyword">await</span> model.<span class="hljs-title function_">availability</span>();
+
+<span class="hljs-keyword">if</span> (availability !== <span class="hljs-string">&quot;available&quot;</span>) {
+    <span class="hljs-keyword">await</span> model.<span class="hljs-title function_">createSessionWithProgress</span>(<span class="hljs-function">(<span class="hljs-params">progress</span>) =&gt;</span> {
+        <span class="hljs-keyword">const</span> percent = <span class="hljs-title class_">Math</span>.<span class="hljs-title function_">round</span>(progress * <span class="hljs-number">100</span>);
+
+        <span class="hljs-keyword">if</span> (progress &gt;= <span class="hljs-number">1</span>) {
+            writer.<span class="hljs-title function_">write</span>({
+                <span class="hljs-attr">type</span>: <span class="hljs-string">&quot;data-modelDownloadProgress&quot;</span>,
+                <span class="hljs-attr">id</span>: downloadProgressId,
+                <span class="hljs-attr">data</span>: { <span class="hljs-attr">status</span>: <span class="hljs-string">&quot;complete&quot;</span>, <span class="hljs-attr">progress</span>: <span class="hljs-number">100</span>, <span class="hljs-attr">message</span>: <span class="hljs-string">&quot;Model ready!&quot;</span> },
+            });
+            <span class="hljs-keyword">return</span>;
+        }
+
+        <span class="hljs-keyword">if</span> (!downloadProgressId) {
+            downloadProgressId = <span class="hljs-string">`download-<span class="hljs-subst">${<span class="hljs-built_in">Date</span>.now()}</span>`</span>;
+        }
+
+        writer.<span class="hljs-title function_">write</span>({
+            <span class="hljs-attr">type</span>: <span class="hljs-string">&quot;data-modelDownloadProgress&quot;</span>,
+            <span class="hljs-attr">id</span>: downloadProgressId,
+            <span class="hljs-attr">data</span>: {
+                <span class="hljs-attr">status</span>: <span class="hljs-string">&quot;downloading&quot;</span>,
+                <span class="hljs-attr">progress</span>: percent,
+                <span class="hljs-attr">message</span>: <span class="hljs-string">`Downloading AI model... <span class="hljs-subst">${percent}</span>%`</span>,
+            },
+        });
+    });
+}
+</code></pre>
+
+	<button class="markdown-it-code-copy btn btn-ghost btn-circle btn-sm" data-clipboard-text="const availability = await model.availability();
+
+if (availability !== &quot;available&quot;) {
+    await model.createSessionWithProgress((progress) => {
+        const percent = Math.round(progress * 100);
+
+        if (progress >= 1) {
+            writer.write({
+                type: &quot;data-modelDownloadProgress&quot;,
+                id: downloadProgressId,
+                data: { status: &quot;complete&quot;, progress: 100, message: &quot;Model ready!&quot; },
+            });
+            return;
+        }
+
+        if (!downloadProgressId) {
+            downloadProgressId = `download-${Date.now()}`;
+        }
+
+        writer.write({
+            type: &quot;data-modelDownloadProgress&quot;,
+            id: downloadProgressId,
+            data: {
+                status: &quot;downloading&quot;,
+                progress: percent,
+                message: `Downloading AI model... ${percent}%`,
+            },
+        });
+    });
+}
+" style="position: absolute; top: 7.5px; right: 6px; cursor: pointer; outline: none;" title="Copy">
+		<span style="font-size: 21px; opacity: 0.4;" class="fa fa-solid fa-clone text-neutral-content"></span>
+	</button>
+</div>
+<p>The nice thing about this approach is that the download progress is treated as just another message part, so the AI SDK's message state management handles it automatically. No separate loading state, no extra React context, no coordination logic.</p>
+<h3>Reasoning Middleware</h3>
+<p>The transport wraps the model with <code>extractReasoningMiddleware</code> to parse <code>&lt;think&gt;</code> tags. If the model reasons before answering (chain-of-thought), those tokens are separated from the visible response and can be rendered in a collapsible section:</p>
+
+<div style="position: relative">
+	<pre><code class="hljs language-typescript"><span class="hljs-keyword">const</span> result = <span class="hljs-title function_">streamText</span>({
+    <span class="hljs-attr">model</span>: <span class="hljs-title function_">wrapLanguageModel</span>({
+        model,
+        <span class="hljs-attr">middleware</span>: <span class="hljs-title function_">extractReasoningMiddleware</span>({ <span class="hljs-attr">tagName</span>: <span class="hljs-string">&quot;think&quot;</span> }),
+    }),
+    <span class="hljs-attr">system</span>: <span class="hljs-variable language_">this</span>.<span class="hljs-property">systemPrompt</span>,
+    <span class="hljs-attr">messages</span>: prompt,
+    abortSignal,
+});
+
+writer.<span class="hljs-title function_">merge</span>(result.<span class="hljs-title function_">toUIMessageStream</span>({ <span class="hljs-attr">sendStart</span>: <span class="hljs-literal">false</span> }));
+</code></pre>
+
+	<button class="markdown-it-code-copy btn btn-ghost btn-circle btn-sm" data-clipboard-text="const result = streamText({
+    model: wrapLanguageModel({
+        model,
+        middleware: extractReasoningMiddleware({ tagName: &quot;think&quot; }),
+    }),
+    system: this.systemPrompt,
+    messages: prompt,
+    abortSignal,
+});
+
+writer.merge(result.toUIMessageStream({ sendStart: false }));
+" style="position: absolute; top: 7.5px; right: 6px; cursor: pointer; outline: none;" title="Copy">
+		<span style="font-size: 21px; opacity: 0.4;" class="fa fa-solid fa-clone text-neutral-content"></span>
+	</button>
+</div>
+<p>This middleware integration is one of the perks of building on the AI SDK: reasoning extraction works the same way whether the model runs on a server or in the browser.</p>
+<h3>System Prompt Injection</h3>
+<p>The transport injects a detailed system prompt that gives the model full context about the portfolio owner: background, experience, communication style, and how to adapt responses for different audiences (recruiters, developers, casual visitors). The Granite 350M model is small. It doesn't know everything. But it doesn't need to. The system prompt provides all the context, and the model's job is to be a <em>conversational interface</em> to that context, not a knowledge base.</p>
+<h2>The Web Worker: Keeping the UI Alive</h2>
+<p>AI inference is computationally expensive. Running it on the main thread would freeze the entire page: no scrolling, no animations, no interaction. The solution is a dedicated Web Worker that handles all model operations off-thread:</p>
+
+<div style="position: relative">
+	<pre><code class="hljs language-typescript"><span class="hljs-comment">// worker.ts</span>
+<span class="hljs-keyword">import</span> { <span class="hljs-title class_">TransformersJSWorkerHandler</span> } <span class="hljs-keyword">from</span> <span class="hljs-string">&quot;@browser-ai/transformers-js&quot;</span>;
+
+<span class="hljs-keyword">const</span> handler = <span class="hljs-keyword">new</span> <span class="hljs-title class_">TransformersJSWorkerHandler</span>();
+self.<span class="hljs-property">onmessage</span> = <span class="hljs-function">(<span class="hljs-params">msg: MessageEvent</span>) =&gt;</span> handler.<span class="hljs-title function_">onmessage</span>(msg);
+</code></pre>
+
+	<button class="markdown-it-code-copy btn btn-ghost btn-circle btn-sm" data-clipboard-text="// worker.ts
+import { TransformersJSWorkerHandler } from &quot;@browser-ai/transformers-js&quot;;
+
+const handler = new TransformersJSWorkerHandler();
+self.onmessage = (msg: MessageEvent) => handler.onmessage(msg);
+" style="position: absolute; top: 7.5px; right: 6px; cursor: pointer; outline: none;" title="Copy">
+		<span style="font-size: 21px; opacity: 0.4;" class="fa fa-solid fa-clone text-neutral-content"></span>
+	</button>
+</div>
+<p>That's the entire worker file. The <code>TransformersJSWorkerHandler</code> abstracts away all the complexity:</p>
+<ul>
+<li>ONNX Runtime Web initialization</li>
+<li>WebGPU session management</li>
+<li>Model loading and caching</li>
+<li>Tokenization and inference</li>
+<li>Streaming token generation back to the main thread</li>
+</ul>
+<p>The worker communicates with the main thread through the standard <code>postMessage</code> API, but all of this is abstracted by the <code>transformersJS()</code> model wrapper. From the transport's perspective, the model is just an async function that yields tokens.</p>
+<h2>The React Hook: <code>useChatbot</code></h2>
+<p>The <code>useChatbot</code> hook is the bridge between React and the AI engine. It handles three concerns: browser capability detection, transport initialization, and exposing a clean API to the UI component:</p>
+
+<div style="position: relative">
+	<pre><code class="hljs language-typescript"><span class="hljs-keyword">export</span> <span class="hljs-keyword">function</span> <span class="hljs-title function_">useChatbot</span>(<span class="hljs-params"></span>) {
+    <span class="hljs-comment">// 1. Runtime feature detection</span>
+    <span class="hljs-keyword">const</span> supportsTransformerJs = <span class="hljs-title function_">useMemo</span>(
+        <span class="hljs-function">() =&gt;</span> <span class="hljs-title function_">doesBrowserSupportTransformersJS</span>(), []
+    );
+
+    <span class="hljs-comment">// 2. Create transport (model + system prompt), only once</span>
+    <span class="hljs-keyword">const</span> chatTransport = <span class="hljs-title function_">useMemo</span>(<span class="hljs-function">() =&gt;</span> {
+        <span class="hljs-keyword">if</span> (!supportsTransformerJs) <span class="hljs-keyword">return</span> <span class="hljs-literal">null</span>;
+
+        <span class="hljs-keyword">const</span> model = <span class="hljs-title function_">transformersJS</span>(<span class="hljs-variable constant_">MODEL_ID</span>, {
+            <span class="hljs-attr">device</span>: <span class="hljs-string">&quot;webgpu&quot;</span>,
+            <span class="hljs-attr">dtype</span>: <span class="hljs-string">&quot;fp16&quot;</span>,
+            <span class="hljs-attr">worker</span>: <span class="hljs-keyword">new</span> <span class="hljs-title class_">Worker</span>(
+                <span class="hljs-keyword">new</span> <span class="hljs-title function_">URL</span>(<span class="hljs-string">&quot;@/components/Chatbot/util/worker.ts&quot;</span>, <span class="hljs-keyword">import</span>.<span class="hljs-property">meta</span>.<span class="hljs-property">url</span>),
+                { <span class="hljs-attr">type</span>: <span class="hljs-string">&quot;module&quot;</span> }
+            ),
+        });
+
+        <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">ChatbotTransport</span>(model, { <span class="hljs-attr">systemPrompt</span>: <span class="hljs-variable constant_">SYSTEM_PROMPT</span> });
+    }, [supportsTransformerJs]);
+
+    <span class="hljs-comment">// 3. Wire up the AI SDK&#x27;s useChat</span>
+    <span class="hljs-keyword">const</span> { error, status, messages, sendMessage, stop } =
+        useChat&lt;<span class="hljs-title class_">TransformersUIMessage</span>&gt;({
+            <span class="hljs-attr">transport</span>: chatTransport!,
+            <span class="hljs-attr">experimental_throttle</span>: <span class="hljs-number">50</span>,
+            <span class="hljs-attr">id</span>: <span class="hljs-string">&quot;chatbot-pakybot&quot;</span>,
+        });
+
+    <span class="hljs-comment">// 4. Expose a clean API</span>
+    <span class="hljs-keyword">return</span> {
+        supportsTransformerJs,
+        messages,
+        status,
+        <span class="hljs-attr">isBotLoadingResponse</span>: status === <span class="hljs-string">&quot;submitted&quot;</span> || status === <span class="hljs-string">&quot;streaming&quot;</span>,
+        <span class="hljs-attr">sendMessage</span>: <span class="hljs-function">(<span class="hljs-params">text: <span class="hljs-built_in">string</span></span>) =&gt;</span> <span class="hljs-title function_">sendMessage</span>({ text }),
+        stop,
+    };
+}
+</code></pre>
+
+	<button class="markdown-it-code-copy btn btn-ghost btn-circle btn-sm" data-clipboard-text="export function useChatbot() {
+    // 1. Runtime feature detection
+    const supportsTransformerJs = useMemo(
+        () => doesBrowserSupportTransformersJS(), []
+    );
+
+    // 2. Create transport (model + system prompt), only once
+    const chatTransport = useMemo(() => {
+        if (!supportsTransformerJs) return null;
+
+        const model = transformersJS(MODEL_ID, {
+            device: &quot;webgpu&quot;,
+            dtype: &quot;fp16&quot;,
+            worker: new Worker(
+                new URL(&quot;@/components/Chatbot/util/worker.ts&quot;, import.meta.url),
+                { type: &quot;module&quot; }
+            ),
+        });
+
+        return new ChatbotTransport(model, { systemPrompt: SYSTEM_PROMPT });
+    }, [supportsTransformerJs]);
+
+    // 3. Wire up the AI SDK&apos;s useChat
+    const { error, status, messages, sendMessage, stop } =
+        useChat<TransformersUIMessage>({
+            transport: chatTransport!,
+            experimental_throttle: 50,
+            id: &quot;chatbot-pakybot&quot;,
+        });
+
+    // 4. Expose a clean API
+    return {
+        supportsTransformerJs,
+        messages,
+        status,
+        isBotLoadingResponse: status === &quot;submitted&quot; || status === &quot;streaming&quot;,
+        sendMessage: (text: string) => sendMessage({ text }),
+        stop,
+    };
+}
+" style="position: absolute; top: 7.5px; right: 6px; cursor: pointer; outline: none;" title="Copy">
+		<span style="font-size: 21px; opacity: 0.4;" class="fa fa-solid fa-clone text-neutral-content"></span>
+	</button>
+</div>
+<h3>Notable Implementation Details</h3>
+<ul>
+<li><strong><code>experimental_throttle: 50</code></strong> batches React state updates every 50ms instead of on every single token. Without this, streaming a response triggers hundreds of re-renders per second, causing visible jank.</li>
+<li><strong><code>doesBrowserSupportTransformersJS()</code></strong> is runtime feature detection for WebGPU + WASM. If the browser doesn't support these APIs (rare in 2026, but possible), the chatbot silently hides itself instead of crashing.</li>
+<li><strong>Memoized transport</strong> means the model and worker are created once and reused across messages. The <code>useMemo</code> dependency on <code>supportsTransformerJs</code> ensures we never create a worker in unsupported browsers.</li>
+</ul>
+<h2>The UI: A Streaming Popover Chat</h2>
+<p>The chatbot lives in a <code>Popover</code> component (built on Radix UI) anchored to the bottom-right corner of every page. It's rendered inside the <code>Footer</code>, always available but never intrusive:</p>
+
+<div style="position: relative">
+	<pre><code class="hljs language-tsx">&lt;<span class="hljs-title class_">Popover</span>&gt;
+    <span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">PopoverTrigger</span> <span class="hljs-attr">asChild</span> <span class="hljs-attr">className</span>=<span class="hljs-string">&quot;fixed bottom-4 right-1 z-50&quot;</span>&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-name">button</span> <span class="hljs-attr">className</span>=<span class="hljs-string">&quot;btn btn-ghost btn-circle&quot;</span>&gt;</span>
+            <span class="hljs-tag">&lt;<span class="hljs-name">BsFillChatQuoteFill</span> <span class="hljs-attr">size</span>=<span class="hljs-string">{40}</span> /&gt;</span>
+        <span class="hljs-tag">&lt;/<span class="hljs-name">button</span>&gt;</span>
+    <span class="hljs-tag">&lt;/<span class="hljs-name">PopoverTrigger</span>&gt;</span></span>
+
+    <span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">PopoverContent</span> <span class="hljs-attr">className</span>=<span class="hljs-string">&quot;w-96&quot;</span>&gt;</span>
+        {/* Title + description */}
+        <span class="hljs-tag">&lt;<span class="hljs-name">Conversation</span> <span class="hljs-attr">className</span>=<span class="hljs-string">&quot;h-[200px] no-scrollbar&quot;</span>&gt;</span>
+            <span class="hljs-tag">&lt;<span class="hljs-name">ConversationContent</span>&gt;</span>
+                {/* Message rendering */}
+            <span class="hljs-tag">&lt;/<span class="hljs-name">ConversationContent</span>&gt;</span>
+            <span class="hljs-tag">&lt;<span class="hljs-name">ConversationScrollButton</span> /&gt;</span>
+        <span class="hljs-tag">&lt;/<span class="hljs-name">Conversation</span>&gt;</span>
+        {/* Input form */}
+    <span class="hljs-tag">&lt;/<span class="hljs-name">PopoverContent</span>&gt;</span></span>
+&lt;/<span class="hljs-title class_">Popover</span>&gt;
+</code></pre>
+
+	<button class="markdown-it-code-copy btn btn-ghost btn-circle btn-sm" data-clipboard-text="<Popover>
+    <PopoverTrigger asChild className=&quot;fixed bottom-4 right-1 z-50&quot;>
+        <button className=&quot;btn btn-ghost btn-circle&quot;>
+            <BsFillChatQuoteFill size={40} />
+        </button>
+    </PopoverTrigger>
+
+    <PopoverContent className=&quot;w-96&quot;>
+        {/* Title + description */}
+        <Conversation className=&quot;h-[200px] no-scrollbar&quot;>
+            <ConversationContent>
+                {/* Message rendering */}
+            </ConversationContent>
+            <ConversationScrollButton />
+        </Conversation>
+        {/* Input form */}
+    </PopoverContent>
+</Popover>
+" style="position: absolute; top: 7.5px; right: 6px; cursor: pointer; outline: none;" title="Copy">
+		<span style="font-size: 21px; opacity: 0.4;" class="fa fa-solid fa-clone text-neutral-content"></span>
+	</button>
+</div>
+<h3>Message Rendering</h3>
+<p>Each message is rendered based on its <code>parts</code> array, which is the AI SDK's structured message format:</p>
+<ul>
+<li><strong><code>data-modelDownloadProgress</code></strong>: inline progress bar with spinner</li>
+<li><strong><code>text</code></strong>: markdown-rendered response via the <code>&lt;Response /&gt;</code> component</li>
+<li><strong><code>reasoning</code></strong>: collapsible thinking section (when the model uses <code>&lt;think&gt;</code> tags)</li>
+<li><strong>User messages</strong>: plain text in a chat bubble</li>
+</ul>
+<p>The UI disables the input while the model is generating (<code>status !== &quot;ready&quot;</code>), preventing double-submissions. A bouncing writing icon (<code>TbWriting</code>) appears while the model processes the initial request before tokens start streaming.</p>
+<h2>Scroll Behavior: Sticky Streaming</h2>
+<p>Streaming chat interfaces need scroll behavior that feels natural. The naive approach of setting <code>scrollTop = scrollHeight</code> on every render causes jarring jumps and fights with user scrolling. The <code>use-stick-to-bottom</code> library (the same one used by ChatGPT-like interfaces) solves this nicely:</p>
+
+<div style="position: relative">
+	<pre><code class="hljs language-tsx">&lt;<span class="hljs-title class_">Conversation</span> className=<span class="hljs-string">&quot;h-[200px] no-scrollbar&quot;</span>&gt;
+    <span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">ConversationContent</span>&gt;</span>
+        {/* messages */}
+    <span class="hljs-tag">&lt;/<span class="hljs-name">ConversationContent</span>&gt;</span></span>
+    <span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">ConversationScrollButton</span> <span class="hljs-attr">className</span>=<span class="hljs-string">&quot;btn-sm animate-bounce&quot;</span> /&gt;</span></span>
+&lt;/<span class="hljs-title class_">Conversation</span>&gt;
+</code></pre>
+
+	<button class="markdown-it-code-copy btn btn-ghost btn-circle btn-sm" data-clipboard-text="<Conversation className=&quot;h-[200px] no-scrollbar&quot;>
+    <ConversationContent>
+        {/* messages */}
+    </ConversationContent>
+    <ConversationScrollButton className=&quot;btn-sm animate-bounce&quot; />
+</Conversation>
+" style="position: absolute; top: 7.5px; right: 6px; cursor: pointer; outline: none;" title="Copy">
+		<span style="font-size: 21px; opacity: 0.4;" class="fa fa-solid fa-clone text-neutral-content"></span>
+	</button>
+</div>
+<p>This gives you three behaviors out of the box:</p>
+<ol>
+<li><strong>Auto-stick during streaming</strong>: as new tokens arrive, the scroll stays pinned to the bottom</li>
+<li><strong>Smooth scroll on new messages</strong>: user messages and bot responses scroll into view with animation</li>
+<li><strong>Scroll-to-bottom button</strong>: if the user scrolls up to read earlier messages, a floating arrow button appears to jump back down</li>
+</ol>
+<p>The <code>Conversation</code> component wraps <code>StickToBottom</code> with sensible defaults (<code>initial=&quot;smooth&quot;</code>, <code>resize=&quot;smooth&quot;</code>, <code>role=&quot;log&quot;</code> for accessibility), while <code>ConversationScrollButton</code> uses the <code>useStickToBottomContext</code> hook to conditionally render the jump-to-bottom affordance.</p>
+<h2>Markdown Rendering with Syntax Highlighting</h2>
+<p>Bot responses are rendered as markdown using <code>markdown-it</code> with two plugins for syntax highlighting and a copy-to-clipboard button on code blocks:</p>
+
+<div style="position: relative">
+	<pre><code class="hljs language-typescript"><span class="hljs-keyword">const</span> responseContent = <span class="hljs-title function_">md</span>()
+    .<span class="hljs-title function_">use</span>(highlightjs)
+    .<span class="hljs-title function_">use</span>(codecopy, {
+        <span class="hljs-attr">buttonClass</span>: <span class="hljs-string">&#x27;btn btn-ghost btn-circle btn-sm&#x27;</span>,
+        <span class="hljs-attr">iconClass</span>: <span class="hljs-string">&#x27;fa fa-solid fa-clone text-neutral-content&#x27;</span>
+    })
+    .<span class="hljs-title function_">render</span>(responseText);
+</code></pre>
+
+	<button class="markdown-it-code-copy btn btn-ghost btn-circle btn-sm" data-clipboard-text="const responseContent = md()
+    .use(highlightjs)
+    .use(codecopy, {
+        buttonClass: &apos;btn btn-ghost btn-circle btn-sm&apos;,
+        iconClass: &apos;fa fa-solid fa-clone text-neutral-content&apos;
+    })
+    .render(responseText);
+" style="position: absolute; top: 7.5px; right: 6px; cursor: pointer; outline: none;" title="Copy">
+		<span style="font-size: 21px; opacity: 0.4;" class="fa fa-solid fa-clone text-neutral-content"></span>
+	</button>
+</div>
+<p>The <code>&lt;Response /&gt;</code> component is memoized with a custom comparator so it only re-renders when <code>responseText</code> actually changes:</p>
+
+<div style="position: relative">
+	<pre><code class="hljs language-typescript"><span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> <span class="hljs-title class_">Response</span> = <span class="hljs-title function_">memo</span>(
+    <span class="hljs-keyword">function</span> <span class="hljs-title function_">Response</span>(<span class="hljs-params">{ responseText, className }</span>) {
+        <span class="hljs-keyword">const</span> responseContent = <span class="hljs-title function_">useMemo</span>(
+            <span class="hljs-function">() =&gt;</span> <span class="hljs-title function_">md</span>().<span class="hljs-title function_">use</span>(highlightjs).<span class="hljs-title function_">use</span>(codecopy, { <span class="hljs-comment">/* config */</span> }).<span class="hljs-title function_">render</span>(responseText),
+            [responseText]
+        );
+
+        <span class="hljs-keyword">return</span> (
+            <span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">div</span>
+                <span class="hljs-attr">className</span>=<span class="hljs-string">{cn(</span>&#x27;<span class="hljs-attr">prose</span>&#x27;, <span class="hljs-attr">className</span>)}
+                <span class="hljs-attr">dangerouslySetInnerHTML</span>=<span class="hljs-string">{{</span> <span class="hljs-attr">__html:</span> <span class="hljs-attr">responseContent</span> }}
+            /&gt;</span></span>
+        );
+    },
+    <span class="hljs-function">(<span class="hljs-params">prev, next</span>) =&gt;</span> prev.<span class="hljs-property">responseText</span> === next.<span class="hljs-property">responseText</span>,
+);
+</code></pre>
+
+	<button class="markdown-it-code-copy btn btn-ghost btn-circle btn-sm" data-clipboard-text="export const Response = memo(
+    function Response({ responseText, className }) {
+        const responseContent = useMemo(
+            () => md().use(highlightjs).use(codecopy, { /* config */ }).render(responseText),
+            [responseText]
+        );
+
+        return (
+            <div
+                className={cn(&apos;prose&apos;, className)}
+                dangerouslySetInnerHTML={{ __html: responseContent }}
+            />
+        );
+    },
+    (prev, next) => prev.responseText === next.responseText,
+);
+" style="position: absolute; top: 7.5px; right: 6px; cursor: pointer; outline: none;" title="Copy">
+		<span style="font-size: 21px; opacity: 0.4;" class="fa fa-solid fa-clone text-neutral-content"></span>
+	</button>
+</div>
+<p>This matters during streaming: the component receives the same text with a few more characters appended each time. Without memoization, every intermediate render would re-parse the entire markdown string. The <code>useMemo</code> on <code>responseText</code> ensures the markdown-to-HTML conversion only runs when the text actually changes, not on every parent re-render.</p>
+<h2>What Makes This Special</h2>
+<h3>Zero Infrastructure</h3>
+<p>There is no server. No API. No database. No billing. No rate limits. No cold starts. The entire AI pipeline runs in the visitor's browser. The portfolio is a static Next.js export hosted on GitHub Pages, and the chatbot adds intelligence without adding infrastructure.</p>
+<h3>Privacy by Design</h3>
+<p>User conversations never leave the device. There are no analytics on chat content, no logging, no telemetry. The model runs locally: what you ask stays on your machine.</p>
+<h3>Offline Capable</h3>
+<p>After the first model download, the chatbot works offline. The ONNX model files are cached in the browser's Cache Storage. Combined with a service worker, the entire portfolio (including the chatbot) could function without an internet connection.</p>
+<h3>Standard AI SDK Interface</h3>
+<p>Despite running client-side, the chatbot uses the same <code>useChat</code> hook and <code>ChatTransport</code> interface as server-backed AI applications. This means:</p>
+<ul>
+<li>Swapping to a server-side model requires changing only the transport</li>
+<li>Tool calling can be added by extending the transport</li>
+<li>The streaming UI code is identical to what you'd write for any AI SDK application</li>
+</ul>
+<h3>Progressive Enhancement</h3>
+<p>The chatbot checks for WebGPU support at runtime. If the visitor's browser doesn't support it, the chatbot simply doesn't render. No error, no broken UI, no console spam. The feature enhances the experience for capable browsers without degrading it for others.</p>
+<h2>Limitations and Trade-offs</h2>
+<h3>Model Size vs Quality</h3>
+<p>Granite 350M is impressive for its size, but it's not GPT-4. Responses can be repetitive on complex questions, occasionally off-topic, and limited in reasoning depth. This is a deliberate trade-off: a larger model would mean a longer download and higher GPU memory usage, which would exclude many visitors.</p>
+<h3>First-Visit Download</h3>
+<p>The initial model download is ~350MB. On slow connections, this can take a while. The inline progress bar helps set expectations, but it's still a significant payload for a portfolio website. After the first download, it's cached and instant.</p>
+<h3>Browser Support</h3>
+<p>WebGPU is required. As of 2026, this covers Chrome, Edge, and Firefox on desktop, plus Chrome on Android. Safari support is still experimental. Visitors on unsupported browsers simply won't see the chatbot, which is the whole point of the progressive enhancement approach.</p>
+<h3>No Conversation Persistence</h3>
+<p>Messages are stored in React state. Closing the popover or refreshing the page resets the conversation. This is intentional: the chatbot is designed for quick questions, not long sessions.</p>
+<h2>Conclusion</h2>
+<p>Building a fully client-side AI chatbot is not just a technical exercise. It's a statement about how AI can be deployed without the overhead of servers, API keys, or recurring costs. The combination of WebGPU for hardware acceleration, Transformers.js for model inference, and the Vercel AI SDK for the streaming chat interface creates a stack that is both powerful and portable.</p>
+<p>The key takeaways:</p>
+<ul>
+<li><strong>The AI SDK's transport abstraction</strong> is the architectural linchpin. It lets you swap between server-side and client-side models without touching the UI.</li>
+<li><strong>Web Workers are non-negotiable</strong> for inference. Running models on the main thread will freeze your application.</li>
+<li><strong>Progressive enhancement</strong> is the right pattern for cutting-edge browser APIs. Check support at runtime, enhance when available, degrade silently when not.</li>
+<li><strong>System prompts do the heavy lifting</strong> in small models. The 350M parameter model is effective because the prompt provides all the domain context it needs.</li>
+</ul>
+<p>Explore related resources:</p>
+<p><a href="https://huggingface.co/onnx-community/granite-4.0-350m-ONNX-web">IBM Granite Models</a></p>
+<p><a href="https://huggingface.co/docs/transformers.js">Transformers.js Documentation</a></p>
+<p><a href="https://sdk.vercel.ai/docs">Vercel AI SDK</a></p>
+<p><a href="https://www.w3.org/TR/webgpu/">WebGPU Specification</a></p>
+<p><a href="https://github.com/nickmccurdy/use-stick-to-bottom">use-stick-to-bottom</a></p>
+<p>Happy coding!</p>
+</article><div class="my-8"></div></main><footer class="text-gray-600"><div class="max-w-6xl px-5 py-4 mx-auto flex items-center sm:flex-row flex-col"><a class="text-primary hover:underline underline-offset-2" aria-label="Email to paskfdev@gmail.com" title="Email to paskfdev@gmail.com" href="mailto:paskfdev@gmail.com">Pasquale Favella</a><p class="text-sm text-gray-500 sm:ml-4 sm:pl-4 sm:border-l-2 sm:border-gray-200 sm:py-2 sm:mt-0 mt-4">©<!-- -->2026<!-- --> • made with 💚</p><span class="inline-flex sm:ml-auto sm:mt-0 mt-4 justify-center items-center sm:justify-start gap-4"><a class="transition-all duration-300 hover:text-primary" href="https://github.com/Pasquale-Favella"><svg stroke="currentColor" fill="none" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round" height="20" width="20" xmlns="http://www.w3.org/2000/svg"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path></svg></a><a class="transition-all duration-300 hover:text-primary" href="https://it.linkedin.com/in/pasquale-favella-1a3682187"><svg stroke="currentColor" fill="none" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round" height="20" width="20" xmlns="http://www.w3.org/2000/svg"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path><rect x="2" y="9" width="4" height="12"></rect><circle cx="4" cy="4" r="2"></circle></svg></a></span></div><div class="fixed bottom-4 right-1 sm:bottom-10 sm:right-6 z-50"><span class="loading loading-ring loading-lg"></span></div></footer></div><script id="__NEXT_DATA__" type="application/json">{"props":{"pageProps":{"content":"# Building a Fully Client-Side AI Chatbot with WebGPU, Transformers.js, and the Vercel AI SDK\n\nHow I built a conversational AI assistant that runs entirely in the browser, with no server, no API keys, and no backend, using IBM Granite, Transformers.js, and the Vercel AI SDK.\n\nMost portfolio chatbots either hit an external LLM API (OpenAI, Anthropic, etc.) requiring API keys, billing, and a backend, or they're just glorified FAQ accordions with no real intelligence.\n\nI wanted something different: **a real conversational model running entirely in the browser**. No server calls, no API keys, no cold starts. The model loads once, gets cached by the browser, and every subsequent visit is instant.\n\n### The Value Proposition\n\n| Concern | Server-Side AI | Client-Side AI |\n|---------|---------------|----------------|\n| **Infrastructure** | API keys, servers, billing | Zero, static hosting only |\n| **Privacy** | Data leaves the device | Conversations stay local |\n| **Latency** | Network round-trips | Direct GPU inference |\n| **Offline** | Requires connectivity | Works after first download |\n| **Cost** | Per-token pricing | Free after initial load |\n\nThis approach works well for portfolio sites, documentation assistants, and any context where the knowledge base is bounded and the interaction is conversational.\n\n## Architecture Overview\n\nThe entire pipeline runs client-side. There are six main pieces, and each one has a specific job:\n\n**`Chatbot` (React Component)** is the top-level UI. It renders a floating popover anchored to the bottom-right of every page with a chat bubble trigger, a message list, and an input form. It handles form submission, maps over messages to render the right content for each part type (download progress, text, reasoning), and shows a bouncing writing indicator while the model is thinking. It doesn't know anything about AI. It just consumes the API that `useChatbot` exposes.\n\n**`useChatbot` (React Hook)** is the bridge between the UI and the AI engine. It checks browser support at runtime via `doesBrowserSupportTransformersJS()`, creates the model and transport once using `useMemo`, and wires everything into the AI SDK's `useChat` hook. It exposes a clean surface: `messages`, `status`, `sendMessage`, `stop`, and a boolean `isBotLoadingResponse` so the UI can disable the input during generation. If the browser doesn't support WebGPU, the hook returns `supportsTransformerJs: false` and the component renders nothing.\n\n**`ChatbotTransport` (Custom Transport)** is where the real work happens. The Vercel AI SDK expects a `ChatTransport` implementation that knows how to send messages to a model and stream responses back. This class fulfills that contract for a browser-side model. It converts UI messages into model-compatible format, checks if the model needs downloading (and streams progress as custom message parts if so), runs `streamText` with reasoning middleware to separate `\u003cthink\u003e` tags from visible output, and merges the result into a `UIMessageStream`. The transport also injects the system prompt, which is a long, detailed description of the portfolio owner that turns a generic 350M model into a personalized assistant.\n\n**`worker.ts` (Web Worker)** keeps inference off the main thread. It's only three lines: it imports `TransformersJSWorkerHandler`, creates an instance, and wires it to `self.onmessage`. All the heavy lifting (ONNX Runtime initialization, WebGPU session management, tokenization, streaming generation) is handled internally by the handler. The main thread never blocks.\n\n**`Response` (Markdown Renderer)** takes the raw text from the model and renders it as HTML using `markdown-it` with syntax highlighting (`markdown-it-highlightjs`) and copy-to-clipboard buttons (`markdown-it-code-copy`). It's wrapped in `React.memo` with a custom comparator that only triggers re-renders when `responseText` changes, which matters a lot during streaming when the parent re-renders on every token batch.\n\n**`Conversation` (Scroll Container)** wraps the `use-stick-to-bottom` library to handle streaming-aware scroll behavior. It auto-sticks to the bottom while tokens arrive, smoothly scrolls new messages into view, and shows a floating arrow button when the user scrolls up to read earlier messages. This replaces the naive `scrollTop = scrollHeight` approach that causes janky jumps during streaming.\n\n### How They Connect\n\n1. **User types a question** and submits the React form inside `Chatbot`\n2. **`useChatbot`** forwards it to the AI SDK's `useChat`, which calls `ChatbotTransport.sendMessages()`\n3. **`ChatbotTransport`** converts the messages, checks model availability, and starts `streamText` with the system prompt\n4. **The Web Worker** runs Granite inference on the GPU and streams tokens back\n5. **Tokens flow** through the `UIMessageStream` back into `useChat`, which updates React state\n6. **`Chatbot` re-renders** with new message parts, delegating to `Response` for markdown and `Conversation` for scroll behavior\n\nThe important thing here is that this architecture reuses the same `useChat` hook and `ChatTransport` interface that server-backed AI applications use. If you ever want to swap to a server-side model, you only need to change the transport layer. The UI code stays the same.\n\n## The AI Engine: Granite on WebGPU\n\nThe chatbot uses [IBM Granite 4.0 350M](https://huggingface.co/onnx-community/granite-4.0-350m-ONNX-web), a compact instruction-tuned model optimized for browser inference. Model selection matters a lot here: too large and visitors wait forever, too small and the responses become incoherent.\n\n```typescript\nconst MODEL_ID = \"onnx-community/granite-4.0-350m-ONNX-web\";\n\nconst model = transformersJS(MODEL_ID, {\n    device: \"webgpu\",   // GPU-accelerated inference\n    dtype: \"fp16\",      // Half-precision for speed/memory balance\n    worker: new Worker(\n        new URL(\"@/components/Chatbot/util/worker.ts\", import.meta.url),\n        { type: \"module\" }\n    ),\n});\n```\n\n### Why Granite 350M?\n\n- **350M parameters**: small enough to download quickly and run on consumer GPUs\n- **ONNX-Web optimized**: pre-converted for browser runtimes via the `onnx-community` pipeline\n- **Instruction-tuned**: follows system prompts well despite its compact size\n- **WebGPU acceleration**: uses the visitor's GPU for fast token generation\n- **FP16 precision**: halves memory usage vs FP32 with minimal quality loss\n\nThe model is loaded through [`@browser-ai/transformers-js`](https://github.com/nicepkg/browser-ai), which wraps Hugging Face's Transformers.js with a higher-level API compatible with the Vercel AI SDK.\n\n### First Visit vs Return Visit\n\nOn the **first visit**, the model downloads (~350MB for a 350M param model in FP16). The chatbot displays an inline progress bar during this process (more on that in the transport section). On **subsequent visits**, the browser's Cache Storage serves the model instantly with no network request at all. This caching behavior is automatic and requires zero configuration.\n\n## Custom Chat Transport: The Heart of the System\n\nThe Vercel AI SDK (`ai` package) is designed for server-side LLMs. To use it client-side, you need a custom `ChatTransport`, which is the interface that tells the SDK *how* to send messages to the model and *how* to stream responses back. This is where the real architectural work happens.\n\n```typescript\nexport class ChatbotTransport implements ChatTransport\u003cTransformersUIMessage\u003e {\n    private readonly model: TransformersJSLanguageModel;\n    private readonly systemPrompt: string;\n\n    constructor(model: TransformersJSLanguageModel, options: ChatbotTransportOptions) {\n        this.model = model;\n        this.systemPrompt = options.systemPrompt;\n    }\n\n    async sendMessages(options): Promise\u003cReadableStream\u003cUIMessageChunk\u003e\u003e {\n        const { messages, abortSignal } = options;\n        const prompt = await convertToModelMessages(messages);\n\n        return createUIMessageStream\u003cTransformersUIMessage\u003e({\n            execute: async ({ writer }) =\u003e {\n                // 1. Check model availability\n                // 2. Show download progress if needed\n                // 3. Run streaming inference with reasoning middleware\n                // 4. Pipe tokens to the UI message stream\n            },\n        });\n    }\n}\n```\n\n### Download Progress as Message Parts\n\nInstead of a separate loading overlay, download progress is written as custom `data-modelDownloadProgress` message parts. The progress bar lives *inside the chat conversation*, which keeps the user oriented within the chat context:\n\n```typescript\nconst availability = await model.availability();\n\nif (availability !== \"available\") {\n    await model.createSessionWithProgress((progress) =\u003e {\n        const percent = Math.round(progress * 100);\n\n        if (progress \u003e= 1) {\n            writer.write({\n                type: \"data-modelDownloadProgress\",\n                id: downloadProgressId,\n                data: { status: \"complete\", progress: 100, message: \"Model ready!\" },\n            });\n            return;\n        }\n\n        if (!downloadProgressId) {\n            downloadProgressId = `download-${Date.now()}`;\n        }\n\n        writer.write({\n            type: \"data-modelDownloadProgress\",\n            id: downloadProgressId,\n            data: {\n                status: \"downloading\",\n                progress: percent,\n                message: `Downloading AI model... ${percent}%`,\n            },\n        });\n    });\n}\n```\n\nThe nice thing about this approach is that the download progress is treated as just another message part, so the AI SDK's message state management handles it automatically. No separate loading state, no extra React context, no coordination logic.\n\n### Reasoning Middleware\n\nThe transport wraps the model with `extractReasoningMiddleware` to parse `\u003cthink\u003e` tags. If the model reasons before answering (chain-of-thought), those tokens are separated from the visible response and can be rendered in a collapsible section:\n\n```typescript\nconst result = streamText({\n    model: wrapLanguageModel({\n        model,\n        middleware: extractReasoningMiddleware({ tagName: \"think\" }),\n    }),\n    system: this.systemPrompt,\n    messages: prompt,\n    abortSignal,\n});\n\nwriter.merge(result.toUIMessageStream({ sendStart: false }));\n```\n\nThis middleware integration is one of the perks of building on the AI SDK: reasoning extraction works the same way whether the model runs on a server or in the browser.\n\n### System Prompt Injection\n\nThe transport injects a detailed system prompt that gives the model full context about the portfolio owner: background, experience, communication style, and how to adapt responses for different audiences (recruiters, developers, casual visitors). The Granite 350M model is small. It doesn't know everything. But it doesn't need to. The system prompt provides all the context, and the model's job is to be a *conversational interface* to that context, not a knowledge base.\n\n## The Web Worker: Keeping the UI Alive\n\nAI inference is computationally expensive. Running it on the main thread would freeze the entire page: no scrolling, no animations, no interaction. The solution is a dedicated Web Worker that handles all model operations off-thread:\n\n```typescript\n// worker.ts\nimport { TransformersJSWorkerHandler } from \"@browser-ai/transformers-js\";\n\nconst handler = new TransformersJSWorkerHandler();\nself.onmessage = (msg: MessageEvent) =\u003e handler.onmessage(msg);\n```\n\nThat's the entire worker file. The `TransformersJSWorkerHandler` abstracts away all the complexity:\n\n- ONNX Runtime Web initialization\n- WebGPU session management\n- Model loading and caching\n- Tokenization and inference\n- Streaming token generation back to the main thread\n\nThe worker communicates with the main thread through the standard `postMessage` API, but all of this is abstracted by the `transformersJS()` model wrapper. From the transport's perspective, the model is just an async function that yields tokens.\n\n## The React Hook: `useChatbot`\n\nThe `useChatbot` hook is the bridge between React and the AI engine. It handles three concerns: browser capability detection, transport initialization, and exposing a clean API to the UI component:\n\n```typescript\nexport function useChatbot() {\n    // 1. Runtime feature detection\n    const supportsTransformerJs = useMemo(\n        () =\u003e doesBrowserSupportTransformersJS(), []\n    );\n\n    // 2. Create transport (model + system prompt), only once\n    const chatTransport = useMemo(() =\u003e {\n        if (!supportsTransformerJs) return null;\n\n        const model = transformersJS(MODEL_ID, {\n            device: \"webgpu\",\n            dtype: \"fp16\",\n            worker: new Worker(\n                new URL(\"@/components/Chatbot/util/worker.ts\", import.meta.url),\n                { type: \"module\" }\n            ),\n        });\n\n        return new ChatbotTransport(model, { systemPrompt: SYSTEM_PROMPT });\n    }, [supportsTransformerJs]);\n\n    // 3. Wire up the AI SDK's useChat\n    const { error, status, messages, sendMessage, stop } =\n        useChat\u003cTransformersUIMessage\u003e({\n            transport: chatTransport!,\n            experimental_throttle: 50,\n            id: \"chatbot-pakybot\",\n        });\n\n    // 4. Expose a clean API\n    return {\n        supportsTransformerJs,\n        messages,\n        status,\n        isBotLoadingResponse: status === \"submitted\" || status === \"streaming\",\n        sendMessage: (text: string) =\u003e sendMessage({ text }),\n        stop,\n    };\n}\n```\n\n### Notable Implementation Details\n\n- **`experimental_throttle: 50`** batches React state updates every 50ms instead of on every single token. Without this, streaming a response triggers hundreds of re-renders per second, causing visible jank.\n- **`doesBrowserSupportTransformersJS()`** is runtime feature detection for WebGPU + WASM. If the browser doesn't support these APIs (rare in 2026, but possible), the chatbot silently hides itself instead of crashing.\n- **Memoized transport** means the model and worker are created once and reused across messages. The `useMemo` dependency on `supportsTransformerJs` ensures we never create a worker in unsupported browsers.\n\n## The UI: A Streaming Popover Chat\n\nThe chatbot lives in a `Popover` component (built on Radix UI) anchored to the bottom-right corner of every page. It's rendered inside the `Footer`, always available but never intrusive:\n\n```tsx\n\u003cPopover\u003e\n    \u003cPopoverTrigger asChild className=\"fixed bottom-4 right-1 z-50\"\u003e\n        \u003cbutton className=\"btn btn-ghost btn-circle\"\u003e\n            \u003cBsFillChatQuoteFill size={40} /\u003e\n        \u003c/button\u003e\n    \u003c/PopoverTrigger\u003e\n\n    \u003cPopoverContent className=\"w-96\"\u003e\n        {/* Title + description */}\n        \u003cConversation className=\"h-[200px] no-scrollbar\"\u003e\n            \u003cConversationContent\u003e\n                {/* Message rendering */}\n            \u003c/ConversationContent\u003e\n            \u003cConversationScrollButton /\u003e\n        \u003c/Conversation\u003e\n        {/* Input form */}\n    \u003c/PopoverContent\u003e\n\u003c/Popover\u003e\n```\n\n### Message Rendering\n\nEach message is rendered based on its `parts` array, which is the AI SDK's structured message format:\n\n- **`data-modelDownloadProgress`**: inline progress bar with spinner\n- **`text`**: markdown-rendered response via the `\u003cResponse /\u003e` component\n- **`reasoning`**: collapsible thinking section (when the model uses `\u003cthink\u003e` tags)\n- **User messages**: plain text in a chat bubble\n\nThe UI disables the input while the model is generating (`status !== \"ready\"`), preventing double-submissions. A bouncing writing icon (`TbWriting`) appears while the model processes the initial request before tokens start streaming.\n\n## Scroll Behavior: Sticky Streaming\n\nStreaming chat interfaces need scroll behavior that feels natural. The naive approach of setting `scrollTop = scrollHeight` on every render causes jarring jumps and fights with user scrolling. The `use-stick-to-bottom` library (the same one used by ChatGPT-like interfaces) solves this nicely:\n\n```tsx\n\u003cConversation className=\"h-[200px] no-scrollbar\"\u003e\n    \u003cConversationContent\u003e\n        {/* messages */}\n    \u003c/ConversationContent\u003e\n    \u003cConversationScrollButton className=\"btn-sm animate-bounce\" /\u003e\n\u003c/Conversation\u003e\n```\n\nThis gives you three behaviors out of the box:\n\n1. **Auto-stick during streaming**: as new tokens arrive, the scroll stays pinned to the bottom\n2. **Smooth scroll on new messages**: user messages and bot responses scroll into view with animation\n3. **Scroll-to-bottom button**: if the user scrolls up to read earlier messages, a floating arrow button appears to jump back down\n\nThe `Conversation` component wraps `StickToBottom` with sensible defaults (`initial=\"smooth\"`, `resize=\"smooth\"`, `role=\"log\"` for accessibility), while `ConversationScrollButton` uses the `useStickToBottomContext` hook to conditionally render the jump-to-bottom affordance.\n\n## Markdown Rendering with Syntax Highlighting\n\nBot responses are rendered as markdown using `markdown-it` with two plugins for syntax highlighting and a copy-to-clipboard button on code blocks:\n\n```typescript\nconst responseContent = md()\n    .use(highlightjs)\n    .use(codecopy, {\n        buttonClass: 'btn btn-ghost btn-circle btn-sm',\n        iconClass: 'fa fa-solid fa-clone text-neutral-content'\n    })\n    .render(responseText);\n```\n\nThe `\u003cResponse /\u003e` component is memoized with a custom comparator so it only re-renders when `responseText` actually changes:\n\n```typescript\nexport const Response = memo(\n    function Response({ responseText, className }) {\n        const responseContent = useMemo(\n            () =\u003e md().use(highlightjs).use(codecopy, { /* config */ }).render(responseText),\n            [responseText]\n        );\n\n        return (\n            \u003cdiv\n                className={cn('prose', className)}\n                dangerouslySetInnerHTML={{ __html: responseContent }}\n            /\u003e\n        );\n    },\n    (prev, next) =\u003e prev.responseText === next.responseText,\n);\n```\n\nThis matters during streaming: the component receives the same text with a few more characters appended each time. Without memoization, every intermediate render would re-parse the entire markdown string. The `useMemo` on `responseText` ensures the markdown-to-HTML conversion only runs when the text actually changes, not on every parent re-render.\n\n## What Makes This Special\n\n### Zero Infrastructure\n\nThere is no server. No API. No database. No billing. No rate limits. No cold starts. The entire AI pipeline runs in the visitor's browser. The portfolio is a static Next.js export hosted on GitHub Pages, and the chatbot adds intelligence without adding infrastructure.\n\n### Privacy by Design\n\nUser conversations never leave the device. There are no analytics on chat content, no logging, no telemetry. The model runs locally: what you ask stays on your machine.\n\n### Offline Capable\n\nAfter the first model download, the chatbot works offline. The ONNX model files are cached in the browser's Cache Storage. Combined with a service worker, the entire portfolio (including the chatbot) could function without an internet connection.\n\n### Standard AI SDK Interface\n\nDespite running client-side, the chatbot uses the same `useChat` hook and `ChatTransport` interface as server-backed AI applications. This means:\n\n- Swapping to a server-side model requires changing only the transport\n- Tool calling can be added by extending the transport\n- The streaming UI code is identical to what you'd write for any AI SDK application\n\n### Progressive Enhancement\n\nThe chatbot checks for WebGPU support at runtime. If the visitor's browser doesn't support it, the chatbot simply doesn't render. No error, no broken UI, no console spam. The feature enhances the experience for capable browsers without degrading it for others.\n\n## Limitations and Trade-offs\n\n### Model Size vs Quality\n\nGranite 350M is impressive for its size, but it's not GPT-4. Responses can be repetitive on complex questions, occasionally off-topic, and limited in reasoning depth. This is a deliberate trade-off: a larger model would mean a longer download and higher GPU memory usage, which would exclude many visitors.\n\n### First-Visit Download\n\nThe initial model download is ~350MB. On slow connections, this can take a while. The inline progress bar helps set expectations, but it's still a significant payload for a portfolio website. After the first download, it's cached and instant.\n\n### Browser Support\n\nWebGPU is required. As of 2026, this covers Chrome, Edge, and Firefox on desktop, plus Chrome on Android. Safari support is still experimental. Visitors on unsupported browsers simply won't see the chatbot, which is the whole point of the progressive enhancement approach.\n\n### No Conversation Persistence\n\nMessages are stored in React state. Closing the popover or refreshing the page resets the conversation. This is intentional: the chatbot is designed for quick questions, not long sessions.\n\n## Conclusion\n\nBuilding a fully client-side AI chatbot is not just a technical exercise. It's a statement about how AI can be deployed without the overhead of servers, API keys, or recurring costs. The combination of WebGPU for hardware acceleration, Transformers.js for model inference, and the Vercel AI SDK for the streaming chat interface creates a stack that is both powerful and portable.\n\nThe key takeaways:\n\n* **The AI SDK's transport abstraction** is the architectural linchpin. It lets you swap between server-side and client-side models without touching the UI.\n* **Web Workers are non-negotiable** for inference. Running models on the main thread will freeze your application.\n* **Progressive enhancement** is the right pattern for cutting-edge browser APIs. Check support at runtime, enhance when available, degrade silently when not.\n* **System prompts do the heavy lifting** in small models. The 350M parameter model is effective because the prompt provides all the domain context it needs.\n\nExplore related resources:\n\n[IBM Granite Models](https://huggingface.co/onnx-community/granite-4.0-350m-ONNX-web)\n\n[Transformers.js Documentation](https://huggingface.co/docs/transformers.js)\n\n[Vercel AI SDK](https://sdk.vercel.ai/docs)\n\n[WebGPU Specification](https://www.w3.org/TR/webgpu/)\n\n[use-stick-to-bottom](https://github.com/nickmccurdy/use-stick-to-bottom)\n\nHappy coding!","slug":"29","title":"Building a Fully Client-Side AI Chatbot with WebGPU, Transformers.js, and the Vercel AI SDK","meta_description":"# Building a Fully Client-Side AI Chatbot with WebGPU, Transformers","tags":["React","AI"]},"__N_SSG":true},"page":"/blog/[slug]","query":{"slug":"29"},"buildId":"8zgO71oigg50iA_uWZ1lk","isFallback":false,"gsp":true,"scriptLoader":[]}</script></body></html>
