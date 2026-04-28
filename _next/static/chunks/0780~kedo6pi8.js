@@ -1,0 +1,21 @@
+__turbopack_load_page_chunks__("/blog/[slug]", [
+  "static/chunks/06w9clugfdvi-.js",
+  "static/chunks/13fzxuxfa3u70.js",
+  "static/chunks/0exv.88-9~uur.js",
+  "static/chunks/0m~fshrur9hhe.js",
+  "static/chunks/17~.u7-1umdtg.js",
+  "static/chunks/16gasckvhkfpv.js",
+  "static/chunks/0jr_n105t8f71.js",
+  "static/chunks/0uw~ov22uo1v0.js",
+  "static/chunks/0_bpq2ygtph_8.js",
+  "static/chunks/0iopsnztpytxg.js",
+  "static/chunks/12lk.2rth7-53.js",
+  "static/chunks/0ltc57~nnjtm3.js",
+  "static/chunks/16qo-rec6opwe.js",
+  "static/chunks/10r6qz7idr-ac.js",
+  "static/chunks/0suzz~g3e3swt.js",
+  "static/chunks/0-6yhccmn5_qf.js",
+  "static/chunks/0x2gaxso9rf_4.js",
+  "static/chunks/17tq1unn1yec_.js",
+  "static/chunks/turbopack-0~l2ts.v2bjn2.js"
+])

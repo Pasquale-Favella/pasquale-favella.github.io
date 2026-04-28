@@ -1,0 +1,19 @@
+__turbopack_load_page_chunks__("/nextle", [
+  "static/chunks/06w9clugfdvi-.js",
+  "static/chunks/0uw~ov22uo1v0.js",
+  "static/chunks/0_bpq2ygtph_8.js",
+  "static/chunks/02vhmdcy60b3..js",
+  "static/chunks/0exv.88-9~uur.js",
+  "static/chunks/12lk.2rth7-53.js",
+  "static/chunks/0x2gaxso9rf_4.js",
+  "static/chunks/16gasckvhkfpv.js",
+  "static/chunks/16qo-rec6opwe.js",
+  "static/chunks/0ltc57~nnjtm3.js",
+  "static/chunks/0jr_n105t8f71.js",
+  "static/chunks/0-6yhccmn5_qf.js",
+  "static/chunks/0xge9.8tttcoo.js",
+  "static/chunks/17tq1unn1yec_.js",
+  "static/chunks/0iopsnztpytxg.js",
+  "static/chunks/0z13a7o~kai2..js",
+  "static/chunks/turbopack-0omafjrf2kh03.js"
+])
