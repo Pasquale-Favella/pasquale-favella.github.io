@@ -5,12 +5,11 @@ import { RiArticleFill } from 'react-icons/ri';
 import { DiGitPullRequest } from 'react-icons/di';
 import { TfiThought } from 'react-icons/tfi';
 import { GoCodescan, GoCopilot } from 'react-icons/go';
-import { TbDatabaseStar, TbMailBolt, TbTransform } from "react-icons/tb";
+import { TbCubeUnfolded, TbDatabaseStar, TbMailBolt, TbTransform } from "react-icons/tb";
 import { LuPalette } from "react-icons/lu";
 import { BsGrid3X3Gap } from 'react-icons/bs';
 import { MdOutlineDesignServices, MdOutlineImageSearch } from 'react-icons/md';
 import { SiMoleculer } from 'react-icons/si';
-import { GrCompare } from "react-icons/gr";
 
 import {
   Action,
@@ -153,6 +152,14 @@ const KBar = (props: KBarProps) => {
       section: 'Apps',
       perform: () => router.push('/munaciello'),
       icon: <GoCopilot />,
+    },
+    {
+      id: 'rubik-converter',
+      name: 'Rubik Image Converter',
+      keywords: 'rubik cube image converter mosaic pixel art',
+      section: 'Apps',
+      perform: () => router.push('/rubik-converter'),
+      icon: <TbCubeUnfolded />,
     },
     {
       id: 'github',
