@@ -10,6 +10,7 @@ import { LuPalette } from "react-icons/lu";
 import { BsGrid3X3Gap } from 'react-icons/bs';
 import { MdOutlineDesignServices, MdOutlineImageSearch } from 'react-icons/md';
 import { SiMoleculer } from 'react-icons/si';
+import { IoEarthOutline } from 'react-icons/io5';
 
 import {
   Action,
@@ -160,6 +161,14 @@ const KBar = (props: KBarProps) => {
       section: 'Apps',
       perform: () => router.push('/rubik-converter'),
       icon: <TbCubeUnfolded />,
+    },
+    {
+      id: 'timezone-finder',
+      name: 'Timezone Finder',
+      keywords: 'timezone finder world clock',
+      section: 'Apps',
+      perform: () => router.push('/timezone-finder'),
+      icon: <IoEarthOutline />,
     },
     {
       id: 'github',
